@@ -1174,6 +1174,347 @@
   .sc-exp-dte.weekly { color: var(--warn); border-color: var(--warn); }
   .sc-exp-dte.monthly { color: var(--bull); border-color: var(--bull); }
 
+  /* TECHNICAL DASHBOARD (200-MA + Entry Signal + Oversold) */
+  .tech-dash {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .tech-cell {
+    background: var(--bg-card);
+    padding: 18px 20px;
+    position: relative;
+  }
+  .tech-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tech-label .icon {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    color: var(--accent);
+  }
+  .tech-primary {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .tech-sub {
+    font-size: 11px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+  }
+  .tech-sub .v { color: var(--ink); font-weight: 600; }
+  .tech-sub .up { color: var(--bull); }
+  .tech-sub .down { color: var(--bear); }
+
+  /* Status pill — Oversold / Overbought / Neutral / etc */
+  .status-pill {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 4px 10px;
+    border: 1px solid var(--line-bright);
+  }
+  .status-pill.oversold {
+    color: var(--bull);
+    border-color: var(--bull);
+    background: rgba(0, 214, 143, 0.08);
+  }
+  .status-pill.overbought {
+    color: var(--bear);
+    border-color: var(--bear);
+    background: rgba(255, 59, 92, 0.08);
+  }
+  .status-pill.neutral {
+    color: var(--ink-faint);
+  }
+  .status-pill.unavailable {
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  /* Entry signal */
+  .entry-action {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+  .entry-action.enter { color: var(--bull); }
+  .entry-action.wait { color: var(--warn); }
+  .entry-action.avoid { color: var(--bear); }
+
+  /* Distance bar — visualizes price vs 200MA */
+  .dist-bar {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background: var(--bg);
+    border: 1px solid var(--line-bright);
+    margin-top: 10px;
+    overflow: visible;
+  }
+  .dist-bar-zero {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: 50%;
+    width: 1px;
+    background: var(--ink-faint);
+  }
+  .dist-bar-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--accent);
+  }
+  .dist-bar-fill.over { background: var(--bear); }
+  .dist-bar-fill.under { background: var(--bull); }
+  .dist-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8px;
+    color: var(--ink-faint);
+    letter-spacing: 0.15em;
+    margin-top: 4px;
+  }
+
+  /* OPTION CHAIN */
+  .chain-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .chain-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .chain-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+  }
+  .chain-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .chain-type-toggle {
+    display: flex;
+    border: 1px solid var(--line-bright);
+  }
+  .chain-type-toggle button {
+    padding: 6px 14px;
+    background: transparent;
+    border: none;
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-right: 1px solid var(--line-bright);
+    min-height: 36px;
+  }
+  .chain-type-toggle button:last-child { border-right: none; }
+  .chain-type-toggle button.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+  .chain-type-toggle button.calls.active { background: var(--bull); color: #000; }
+  .chain-type-toggle button.puts.active { background: var(--bear); color: #fff; }
+
+  .chain-exp-tabs {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    scrollbar-width: thin;
+  }
+  .chain-exp-tab {
+    padding: 12px 18px;
+    background: transparent;
+    border: none;
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-right: 1px solid var(--line);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    min-height: 44px;
+  }
+  .chain-exp-tab:hover { color: var(--ink); }
+  .chain-exp-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--bg-card);
+  }
+  .chain-exp-tab .dte {
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.2em;
+    margin-left: 6px;
+  }
+  .chain-exp-tab.active .dte { color: var(--accent); }
+
+  .chain-table-wrap {
+    overflow-x: auto;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .chain-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .chain-table thead {
+    position: sticky;
+    top: 0;
+    background: var(--bg-elev);
+    z-index: 2;
+  }
+  .chain-table th {
+    padding: 10px 8px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    text-align: right;
+    font-weight: 600;
+    border-bottom: 1px solid var(--line-bright);
+    white-space: nowrap;
+  }
+  .chain-table th:first-child { text-align: left; }
+  .chain-table td {
+    padding: 9px 8px;
+    border-bottom: 1px solid var(--line);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .chain-table tr.atm {
+    background: rgba(212, 255, 58, 0.05);
+  }
+  .chain-table tr.atm td {
+    border-top: 1px solid var(--accent);
+    border-bottom: 1px solid var(--accent);
+    font-weight: 600;
+  }
+  .chain-table tr.unusual {
+    background: rgba(255, 181, 71, 0.06);
+  }
+  .chain-strike {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: left !important;
+  }
+  .chain-itm { color: var(--ink); }
+  .chain-otm { color: var(--ink-dim); }
+  .chain-delta {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+  }
+  .chain-delta.high { color: var(--accent); }
+  .chain-iv { color: var(--ink-dim); }
+  .chain-volume { color: var(--ink); }
+  .chain-volume.hot { color: var(--warn); font-weight: 700; }
+  .chain-volume.hot::after {
+    content: ' 🔥';
+    font-size: 9px;
+  }
+  .chain-bidask {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .chain-unusual-banner {
+    padding: 10px 16px;
+    background: rgba(255, 181, 71, 0.06);
+    border-bottom: 1px solid var(--line);
+    font-size: 11px;
+    color: var(--warn);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chain-unusual-banner .count {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 16px;
+  }
+
+  /* OOTD entry / oversold add-ons */
+  .ootd-signals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 14px;
+  }
+  .ootd-signals .sig {
+    background: var(--bg-card);
+    padding: 11px 14px;
+  }
+  .ootd-signals .sig-label {
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .ootd-signals .sig-val {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .ootd-signals .sig-val.bull { color: var(--bull); }
+  .ootd-signals .sig-val.bear { color: var(--bear); }
+  .ootd-signals .sig-val.accent { color: var(--accent); }
+  .ootd-signals .sig-val.warn { color: var(--warn); }
+
+  /* Mobile adjustments for new components */
+  @media (max-width: 720px) {
+    .tech-dash { grid-template-columns: 1fr; }
+    .chain-head { flex-direction: column; align-items: stretch; }
+    .chain-type-toggle button { flex: 1; min-height: 44px; }
+    .chain-exp-tab { padding: 12px 14px; }
+    .chain-table { font-size: 10px; }
+    .chain-table th, .chain-table td { padding: 8px 6px; }
+    .chain-table-wrap { max-height: 420px; }
+    /* Hide less critical columns on mobile to reduce horizontal scroll */
+    .chain-table .col-iv, .chain-table .col-oi { display: none; }
+  }
+
   /* NEWS SECTION */
   .news-grid {
     display: grid;
@@ -1788,6 +2129,35 @@
         </div>
       </div>
 
+      <div id="tech-dash-container" style="display:none">
+        <div class="tech-dash">
+          <div class="tech-cell" id="tc-ma">
+            <div class="tech-label"><span class="icon">200</span>200-Day Moving Average</div>
+            <div class="tech-primary" id="tc-ma-price">—</div>
+            <div class="tech-sub" id="tc-ma-sub">Loading…</div>
+            <div class="dist-bar" id="tc-ma-bar" style="display:none">
+              <div class="dist-bar-zero"></div>
+              <div class="dist-bar-fill" id="tc-ma-bar-fill"></div>
+            </div>
+            <div class="dist-bar-labels" id="tc-ma-bar-labels" style="display:none">
+              <span>−40%</span><span>200-MA</span><span>+40%</span>
+            </div>
+            <div class="status-pill neutral" id="tc-ma-status">—</div>
+          </div>
+          <div class="tech-cell" id="tc-entry">
+            <div class="tech-label"><span class="icon">▶</span>Entry Signal</div>
+            <div class="entry-action wait" id="tc-entry-action">—</div>
+            <div class="tech-sub" id="tc-entry-sub">Awaiting data…</div>
+          </div>
+          <div class="tech-cell" id="tc-momo">
+            <div class="tech-label"><span class="icon">~</span>Momentum (RSI-14)</div>
+            <div class="tech-primary" id="tc-rsi-val">—</div>
+            <div class="tech-sub" id="tc-rsi-sub">—</div>
+            <div class="status-pill neutral" id="tc-rsi-status">—</div>
+          </div>
+        </div>
+      </div>
+
       <div class="section-head">
         <span class="section-num">§</span>
         <span class="section-title">Top Strategies</span>
@@ -1799,6 +2169,32 @@
         <div class="empty-state">
           <div class="empty-state-mark">∅</div>
           <div class="empty-state-text">Enter a ticker to generate live strategies</div>
+        </div>
+      </div>
+
+      <div id="chain-section" style="display:none">
+        <div class="section-head">
+          <span class="section-num">§</span>
+          <span class="section-title">Full Option Chain</span>
+          <span class="section-line"></span>
+          <span class="section-tag" id="chain-update">Loading…</span>
+        </div>
+        <div class="chain-card">
+          <div class="chain-head">
+            <div class="chain-title" id="chain-title">Option Chain</div>
+            <div class="chain-controls">
+              <div class="chain-type-toggle" id="chain-type-toggle">
+                <button class="calls active" data-type="calls">Calls</button>
+                <button class="puts" data-type="puts">Puts</button>
+              </div>
+            </div>
+          </div>
+          <div class="chain-unusual-banner" id="chain-unusual-banner" style="display:none">
+            <span class="count" id="chain-unusual-count">0</span>
+            <span>contracts flagged with unusual current-day volume (Vol/OI &gt; 3×)</span>
+          </div>
+          <div class="chain-exp-tabs" id="chain-exp-tabs"></div>
+          <div class="chain-table-wrap" id="chain-table-wrap"></div>
         </div>
       </div>
 
@@ -1867,8 +2263,8 @@
     </section>
 
     <div class="disclosure">
-      <strong>Disclosure</strong>
-      Volatility Desk surfaces options strategies and price targets generated from real-time market data via the Finnhub API. Targets are computed from recent realized volatility and Average True Range (ATR) over a 14-day window — they are statistical projections, not predictions. Options trading involves substantial risk of loss and is not suitable for every investor. Strike selection uses the closest available expiration with at least 25 days to expiry where chain data is available; otherwise standard ±5% / ±10% offsets are used. Nothing on this page is investment advice. Verify all data with your broker before trading.
+      <strong>Disclosure &amp; Data Sources</strong>
+      Volatility Desk surfaces options strategies, price targets, and technical signals generated from real-time market data via the Finnhub API, supplemented with 200-day historical data from Stooq for moving average calculations. The "unusual activity" flag identifies contracts where <em>current-day</em> volume is greater than 3× open interest — a widely-used proxy signal, but not a true 45-day historical unusual-activity feed (those require premium data vendors like Cheddar Flow, Unusual Whales, or Polygon's options tier). Greeks (Delta, etc.) come directly from Finnhub's option chain endpoint. Targets are computed from recent realized volatility and Average True Range. The Entry Signal combines RSI-14, distance from the 200-day MA, intraday range position, and short-term momentum into a composite score — it is a statistical heuristic, not a prediction. Options trading involves substantial risk of loss and is not suitable for every investor. Nothing on this page is investment advice. Verify all data with your broker before trading.
     </div>
 
   </main>
@@ -2001,6 +2397,91 @@ async function getCompanyNews(symbol, daysBack = 7) {
   const from = new Date(today.getTime() - daysBack * 24 * 60 * 60 * 1000);
   const fmt = (d) => d.toISOString().split('T')[0];
   return finnhubFetch(`/company-news?symbol=${encodeURIComponent(symbol)}&from=${fmt(from)}&to=${fmt(today)}`);
+}
+
+async function getOptionChain(symbol) {
+  return finnhubFetch(`/stock/option-chain?symbol=${encodeURIComponent(symbol)}`);
+}
+
+// ====================================================================
+// STOOQ — Free historical data source for 200-day MA
+// Stooq returns CSV directly with no CORS restrictions for most browsers.
+// We try-fetch and gracefully degrade if it fails.
+// ====================================================================
+async function getStooqHistory(symbol, days = 220) {
+  // Stooq uses .us suffix for US tickers
+  // For indices/ETFs the suffix is still .us
+  const today = new Date();
+  const start = new Date(today.getTime() - days * 1.6 * 24 * 60 * 60 * 1000); // 1.6x buffer for weekends/holidays
+  const fmt = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${y}${m}${dd}`;
+  };
+  const tickerForStooq = symbol.toLowerCase().replace('.', '-');
+  const url = `https://stooq.com/q/d/l/?s=${encodeURIComponent(tickerForStooq)}.us&d1=${fmt(start)}&d2=${fmt(today)}&i=d`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Stooq HTTP ${res.status}`);
+    const text = await res.text();
+    // Stooq returns "No data" or similar on failure
+    if (!text || text.length < 50 || text.toLowerCase().includes('no data')) {
+      throw new Error('Stooq returned no data');
+    }
+    // Parse CSV: header is "Date,Open,High,Low,Close,Volume"
+    const lines = text.trim().split('\n');
+    if (lines.length < 50) throw new Error('Insufficient Stooq history');
+    const closes = [];
+    for (let i = 1; i < lines.length; i++) {
+      const parts = lines[i].split(',');
+      if (parts.length >= 5) {
+        const close = parseFloat(parts[4]);
+        if (!isNaN(close)) closes.push(close);
+      }
+    }
+    if (closes.length < 50) throw new Error('Not enough valid close prices');
+    return closes; // chronological order, oldest first
+  } catch (e) {
+    // Network error, CORS, or no data — return null so callers can fall back
+    return null;
+  }
+}
+
+// Compute simple moving average from a series of closes (oldest first)
+function computeMA(closes, period) {
+  if (!closes || closes.length < period) return null;
+  const slice = closes.slice(-period);
+  return slice.reduce((a, b) => a + b, 0) / slice.length;
+}
+
+// Compute Wilder's RSI from a series of closes
+function computeRSI(closes, period = 14) {
+  if (!closes || closes.length < period + 1) return null;
+  const slice = closes.slice(-(period + 1));
+  let gains = 0, losses = 0;
+  for (let i = 1; i < slice.length; i++) {
+    const diff = slice[i] - slice[i - 1];
+    if (diff > 0) gains += diff;
+    else losses -= diff;
+  }
+  const avgGain = gains / period;
+  const avgLoss = losses / period;
+  if (avgLoss === 0) return 100;
+  const rs = avgGain / avgLoss;
+  return 100 - (100 / (1 + rs));
+}
+
+// Fast intraday RSI proxy when we don't have history.
+// Uses the position of current price within today's range as a stand-in for momentum strength.
+function intradayRSIProxy(quote) {
+  if (!quote || !quote.h || !quote.l || quote.h === quote.l) return 50;
+  // Where in the day's range are we? 0 = at low, 100 = at high.
+  const positionPct = ((quote.c - quote.l) / (quote.h - quote.l)) * 100;
+  // Blend with day-change to get a momentum-aware proxy.
+  const changeBias = Math.max(-20, Math.min(20, (quote.dp || 0) * 2));
+  return Math.max(0, Math.min(100, positionPct * 0.7 + 50 + changeBias * 0.3));
 }
 
 // ====================================================================
@@ -2602,13 +3083,35 @@ async function findOptionOfTheDay() {
   }
 }
 
-function renderOOTD(pick) {
+async function renderOOTD(pick) {
   const loading = document.getElementById('ootd-loading');
   const content = document.getElementById('ootd-content');
   const q = pick.quote;
   const s = pick.strategy;
   const isUp = (q.d || q.dp || 0) >= 0;
   const name = COMPANY_NAMES[pick.symbol] || pick.symbol;
+
+  // Fetch tech data for the OOTD pick — best-effort, won't block rendering
+  let techData = techCache.get(pick.symbol);
+  if (!techData) {
+    try {
+      const closes = await getStooqHistory(pick.symbol, 220);
+      let ma200info = null, rsiInfo = null;
+      if (closes && closes.length >= 200) {
+        ma200info = classifyMA(q.c, computeMA(closes, 200));
+        rsiInfo = classifyRSI(computeRSI(closes, 14));
+      } else if (closes && closes.length >= 50) {
+        rsiInfo = classifyRSI(computeRSI(closes, 14));
+      }
+      if (!rsiInfo) rsiInfo = classifyRSI(intradayRSIProxy(q));
+      const entry = computeEntrySignal(q, ma200info, rsiInfo);
+      techData = { ma200info, rsiInfo, entry };
+      techCache.set(pick.symbol, techData);
+    } catch (e) {
+      techData = { ma200info: null, rsiInfo: null, entry: null };
+    }
+  }
+  const { ma200info, rsiInfo, entry } = techData;
 
   // Format strategy values
   const debitStr = s.debit < 0
@@ -2706,6 +3209,40 @@ function renderOOTD(pick) {
       <span>Selected from ${OOTD_UNIVERSE.length} large-cap candidates · Move ${pick.movePct.toFixed(2)}% · Range ${pick.rangePct.toFixed(2)}%</span>
       <button class="ootd-footer-action" id="ootd-analyze-btn" data-symbol="${pick.symbol}">Full Analysis →</button>
     </div>
+
+    ${entry || ma200info || rsiInfo ? `
+    <div style="padding: 0 28px 22px">
+      <div class="ootd-signals">
+        ${entry ? `
+          <div class="sig">
+            <div class="sig-label">Entry Signal</div>
+            <div class="sig-val ${entry.actionClass === 'enter' ? 'bull' : entry.actionClass === 'avoid' ? 'bear' : 'warn'}">${entry.action}</div>
+          </div>
+          <div class="sig">
+            <div class="sig-label">Entry Price</div>
+            <div class="sig-val accent">${entry.entryPrice != null ? '$' + entry.entryPrice.toFixed(2) : '—'}</div>
+          </div>
+        ` : ''}
+        ${ma200info ? `
+          <div class="sig">
+            <div class="sig-label">200-Day MA</div>
+            <div class="sig-val ${ma200info.status === 'oversold' ? 'bull' : ma200info.status === 'overbought' ? 'bear' : ''}">${ma200info.distance >= 0 ? '+' : ''}${ma200info.distance.toFixed(1)}%</div>
+          </div>
+        ` : `
+          <div class="sig">
+            <div class="sig-label">200-Day MA</div>
+            <div class="sig-val" style="color:var(--ink-faint);font-size:11px">No history</div>
+          </div>
+        `}
+        ${rsiInfo ? `
+          <div class="sig">
+            <div class="sig-label">RSI · Status</div>
+            <div class="sig-val ${rsiInfo.status === 'oversold' ? 'bull' : rsiInfo.status === 'overbought' ? 'bear' : ''}">${rsiInfo.rsi.toFixed(0)} · ${rsiInfo.label.replace(' (intraday)', '')}</div>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+    ` : ''}
   `;
 
   loading.style.display = 'none';
@@ -2874,6 +3411,8 @@ async function runAnalysis(symbol) {
     </div>`;
   document.getElementById('quote-container').innerHTML = '';
   hideChart();
+  document.getElementById('tech-dash-container').style.display = 'none';
+  document.getElementById('chain-section').style.display = 'none';
   document.getElementById('analyze-btn').disabled = true;
 
   try {
@@ -2914,8 +3453,10 @@ async function runAnalysis(symbol) {
     // Start real-time polling for this symbol
     startRealtimePolling();
 
-    // Load news in parallel (don't block strategy display)
+    // Load news, tech analysis, and option chain in parallel (don't block strategy display)
     loadNews(symbol);
+    runTechAnalysis(symbol, quote);
+    loadOptionChain(symbol, quote.c);
   } catch (e) {
     handleApiError(e, 'strategies');
     document.getElementById('strategy-output').innerHTML = `
@@ -2925,6 +3466,8 @@ async function runAnalysis(symbol) {
       </div>`;
     document.getElementById('strat-update').textContent = 'Error';
     document.getElementById('news-section').style.display = 'none';
+    document.getElementById('tech-dash-container').style.display = 'none';
+    document.getElementById('chain-section').style.display = 'none';
     hideChart();
     stopRealtimePolling();
   } finally {
@@ -3582,6 +4125,453 @@ async function loadNews(symbol) {
 }
 
 // ====================================================================
+// TECHNICAL DASHBOARD (200-MA + RSI + Entry Signal)
+// ====================================================================
+
+// Hold the latest tech state per symbol (used by OOTD signals too)
+const techCache = new Map();
+
+function classifyMA(currentPrice, ma200) {
+  if (!ma200) return null;
+  const distance = ((currentPrice - ma200) / ma200) * 100;
+  // 20% +/- threshold per user request
+  let status;
+  if (distance <= -20) status = 'oversold';
+  else if (distance >= 20) status = 'overbought';
+  else if (distance < 0) status = 'below';   // below MA but not 20%+
+  else status = 'above';
+  return { distance, ma200, status };
+}
+
+function classifyRSI(rsi) {
+  if (rsi == null) return null;
+  let status, label;
+  if (rsi <= 30) { status = 'oversold'; label = 'Oversold'; }
+  else if (rsi >= 70) { status = 'overbought'; label = 'Overbought'; }
+  else if (rsi < 45) { status = 'neutral'; label = 'Weak'; }
+  else if (rsi > 55) { status = 'neutral'; label = 'Strong'; }
+  else { status = 'neutral'; label = 'Neutral'; }
+  return { rsi, status, label };
+}
+
+// Compute entry signal — composite of MA distance, RSI, intraday range position, momentum
+function computeEntrySignal(quote, ma200info, rsiInfo) {
+  const price = quote.c;
+  const changePct = quote.dp || 0;
+  const dayRange = quote.h - quote.l;
+  const positionInRange = dayRange > 0 ? (price - quote.l) / dayRange : 0.5; // 0=low, 1=high
+
+  // Score 0-100 where higher = better entry
+  let score = 50;
+  const reasons = [];
+
+  // RSI contribution
+  if (rsiInfo) {
+    if (rsiInfo.rsi <= 30) { score += 25; reasons.push(`RSI ${rsiInfo.rsi.toFixed(1)} signals oversold`); }
+    else if (rsiInfo.rsi <= 40) { score += 12; reasons.push(`RSI ${rsiInfo.rsi.toFixed(1)} approaching oversold`); }
+    else if (rsiInfo.rsi >= 70) { score -= 25; reasons.push(`RSI ${rsiInfo.rsi.toFixed(1)} signals overbought`); }
+    else if (rsiInfo.rsi >= 60) { score -= 10; reasons.push(`RSI ${rsiInfo.rsi.toFixed(1)} approaching overbought`); }
+  }
+
+  // 200-MA distance contribution
+  if (ma200info) {
+    if (ma200info.distance <= -20) { score += 25; reasons.push(`Price ${Math.abs(ma200info.distance).toFixed(1)}% below 200-MA (deep oversold)`); }
+    else if (ma200info.distance <= -10) { score += 12; reasons.push(`Price ${Math.abs(ma200info.distance).toFixed(1)}% below 200-MA`); }
+    else if (ma200info.distance >= 20) { score -= 20; reasons.push(`Price ${ma200info.distance.toFixed(1)}% above 200-MA (extended)`); }
+    else if (ma200info.distance >= 10) { score -= 8; reasons.push(`Price ${ma200info.distance.toFixed(1)}% above 200-MA`); }
+  }
+
+  // Intraday position — buying near day low is generally better entry than near day high
+  if (dayRange > 0) {
+    if (positionInRange < 0.25) { score += 5; reasons.push('Near day low'); }
+    else if (positionInRange > 0.85) { score -= 8; reasons.push('Near day high — chasing risk'); }
+  }
+
+  // Sharp single-day moves warn against immediate entry
+  if (changePct < -5) { score += 5; reasons.push(`Sharp ${changePct.toFixed(1)}% drop today — potential reversal setup`); }
+  else if (changePct > 5) { score -= 10; reasons.push(`Sharp +${changePct.toFixed(1)}% spike — wait for pullback`); }
+
+  // Action classification
+  let action, actionClass, entryPrice;
+  if (score >= 70) {
+    action = 'Enter Now';
+    actionClass = 'enter';
+    entryPrice = price;
+  } else if (score >= 55) {
+    action = 'Enter';
+    actionClass = 'enter';
+    entryPrice = quote.l + dayRange * 0.3; // pull back to lower third of range
+  } else if (score >= 40) {
+    action = 'Wait';
+    actionClass = 'wait';
+    entryPrice = ma200info ? Math.max(quote.l, ma200info.ma200 * 0.95) : quote.l;
+  } else {
+    action = 'Avoid';
+    actionClass = 'avoid';
+    entryPrice = null;
+  }
+
+  // Cap and floor entry price reasonably
+  if (entryPrice != null) {
+    entryPrice = Math.max(price * 0.85, Math.min(price * 1.05, entryPrice));
+  }
+
+  return { score, action, actionClass, entryPrice, reasons, price };
+}
+
+function renderTechDashboard(symbol, quote, ma200info, rsiInfo, entry) {
+  document.getElementById('tech-dash-container').style.display = 'block';
+
+  // === 200-MA cell ===
+  const maCell = document.getElementById('tc-ma');
+  const statusPill = document.getElementById('tc-ma-status');
+  if (ma200info) {
+    document.getElementById('tc-ma-price').textContent = `$${ma200info.ma200.toFixed(2)}`;
+    const distStr = ma200info.distance >= 0 ? '+' : '';
+    const distClass = ma200info.distance >= 0 ? 'up' : 'down';
+    document.getElementById('tc-ma-sub').innerHTML =
+      `Price is <span class="v ${distClass}">${distStr}${ma200info.distance.toFixed(2)}%</span> ${ma200info.distance >= 0 ? 'above' : 'below'} the 200-day MA`;
+
+    // Distance bar — clamp to ±40% range visualization
+    const bar = document.getElementById('tc-ma-bar');
+    const fill = document.getElementById('tc-ma-bar-fill');
+    const labels = document.getElementById('tc-ma-bar-labels');
+    bar.style.display = 'block';
+    labels.style.display = 'flex';
+    const clamped = Math.max(-40, Math.min(40, ma200info.distance));
+    if (clamped >= 0) {
+      fill.style.left = '50%';
+      fill.style.right = 'auto';
+      fill.style.width = (clamped / 40 * 50) + '%';
+      fill.className = 'dist-bar-fill ' + (clamped >= 20 ? 'over' : '');
+    } else {
+      fill.style.right = '50%';
+      fill.style.left = 'auto';
+      fill.style.width = (Math.abs(clamped) / 40 * 50) + '%';
+      fill.className = 'dist-bar-fill ' + (clamped <= -20 ? 'under' : '');
+    }
+
+    if (ma200info.status === 'oversold') {
+      statusPill.className = 'status-pill oversold';
+      statusPill.textContent = '★ Oversold';
+    } else if (ma200info.status === 'overbought') {
+      statusPill.className = 'status-pill overbought';
+      statusPill.textContent = '⚠ Overbought';
+    } else {
+      statusPill.className = 'status-pill neutral';
+      statusPill.textContent = ma200info.status === 'above' ? 'Above MA' : 'Below MA';
+    }
+  } else {
+    document.getElementById('tc-ma-price').textContent = 'N/A';
+    document.getElementById('tc-ma-sub').textContent = 'Historical data unavailable for this symbol';
+    document.getElementById('tc-ma-bar').style.display = 'none';
+    document.getElementById('tc-ma-bar-labels').style.display = 'none';
+    statusPill.className = 'status-pill unavailable';
+    statusPill.textContent = 'No History';
+  }
+
+  // === Entry signal cell ===
+  const action = document.getElementById('tc-entry-action');
+  action.className = `entry-action ${entry.actionClass}`;
+  action.textContent = entry.action;
+  let entrySubHtml = '';
+  if (entry.entryPrice != null) {
+    entrySubHtml = `<span class="v">Entry: $${entry.entryPrice.toFixed(2)}</span> · Score ${entry.score}/100<br>`;
+  } else {
+    entrySubHtml = `<span class="v">No entry</span> · Score ${entry.score}/100<br>`;
+  }
+  entrySubHtml += `<span style="opacity:0.85">${entry.reasons.slice(0, 2).join(' · ') || 'Standard setup'}</span>`;
+  document.getElementById('tc-entry-sub').innerHTML = entrySubHtml;
+
+  // === RSI cell ===
+  if (rsiInfo) {
+    document.getElementById('tc-rsi-val').textContent = rsiInfo.rsi.toFixed(1);
+    const rsiPill = document.getElementById('tc-rsi-status');
+    if (rsiInfo.status === 'oversold') {
+      rsiPill.className = 'status-pill oversold';
+      rsiPill.textContent = '★ Oversold';
+    } else if (rsiInfo.status === 'overbought') {
+      rsiPill.className = 'status-pill overbought';
+      rsiPill.textContent = '⚠ Overbought';
+    } else {
+      rsiPill.className = 'status-pill neutral';
+      rsiPill.textContent = rsiInfo.label;
+    }
+    let scale;
+    if (rsiInfo.rsi <= 30) scale = 'Deep oversold — historically a contrarian buy zone';
+    else if (rsiInfo.rsi <= 45) scale = 'Soft / range bottom';
+    else if (rsiInfo.rsi <= 55) scale = 'Neutral momentum';
+    else if (rsiInfo.rsi <= 70) scale = 'Strong / range top';
+    else scale = 'Deep overbought — historically a fade zone';
+    document.getElementById('tc-rsi-sub').textContent = scale;
+  } else {
+    document.getElementById('tc-rsi-val').textContent = '—';
+    document.getElementById('tc-rsi-sub').textContent = 'Insufficient history (using intraday proxy)';
+    document.getElementById('tc-rsi-status').className = 'status-pill unavailable';
+    document.getElementById('tc-rsi-status').textContent = 'Limited';
+  }
+}
+
+// ====================================================================
+// OPTION CHAIN
+// ====================================================================
+const chainState = {
+  data: null,             // raw response
+  expirations: [],        // [{date, dte, calls, puts}]
+  selectedExp: 0,
+  type: 'calls',          // 'calls' | 'puts'
+  symbol: null,
+  spot: null,
+};
+
+async function loadOptionChain(symbol, spotPrice) {
+  const section = document.getElementById('chain-section');
+  const update = document.getElementById('chain-update');
+  section.style.display = 'block';
+  update.innerHTML = '<span class="loading"></span> Loading option chain…';
+  document.getElementById('chain-table-wrap').innerHTML = '';
+  document.getElementById('chain-exp-tabs').innerHTML = '';
+  document.getElementById('chain-unusual-banner').style.display = 'none';
+  document.getElementById('chain-title').textContent = `${symbol} Option Chain`;
+
+  try {
+    const data = await getOptionChain(symbol);
+    if (!data || !data.data || data.data.length === 0) {
+      throw new Error('No option chain available for this symbol');
+    }
+
+    // Normalize the structure. Finnhub returns { data: [{expirationDate, options: {CALL: [...], PUT: [...]}}, ...] }
+    const expirations = [];
+    const now = Date.now();
+    for (const exp of data.data) {
+      const expDate = new Date(exp.expirationDate);
+      const dte = Math.round((expDate.getTime() - now) / (1000 * 60 * 60 * 24));
+      const calls = (exp.options && exp.options.CALL) ? exp.options.CALL : [];
+      const puts = (exp.options && exp.options.PUT) ? exp.options.PUT : [];
+      expirations.push({
+        date: exp.expirationDate,
+        dateObj: expDate,
+        dte,
+        calls,
+        puts,
+      });
+    }
+    expirations.sort((a, b) => a.dateObj - b.dateObj);
+
+    chainState.data = data;
+    chainState.expirations = expirations;
+    chainState.symbol = symbol;
+    chainState.spot = spotPrice;
+
+    // Find the expiration closest to 30-45 DTE for default selection
+    let defaultIdx = 0;
+    let bestDist = Infinity;
+    expirations.forEach((e, i) => {
+      if (e.dte < 2) return; // skip super-near-term
+      const dist = Math.abs(e.dte - 35);
+      if (dist < bestDist) { bestDist = dist; defaultIdx = i; }
+    });
+    chainState.selectedExp = defaultIdx;
+    chainState.type = 'calls';
+
+    renderChainExpTabs();
+    renderChainTable();
+
+    // Calculate unusual activity across all expirations
+    let unusualCount = 0;
+    for (const exp of expirations) {
+      for (const c of [...exp.calls, ...exp.puts]) {
+        const vol = c.volume || 0;
+        const oi = c.openInterest || 0;
+        if (oi > 50 && vol >= oi * 3) unusualCount++;
+      }
+    }
+    if (unusualCount > 0) {
+      document.getElementById('chain-unusual-count').textContent = unusualCount;
+      document.getElementById('chain-unusual-banner').style.display = 'flex';
+    }
+
+    update.textContent = `${expirations.length} expirations · ${new Date().toLocaleTimeString()}`;
+  } catch (e) {
+    update.textContent = 'Error';
+    document.getElementById('chain-table-wrap').innerHTML = `
+      <div class="empty-state" style="border:none">
+        <div class="empty-state-mark">⌧</div>
+        <div class="empty-state-text">${e.message}</div>
+      </div>`;
+  }
+}
+
+function renderChainExpTabs() {
+  const tabs = document.getElementById('chain-exp-tabs');
+  tabs.innerHTML = chainState.expirations.map((e, i) => {
+    const d = e.dateObj;
+    const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+    return `<button class="chain-exp-tab ${i === chainState.selectedExp ? 'active' : ''}" data-idx="${i}">
+      ${month} ${d.getDate()}<span class="dte">${e.dte}D</span>
+    </button>`;
+  }).join('');
+  tabs.querySelectorAll('.chain-exp-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      chainState.selectedExp = parseInt(t.dataset.idx);
+      renderChainExpTabs();
+      renderChainTable();
+      // Scroll active tab into view
+      t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    });
+  });
+  // Scroll the active tab into view on first render
+  const activeTab = tabs.querySelector('.chain-exp-tab.active');
+  if (activeTab) activeTab.scrollIntoView({ block: 'nearest', inline: 'center' });
+}
+
+function renderChainTable() {
+  const wrap = document.getElementById('chain-table-wrap');
+  const exp = chainState.expirations[chainState.selectedExp];
+  if (!exp) { wrap.innerHTML = ''; return; }
+
+  const contracts = chainState.type === 'calls' ? exp.calls : exp.puts;
+  if (!contracts || contracts.length === 0) {
+    wrap.innerHTML = `<div class="empty-state" style="border:none"><div class="empty-state-text">No ${chainState.type} for this expiration</div></div>`;
+    return;
+  }
+
+  // Sort by strike ascending
+  const sorted = [...contracts].sort((a, b) => (a.strike || 0) - (b.strike || 0));
+
+  const spot = chainState.spot;
+  // Find ATM strike (closest to spot)
+  let atmIdx = 0;
+  let atmDist = Infinity;
+  sorted.forEach((c, i) => {
+    const d = Math.abs((c.strike || 0) - spot);
+    if (d < atmDist) { atmDist = d; atmIdx = i; }
+  });
+
+  const rows = sorted.map((c, i) => {
+    const strike = c.strike || 0;
+    const isITM = chainState.type === 'calls' ? strike < spot : strike > spot;
+    const isATM = i === atmIdx;
+    const vol = c.volume || 0;
+    const oi = c.openInterest || 0;
+    const volOIRatio = oi > 0 ? vol / oi : 0;
+    const isUnusual = oi > 50 && volOIRatio >= 3;
+
+    const delta = c.delta != null ? c.delta : null;
+    const iv = c.impliedVolatility != null ? c.impliedVolatility : null;
+    const bid = c.bid != null ? c.bid : null;
+    const ask = c.ask != null ? c.ask : null;
+
+    const deltaDisplay = delta != null ? delta.toFixed(3) : '—';
+    const deltaClass = delta != null && Math.abs(delta) >= 0.4 ? 'high' : '';
+    const ivDisplay = iv != null ? `${(iv * 100).toFixed(1)}%` : '—';
+    const bidAskDisplay = (bid != null && ask != null)
+      ? `${bid.toFixed(2)} / ${ask.toFixed(2)}`
+      : (c.lastPrice != null ? c.lastPrice.toFixed(2) : '—');
+
+    let classes = [];
+    if (isATM) classes.push('atm');
+    if (isUnusual) classes.push('unusual');
+
+    return `
+      <tr class="${classes.join(' ')}">
+        <td class="chain-strike ${isITM ? 'chain-itm' : 'chain-otm'}">$${strike.toFixed(2)}${isATM ? ' ◀' : ''}</td>
+        <td class="chain-bidask">${bidAskDisplay}</td>
+        <td class="chain-delta ${deltaClass}">${deltaDisplay}</td>
+        <td class="chain-iv col-iv">${ivDisplay}</td>
+        <td class="chain-volume ${isUnusual ? 'hot' : ''}">${vol.toLocaleString()}</td>
+        <td class="chain-iv col-oi">${oi.toLocaleString()}</td>
+        <td class="chain-iv">${volOIRatio > 0 ? volOIRatio.toFixed(2) + '×' : '—'}</td>
+      </tr>
+    `;
+  }).join('');
+
+  wrap.innerHTML = `
+    <table class="chain-table">
+      <thead>
+        <tr>
+          <th>Strike</th>
+          <th>Bid / Ask</th>
+          <th>Delta</th>
+          <th class="col-iv">IV</th>
+          <th>Volume</th>
+          <th class="col-oi">Open Int</th>
+          <th>Vol/OI</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+
+  // Scroll the ATM row into view
+  setTimeout(() => {
+    const atmRow = wrap.querySelector('tr.atm');
+    if (atmRow) atmRow.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, 50);
+}
+
+// Wire chain type toggle on first init (done once at DOMContentLoaded)
+function wireChainControls() {
+  document.querySelectorAll('#chain-type-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#chain-type-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      chainState.type = btn.dataset.type;
+      renderChainTable();
+    });
+  });
+}
+
+// ====================================================================
+// TECH PIPELINE: Fetch and apply tech analysis to a symbol
+// ====================================================================
+async function runTechAnalysis(symbol, quote) {
+  // Reset to "loading" state visually
+  document.getElementById('tech-dash-container').style.display = 'block';
+  document.getElementById('tc-ma-price').textContent = '…';
+  document.getElementById('tc-ma-sub').innerHTML = '<span class="loading"></span> Fetching history…';
+  document.getElementById('tc-ma-status').className = 'status-pill neutral';
+  document.getElementById('tc-ma-status').textContent = 'Loading';
+  document.getElementById('tc-ma-bar').style.display = 'none';
+  document.getElementById('tc-ma-bar-labels').style.display = 'none';
+  document.getElementById('tc-entry-action').textContent = '…';
+  document.getElementById('tc-entry-sub').textContent = 'Computing signal…';
+  document.getElementById('tc-rsi-val').textContent = '…';
+
+  // Fetch historical closes from Stooq (best effort)
+  const closes = await getStooqHistory(symbol, 220);
+
+  let ma200info = null;
+  let rsiInfo = null;
+
+  if (closes && closes.length >= 200) {
+    const ma200 = computeMA(closes, 200);
+    ma200info = classifyMA(quote.c, ma200);
+    const rsi = computeRSI(closes, 14);
+    rsiInfo = classifyRSI(rsi);
+  } else if (closes && closes.length >= 50) {
+    // Partial history — give what we can
+    const rsi = computeRSI(closes, 14);
+    rsiInfo = classifyRSI(rsi);
+  }
+
+  // If we don't have RSI, fall back to intraday proxy
+  if (!rsiInfo) {
+    const proxyRSI = intradayRSIProxy(quote);
+    rsiInfo = classifyRSI(proxyRSI);
+    if (rsiInfo) rsiInfo.label = rsiInfo.label + ' (intraday)';
+  }
+
+  const entry = computeEntrySignal(quote, ma200info, rsiInfo);
+  renderTechDashboard(symbol, quote, ma200info, rsiInfo, entry);
+
+  // Cache for OOTD consumption
+  techCache.set(symbol, { ma200info, rsiInfo, entry });
+
+  return { ma200info, rsiInfo, entry };
+}
+
+// ====================================================================
 // PAGE NAV
 // ====================================================================
 function switchPage(p) {
@@ -3940,6 +4930,9 @@ document.addEventListener('DOMContentLoaded', () => {
       renderChart();
     });
   });
+
+  // Option chain calls/puts toggle
+  wireChainControls();
 
   // Chart hover tooltip — use pointer events so we can filter out touch
   // (we don't want touch on the chart to fire the tooltip OR block scroll).
