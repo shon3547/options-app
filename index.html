@@ -48,13 +48,15 @@
     line-height: 1.5;
     overflow-x: hidden;
     min-height: 100vh;
+    /* Explicitly tell the browser that vertical pan is the default gesture.
+       Without this, Android Chrome can sometimes hesitate on the first touch
+       waiting to see if it's a custom gesture (pinch, drag, etc.). */
+    touch-action: pan-y;
     /* Smoother scroll behavior */
     -webkit-overflow-scrolling: touch;
     /* Better text rendering on mobile */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Use 100dvh on supporting browsers — fixes mobile address-bar height jumps */
-    min-height: 100dvh;
     /* Prevent unwanted text size adjustment in landscape on iOS */
     -webkit-text-size-adjust: 100%;
     /* Tap highlight is ugly on mobile */
@@ -125,8 +127,7 @@
     grid-template-columns: auto 1fr auto;
     gap: 32px;
     align-items: center;
-    background: rgba(10, 10, 10, 0.92);
-    backdrop-filter: blur(10px);
+    background: rgba(10, 10, 10, 0.96);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -592,11 +593,16 @@
     width: 100%;
     height: 280px;
     overflow: hidden;
+    /* Allow vertical pan to pass through even though we have hover handlers.
+       Without this, Android Chrome can hold the touch waiting to see if
+       it's a chart-interaction gesture before allowing scroll. */
+    touch-action: pan-y;
   }
   #price-chart {
     width: 100%;
     height: 100%;
     display: block;
+    touch-action: pan-y;
   }
   .chart-legend {
     display: flex;
@@ -1575,14 +1581,6 @@
     .movers-controls { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 720px) {
-    /* iOS Safari has a bug where backdrop-filter on a sticky/fixed element
-       breaks single-finger touch propagation. Disable it on mobile. */
-    header {
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-      background: var(--bg);
-    }
-
     header { grid-template-columns: 1fr auto; gap: 10px; padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); }
     .brand-tag { display: none; }
     .nav-tabs {
@@ -3943,10 +3941,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Chart hover tooltip
+  // Chart hover tooltip — use pointer events so we can filter out touch
+  // (we don't want touch on the chart to fire the tooltip OR block scroll).
   const chartSvg = document.getElementById('price-chart');
   const tooltip = document.getElementById('chart-tooltip');
-  chartSvg.addEventListener('mousemove', (e) => {
+  chartSvg.addEventListener('pointermove', (e) => {
+    // Ignore touch — let the page scroll naturally. Only respond to mouse/pen.
+    if (e.pointerType === 'touch') return;
     if (!state.chartTicks.length) return;
     const rect = chartSvg.getBoundingClientRect();
     const xRatio = (e.clientX - rect.left) / rect.width;
@@ -3968,7 +3969,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tooltip.style.top = (e.clientY - rect.top) + 'px';
     tooltip.classList.add('show');
   });
-  chartSvg.addEventListener('mouseleave', () => {
+  chartSvg.addEventListener('pointerleave', () => {
     tooltip.classList.remove('show');
   });
 
