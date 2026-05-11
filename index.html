@@ -2264,7 +2264,7 @@
 
     <div class="disclosure">
       <strong>Disclosure &amp; Data Sources</strong>
-      Volatility Desk surfaces options strategies, price targets, and technical signals generated from real-time market data via the Finnhub API, supplemented with 200-day historical data from Stooq for moving average calculations. The "unusual activity" flag identifies contracts where <em>current-day</em> volume is greater than 3× open interest — a widely-used proxy signal, but not a true 45-day historical unusual-activity feed (those require premium data vendors like Cheddar Flow, Unusual Whales, or Polygon's options tier). Greeks (Delta, etc.) come directly from Finnhub's option chain endpoint. Targets are computed from recent realized volatility and Average True Range. The Entry Signal combines RSI-14, distance from the 200-day MA, intraday range position, and short-term momentum into a composite score — it is a statistical heuristic, not a prediction. Options trading involves substantial risk of loss and is not suitable for every investor. Nothing on this page is investment advice. Verify all data with your broker before trading.
+      Volatility Desk surfaces options strategies, price targets, and technical signals generated from real-time market data via the Finnhub API, supplemented with 200-day historical data from Stooq (with public CORS-proxy fallback) for moving average and RSI calculations. The <strong>Full Option Chain</strong> section requires Finnhub's paid tier — on free keys it returns 403 Forbidden and shows a notice. Strategy cards above the chain use real-time quotes plus calculated strikes; their premium estimates use realized volatility as an IV proxy. The Entry Signal combines RSI-14, distance from the 200-day MA, intraday range position, and short-term momentum into a composite score — it is a statistical heuristic, not a prediction. Options trading involves substantial risk of loss and is not suitable for every investor. Nothing on this page is investment advice. Verify all data with your broker before trading.
     </div>
 
   </main>
@@ -2410,9 +2410,8 @@ async function getOptionChain(symbol) {
 // ====================================================================
 async function getStooqHistory(symbol, days = 220) {
   // Stooq uses .us suffix for US tickers
-  // For indices/ETFs the suffix is still .us
   const today = new Date();
-  const start = new Date(today.getTime() - days * 1.6 * 24 * 60 * 60 * 1000); // 1.6x buffer for weekends/holidays
+  const start = new Date(today.getTime() - days * 1.6 * 24 * 60 * 60 * 1000);
   const fmt = (d) => {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -2420,33 +2419,45 @@ async function getStooqHistory(symbol, days = 220) {
     return `${y}${m}${dd}`;
   };
   const tickerForStooq = symbol.toLowerCase().replace('.', '-');
-  const url = `https://stooq.com/q/d/l/?s=${encodeURIComponent(tickerForStooq)}.us&d1=${fmt(start)}&d2=${fmt(today)}&i=d`;
+  const baseUrl = `https://stooq.com/q/d/l/?s=${encodeURIComponent(tickerForStooq)}.us&d1=${fmt(start)}&d2=${fmt(today)}&i=d`;
 
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Stooq HTTP ${res.status}`);
-    const text = await res.text();
-    // Stooq returns "No data" or similar on failure
-    if (!text || text.length < 50 || text.toLowerCase().includes('no data')) {
-      throw new Error('Stooq returned no data');
-    }
-    // Parse CSV: header is "Date,Open,High,Low,Close,Volume"
-    const lines = text.trim().split('\n');
-    if (lines.length < 50) throw new Error('Insufficient Stooq history');
-    const closes = [];
-    for (let i = 1; i < lines.length; i++) {
-      const parts = lines[i].split(',');
-      if (parts.length >= 5) {
-        const close = parseFloat(parts[4]);
-        if (!isNaN(close)) closes.push(close);
+  // Try direct first, then fall back through public CORS proxies.
+  // These proxies are public/free and may have occasional downtime — we cycle through.
+  const attempts = [
+    baseUrl,
+    `https://corsproxy.io/?${encodeURIComponent(baseUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(baseUrl)}`,
+  ];
+
+  for (const url of attempts) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const text = await res.text();
+      if (!text || text.length < 50) continue;
+      if (text.toLowerCase().includes('no data') || text.toLowerCase().includes('<!doctype html')) continue;
+
+      const lines = text.trim().split('\n');
+      if (lines.length < 50) continue;
+      // First line should be the CSV header — verify by checking it starts with "Date"
+      if (!lines[0].toLowerCase().startsWith('date')) continue;
+
+      const closes = [];
+      for (let i = 1; i < lines.length; i++) {
+        const parts = lines[i].split(',');
+        if (parts.length >= 5) {
+          const close = parseFloat(parts[4]);
+          if (!isNaN(close) && close > 0) closes.push(close);
+        }
       }
+      if (closes.length < 50) continue;
+      return closes; // chronological order, oldest first
+    } catch (e) {
+      // Network/CORS failure — try next attempt
+      continue;
     }
-    if (closes.length < 50) throw new Error('Not enough valid close prices');
-    return closes; // chronological order, oldest first
-  } catch (e) {
-    // Network error, CORS, or no data — return null so callers can fall back
-    return null;
   }
+  return null; // all attempts failed
 }
 
 // Compute simple moving average from a series of closes (oldest first)
@@ -3083,6 +3094,48 @@ async function findOptionOfTheDay() {
   }
 }
 
+// Populates the OOTD signals row after async tech-data load
+function populateOOTDSignals(techData) {
+  const { ma200info, rsiInfo, entry } = techData;
+
+  const entryEl = document.getElementById('ootd-sig-entry');
+  const priceEl = document.getElementById('ootd-sig-price');
+  const maEl = document.getElementById('ootd-sig-ma');
+  const rsiEl = document.getElementById('ootd-sig-rsi');
+  if (!entryEl) return; // OOTD card may not be rendered anymore
+
+  if (entry) {
+    entryEl.className = `sig-val ${entry.actionClass === 'enter' ? 'bull' : entry.actionClass === 'avoid' ? 'bear' : 'warn'}`;
+    entryEl.textContent = entry.action;
+    priceEl.className = 'sig-val accent';
+    priceEl.textContent = entry.entryPrice != null ? `$${entry.entryPrice.toFixed(2)}` : '—';
+  }
+
+  if (ma200info) {
+    maEl.className = `sig-val ${ma200info.status === 'oversold' ? 'bull' : ma200info.status === 'overbought' ? 'bear' : ''}`;
+    maEl.style.color = '';
+    maEl.style.fontSize = '';
+    maEl.textContent = `${ma200info.distance >= 0 ? '+' : ''}${ma200info.distance.toFixed(1)}%`;
+  } else {
+    maEl.className = 'sig-val';
+    maEl.style.color = 'var(--ink-faint)';
+    maEl.style.fontSize = '11px';
+    maEl.textContent = 'No history';
+  }
+
+  if (rsiInfo) {
+    rsiEl.className = `sig-val ${rsiInfo.status === 'oversold' ? 'bull' : rsiInfo.status === 'overbought' ? 'bear' : ''}`;
+    rsiEl.style.color = '';
+    rsiEl.style.fontSize = '';
+    rsiEl.textContent = `${rsiInfo.rsi.toFixed(0)} · ${rsiInfo.label.replace(' (intraday)', '')}`;
+  } else {
+    rsiEl.className = 'sig-val';
+    rsiEl.style.color = 'var(--ink-faint)';
+    rsiEl.style.fontSize = '11px';
+    rsiEl.textContent = '—';
+  }
+}
+
 async function renderOOTD(pick) {
   const loading = document.getElementById('ootd-loading');
   const content = document.getElementById('ootd-content');
@@ -3091,27 +3144,9 @@ async function renderOOTD(pick) {
   const isUp = (q.d || q.dp || 0) >= 0;
   const name = COMPANY_NAMES[pick.symbol] || pick.symbol;
 
-  // Fetch tech data for the OOTD pick — best-effort, won't block rendering
-  let techData = techCache.get(pick.symbol);
-  if (!techData) {
-    try {
-      const closes = await getStooqHistory(pick.symbol, 220);
-      let ma200info = null, rsiInfo = null;
-      if (closes && closes.length >= 200) {
-        ma200info = classifyMA(q.c, computeMA(closes, 200));
-        rsiInfo = classifyRSI(computeRSI(closes, 14));
-      } else if (closes && closes.length >= 50) {
-        rsiInfo = classifyRSI(computeRSI(closes, 14));
-      }
-      if (!rsiInfo) rsiInfo = classifyRSI(intradayRSIProxy(q));
-      const entry = computeEntrySignal(q, ma200info, rsiInfo);
-      techData = { ma200info, rsiInfo, entry };
-      techCache.set(pick.symbol, techData);
-    } catch (e) {
-      techData = { ma200info: null, rsiInfo: null, entry: null };
-    }
-  }
-  const { ma200info, rsiInfo, entry } = techData;
+  // Use cached tech data if available; otherwise we'll fill it in async after render.
+  const cachedTech = techCache.get(pick.symbol) || { ma200info: null, rsiInfo: null, entry: null };
+  const { ma200info, rsiInfo, entry } = cachedTech;
 
   // Format strategy values
   const debitStr = s.debit < 0
@@ -3210,40 +3245,56 @@ async function renderOOTD(pick) {
       <button class="ootd-footer-action" id="ootd-analyze-btn" data-symbol="${pick.symbol}">Full Analysis →</button>
     </div>
 
-    ${entry || ma200info || rsiInfo ? `
-    <div style="padding: 0 28px 22px">
-      <div class="ootd-signals">
-        ${entry ? `
-          <div class="sig">
-            <div class="sig-label">Entry Signal</div>
-            <div class="sig-val ${entry.actionClass === 'enter' ? 'bull' : entry.actionClass === 'avoid' ? 'bear' : 'warn'}">${entry.action}</div>
-          </div>
-          <div class="sig">
-            <div class="sig-label">Entry Price</div>
-            <div class="sig-val accent">${entry.entryPrice != null ? '$' + entry.entryPrice.toFixed(2) : '—'}</div>
-          </div>
-        ` : ''}
-        ${ma200info ? `
-          <div class="sig">
-            <div class="sig-label">200-Day MA</div>
-            <div class="sig-val ${ma200info.status === 'oversold' ? 'bull' : ma200info.status === 'overbought' ? 'bear' : ''}">${ma200info.distance >= 0 ? '+' : ''}${ma200info.distance.toFixed(1)}%</div>
-          </div>
-        ` : `
-          <div class="sig">
-            <div class="sig-label">200-Day MA</div>
-            <div class="sig-val" style="color:var(--ink-faint);font-size:11px">No history</div>
-          </div>
-        `}
-        ${rsiInfo ? `
-          <div class="sig">
-            <div class="sig-label">RSI · Status</div>
-            <div class="sig-val ${rsiInfo.status === 'oversold' ? 'bull' : rsiInfo.status === 'overbought' ? 'bear' : ''}">${rsiInfo.rsi.toFixed(0)} · ${rsiInfo.label.replace(' (intraday)', '')}</div>
-          </div>
-        ` : ''}
+    <div style="padding: 0 28px 22px" id="ootd-signals-wrap">
+      <div class="ootd-signals" id="ootd-signals-grid">
+        <div class="sig">
+          <div class="sig-label">Entry Signal</div>
+          <div class="sig-val" id="ootd-sig-entry"><span class="loading"></span></div>
+        </div>
+        <div class="sig">
+          <div class="sig-label">Entry Price</div>
+          <div class="sig-val accent" id="ootd-sig-price">—</div>
+        </div>
+        <div class="sig">
+          <div class="sig-label">200-Day MA</div>
+          <div class="sig-val" id="ootd-sig-ma" style="color:var(--ink-faint);font-size:11px">Loading…</div>
+        </div>
+        <div class="sig">
+          <div class="sig-label">RSI · Status</div>
+          <div class="sig-val" id="ootd-sig-rsi" style="color:var(--ink-faint);font-size:11px">Loading…</div>
+        </div>
       </div>
     </div>
-    ` : ''}
   `;
+
+  // If we have cached tech data, populate signals immediately. Otherwise fetch async.
+  if (cachedTech.entry || cachedTech.ma200info || cachedTech.rsiInfo) {
+    populateOOTDSignals(cachedTech);
+  } else {
+    // Async fetch — show loading then update when done
+    (async () => {
+      try {
+        const closes = await getStooqHistory(pick.symbol, 220);
+        let ma200info = null, rsiInfo = null;
+        if (closes && closes.length >= 200) {
+          ma200info = classifyMA(q.c, computeMA(closes, 200));
+          rsiInfo = classifyRSI(computeRSI(closes, 14));
+        } else if (closes && closes.length >= 50) {
+          rsiInfo = classifyRSI(computeRSI(closes, 14));
+        }
+        if (!rsiInfo) rsiInfo = classifyRSI(intradayRSIProxy(q));
+        const newEntry = computeEntrySignal(q, ma200info, rsiInfo);
+        const techData = { ma200info, rsiInfo, entry: newEntry };
+        techCache.set(pick.symbol, techData);
+        populateOOTDSignals(techData);
+      } catch (e) {
+        // On total failure, still show entry signal based on intraday-only data
+        const rsiInfo = classifyRSI(intradayRSIProxy(q));
+        const entry = computeEntrySignal(q, null, rsiInfo);
+        populateOOTDSignals({ ma200info: null, rsiInfo, entry });
+      }
+    })();
+  }
 
   loading.style.display = 'none';
   content.style.display = 'block';
@@ -4219,7 +4270,7 @@ function computeEntrySignal(quote, ma200info, rsiInfo) {
   return { score, action, actionClass, entryPrice, reasons, price };
 }
 
-function renderTechDashboard(symbol, quote, ma200info, rsiInfo, entry) {
+function renderTechDashboard(symbol, quote, ma200info, rsiInfo, entry, dataSource = 'full') {
   document.getElementById('tech-dash-container').style.display = 'block';
 
   // === 200-MA cell ===
@@ -4263,7 +4314,13 @@ function renderTechDashboard(symbol, quote, ma200info, rsiInfo, entry) {
     }
   } else {
     document.getElementById('tc-ma-price').textContent = 'N/A';
-    document.getElementById('tc-ma-sub').textContent = 'Historical data unavailable for this symbol';
+    if (dataSource === 'intraday') {
+      document.getElementById('tc-ma-sub').innerHTML = `<span style="color:var(--warn)">Stooq history blocked</span> — try a hard refresh, or this symbol may not be on Stooq's US feed.`;
+    } else if (dataSource === 'partial') {
+      document.getElementById('tc-ma-sub').textContent = 'Insufficient history (need 200 days)';
+    } else {
+      document.getElementById('tc-ma-sub').textContent = 'Historical data unavailable for this symbol';
+    }
     document.getElementById('tc-ma-bar').style.display = 'none';
     document.getElementById('tc-ma-bar-labels').style.display = 'none';
     statusPill.className = 'status-pill unavailable';
@@ -4340,6 +4397,10 @@ async function loadOptionChain(symbol, spotPrice) {
       throw new Error('No option chain available for this symbol');
     }
 
+    // Show the controls now that we have data
+    document.getElementById('chain-type-toggle').style.display = '';
+    document.querySelector('.chain-head').style.display = '';
+
     // Normalize the structure. Finnhub returns { data: [{expirationDate, options: {CALL: [...], PUT: [...]}}, ...] }
     const expirations = [];
     const now = Date.now();
@@ -4393,12 +4454,32 @@ async function loadOptionChain(symbol, spotPrice) {
 
     update.textContent = `${expirations.length} expirations · ${new Date().toLocaleTimeString()}`;
   } catch (e) {
-    update.textContent = 'Error';
-    document.getElementById('chain-table-wrap').innerHTML = `
-      <div class="empty-state" style="border:none">
-        <div class="empty-state-mark">⌧</div>
-        <div class="empty-state-text">${e.message}</div>
-      </div>`;
+    // Special handling for FORBIDDEN — this is a Finnhub paid-tier endpoint
+    if (e.message === 'FORBIDDEN') {
+      update.textContent = 'Premium endpoint';
+      // Hide calls/puts toggle since it has nothing to toggle
+      document.getElementById('chain-type-toggle').style.display = 'none';
+      document.getElementById('chain-table-wrap').innerHTML = `
+        <div style="padding: 32px 24px; text-align: left; max-width: 720px; margin: 0 auto;">
+          <div style="font-family: 'Fraunces', serif; font-weight: 800; font-size: 22px; color: var(--ink); margin-bottom: 12px;">
+            Option Chain requires a Finnhub paid plan
+          </div>
+          <div style="font-size: 12px; color: var(--ink-dim); line-height: 1.7; margin-bottom: 18px;">
+            Finnhub's <code style="background:var(--bg);padding:2px 6px;border:1px solid var(--line-bright);font-family:'JetBrains Mono',monospace">/stock/option-chain</code> endpoint — the source for full strike-by-strike data with Delta and the other Greeks — is restricted to paid tiers (currently $59.99/month for US options). The free tier blocks it with a 403 Forbidden response.
+            <br><br>
+            <strong style="color: var(--ink);">Free alternatives that work:</strong> the <strong>Strategy cards</strong> and <strong>Option of the Day</strong> sections above use real-time quotes plus calculated strikes around the current price, with expirations chosen from actual weekly/monthly Friday cycles. Premium estimates use realized volatility as an IV proxy.
+            <br><br>
+            <strong style="color: var(--ink);">If you want full chain data with real Delta values:</strong> upgrade Finnhub to a paid plan, or switch to a provider like <a href="https://documentation.tradier.com" target="_blank" rel="noopener" style="color:var(--accent)">Tradier</a> (free sandbox tier includes options), <a href="https://polygon.io" target="_blank" rel="noopener" style="color:var(--accent)">Polygon.io</a>, or <a href="https://tradestation-api-docs.readthedocs.io/" target="_blank" rel="noopener" style="color:var(--accent)">TradeStation</a>.
+          </div>
+        </div>`;
+    } else {
+      update.textContent = 'Unavailable';
+      document.getElementById('chain-table-wrap').innerHTML = `
+        <div class="empty-state" style="border:none">
+          <div class="empty-state-mark">⌧</div>
+          <div class="empty-state-text">${e.message}</div>
+        </div>`;
+    }
   }
 }
 
@@ -4538,32 +4619,43 @@ async function runTechAnalysis(symbol, quote) {
   document.getElementById('tc-entry-sub').textContent = 'Computing signal…';
   document.getElementById('tc-rsi-val').textContent = '…';
 
-  // Fetch historical closes from Stooq (best effort)
-  const closes = await getStooqHistory(symbol, 220);
+  // Fetch historical closes from Stooq (best effort — may take several seconds through CORS proxies)
+  let closes = null;
+  try {
+    closes = await getStooqHistory(symbol, 220);
+  } catch (e) {
+    closes = null;
+  }
 
   let ma200info = null;
   let rsiInfo = null;
+  let dataSource = 'none';
 
   if (closes && closes.length >= 200) {
     const ma200 = computeMA(closes, 200);
     ma200info = classifyMA(quote.c, ma200);
     const rsi = computeRSI(closes, 14);
     rsiInfo = classifyRSI(rsi);
+    dataSource = 'full';
   } else if (closes && closes.length >= 50) {
-    // Partial history — give what we can
+    // Partial history — RSI works but no reliable 200-MA
     const rsi = computeRSI(closes, 14);
     rsiInfo = classifyRSI(rsi);
+    dataSource = 'partial';
   }
 
-  // If we don't have RSI, fall back to intraday proxy
+  // Always have an RSI value — fall back to intraday proxy if no history available
   if (!rsiInfo) {
     const proxyRSI = intradayRSIProxy(quote);
     rsiInfo = classifyRSI(proxyRSI);
     if (rsiInfo) rsiInfo.label = rsiInfo.label + ' (intraday)';
+    dataSource = 'intraday';
   }
 
+  // Entry signal ALWAYS computes — even if only intraday data is available
   const entry = computeEntrySignal(quote, ma200info, rsiInfo);
-  renderTechDashboard(symbol, quote, ma200info, rsiInfo, entry);
+
+  renderTechDashboard(symbol, quote, ma200info, rsiInfo, entry, dataSource);
 
   // Cache for OOTD consumption
   techCache.set(symbol, { ma200info, rsiInfo, entry });
