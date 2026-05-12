@@ -238,6 +238,184 @@
   .api-btn:hover { border-color: var(--accent); color: var(--accent); }
   .api-btn.connected { border-color: var(--bull); color: var(--bull); }
 
+  /* NOTIFICATION BELL */
+  .notif-btn {
+    padding: 7px 10px;
+    border: 1px solid var(--line-bright);
+    background: transparent;
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1;
+    min-height: 32px;
+    position: relative;
+  }
+  .notif-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .notif-btn.on {
+    border-color: var(--bull);
+    color: var(--bull);
+  }
+  .notif-btn.on::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--bull);
+    box-shadow: 0 0 8px var(--bull);
+  }
+  .notif-btn.blocked {
+    border-color: var(--bear);
+    color: var(--bear);
+  }
+  .notif-btn .label {
+    display: none;
+    margin-left: 4px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  @media (min-width: 720px) {
+    .notif-btn .label { display: inline; }
+  }
+
+  /* NOTIFICATION PREFERENCES MODAL */
+  .notif-prefs {
+    margin-top: 14px;
+  }
+  .notif-pref-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    gap: 12px;
+  }
+  .notif-pref-row:last-child { border-bottom: none; }
+  .notif-pref-label {
+    font-size: 12px;
+    color: var(--ink);
+    flex: 1;
+  }
+  .notif-pref-desc {
+    font-size: 10px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+  .notif-toggle {
+    width: 40px;
+    height: 22px;
+    border-radius: 12px;
+    background: var(--line-bright);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .notif-toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ink);
+    transition: transform 0.15s, background 0.15s;
+  }
+  .notif-toggle.on {
+    background: var(--accent);
+  }
+  .notif-toggle.on::after {
+    transform: translateX(18px);
+    background: #000;
+  }
+
+  /* IN-APP TOAST */
+  .toast-stack {
+    position: fixed;
+    top: max(80px, env(safe-area-inset-top));
+    right: 16px;
+    left: 16px;
+    max-width: 420px;
+    margin-left: auto;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-left: 4px solid var(--accent);
+    padding: 14px 16px;
+    color: var(--ink);
+    pointer-events: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    animation: toastSlide 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .toast.exiting {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  .toast.movers { border-color: var(--bull); border-left-color: var(--bull); }
+  .toast-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .toast-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+  .toast-close {
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .toast-close:hover { color: var(--ink); }
+  .toast-body {
+    font-size: 12px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+  }
+  .toast-body strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .toast-tag {
+    display: inline-block;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .toast.movers .toast-tag { color: var(--bull); }
+  @keyframes toastSlide {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
   /* MAIN */
   main { padding: 28px; max-width: 1600px; margin: 0 auto; }
 
@@ -1699,6 +1877,45 @@
     text-transform: uppercase;
   }
 
+  /* Bias pill — shown in the Bias column on desktop, inline on mobile */
+  .mt-bias {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border: 1px solid var(--line-bright);
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .mt-bias.bull {
+    color: var(--bull);
+    border-color: var(--bull);
+    background: rgba(0, 214, 143, 0.08);
+  }
+  .mt-bias.bear {
+    color: var(--bear);
+    border-color: var(--bear);
+    background: rgba(255, 59, 92, 0.08);
+  }
+  .mt-bias.neutral {
+    color: var(--ink-dim);
+  }
+  .mt-bias.volatile {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(212, 255, 58, 0.06);
+  }
+
+  /* Mobile extras row — hidden on desktop, shown on mobile */
+  .mt-extras {
+    display: none;
+  }
+
   .mt-rank {
     font-family: 'Fraunces', serif;
     font-weight: 900;
@@ -1923,6 +2140,8 @@
   }
   @media (max-width: 720px) {
     header { grid-template-columns: 1fr auto; gap: 10px; padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top)); }
+    .header-right { gap: 8px; }
+    .clock { display: none; }
     .brand-tag { display: none; }
     .nav-tabs {
       justify-self: stretch;
@@ -1977,22 +2196,68 @@
     .strategy-grid { grid-template-columns: 1fr; gap: 12px; }
     .strategy-card { padding: 16px; }
 
-    .mt-row { grid-template-columns: 32px 1fr 80px 70px; gap: 8px; padding: 12px 10px; font-size: 11px; min-height: 56px; align-items: center; }
-    .mt-row > .col-name, .mt-row > .col-vol, .mt-row > .col-mc, .mt-row > .col-act { display: none; }
-    .mt-row.head > .col-t1, .mt-row.head > .col-t2 { font-size: 8px; }
-    .mt-symbol { font-size: 15px; }
-    .mt-price { font-size: 13px; }
-    .mt-change { font-size: 13px; }
-    .mt-target { font-size: 12px; }
-    .mt-target .pct { font-size: 8px; }
-    .mt-rank { font-size: 18px; }
-    /* Make the whole row tappable on mobile (jumps to strats) */
+    /* Mobile: drop the rigid grid in favor of a flex card with a primary line + extras line */
     .mt-row:not(.head) {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 10px;
+      padding: 12px 12px;
+      font-size: 11px;
+      min-height: 56px;
       cursor: pointer;
     }
-    .mt-row:not(.head):active {
-      background: var(--bg-elev);
+    /* Hide the desktop head row entirely on mobile — the layout is self-documenting */
+    .mt-row.head { display: none; }
+    /* Primary line items */
+    .mt-rank { font-size: 16px; flex: 0 0 26px; }
+    .mt-symbol { font-size: 16px; flex: 0 0 auto; }
+    .mt-name, .mt-volume, .col-name, .col-vol, .col-mc, .col-act { display: none; }
+    .mt-price { font-size: 13px; flex: 0 0 auto; margin-left: auto; }
+    .mt-change { font-size: 13px; flex: 0 0 auto; }
+    /* Show the extras line on mobile, full-width below the primary line */
+    .mt-extras {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      flex-basis: 100%;
+      padding-top: 6px;
+      border-top: 1px dashed var(--line);
+      margin-top: 2px;
+      align-items: center;
+      font-size: 10px;
+      color: var(--ink-faint);
+      letter-spacing: 0.1em;
     }
+    .mt-extras .ex-target {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+    .mt-extras .ex-target.t1 { color: var(--accent); }
+    .mt-extras .ex-target.t2 { color: var(--bull); }
+    .mt-extras .ex-target.t1.bear { color: var(--warn); }
+    .mt-extras .ex-target.t2.bear { color: var(--bear); }
+    .mt-extras .ex-target .pct {
+      font-size: 9px;
+      color: var(--ink-faint);
+      margin-left: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+    .mt-extras .ex-label {
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    /* The desktop bias cell hides on mobile (lives in extras line instead) */
+    .mt-row > .col-bias { display: none; }
+    /* The desktop target cells also hide on mobile */
+    .mt-row > .col-t1, .mt-row > .col-t2 { display: none; }
+    .mt-row:not(.head):active { background: var(--bg-elev); }
 
     .page-title { font-size: 28px; line-height: 1.05; }
     .page-title em, .page-title strong { line-height: 1.05; }
@@ -2051,6 +2316,7 @@
     </nav>
     <div class="header-right">
       <div class="clock disconnected" id="clock"><span class="live"></span><span id="clock-text">— · —</span></div>
+      <button class="notif-btn" id="notif-btn" title="Notifications: off"><span aria-hidden="true">🔔</span><span class="label">Alerts</span></button>
       <button class="api-btn" id="api-btn">⚙ API Key</button>
     </div>
   </header>
@@ -2268,6 +2534,39 @@
     </div>
 
   </main>
+</div>
+
+<!-- IN-APP TOAST STACK -->
+<div class="toast-stack" id="toast-stack"></div>
+
+<!-- NOTIFICATION PREFERENCES MODAL -->
+<div class="modal-bg" id="notif-modal-bg">
+  <div class="modal">
+    <h2>Alerts</h2>
+    <p id="notif-modal-status">Get pop-up alerts when a new Option of the Day is picked or when the top movers shift. Alerts appear as OS notifications (when permitted) plus in-app toasts.</p>
+    <div class="notif-prefs">
+      <div class="notif-pref-row">
+        <div>
+          <div class="notif-pref-label">Option of the Day</div>
+          <div class="notif-pref-desc">Notify when a new daily pick is selected</div>
+        </div>
+        <button class="notif-toggle" id="notif-toggle-ootd" data-key="ootd"></button>
+      </div>
+      <div class="notif-pref-row">
+        <div>
+          <div class="notif-pref-label">Top 3 Movers</div>
+          <div class="notif-pref-desc">Notify after each universe scan with the biggest movers</div>
+        </div>
+        <button class="notif-toggle" id="notif-toggle-movers" data-key="movers"></button>
+      </div>
+    </div>
+    <p style="font-size:10px;color:var(--ink-faint);margin-top:14px;line-height:1.6">
+      <strong style="color:var(--ink-dim)">Heads up:</strong> Browser notifications only fire while this app is open (or installed to your home screen on iOS 16.4+). For true background alerts, the app would need a server with web-push protocol — not possible in a single-file static deployment. In-app toasts always work regardless of OS permission.
+    </p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="notif-modal-close">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- API KEY MODAL -->
@@ -2683,6 +2982,32 @@ function targetDTEFor(strategyName, vol) {
   return Math.round(base * volAdjust);
 }
 
+// Classify directional bias for the movers table — keeps strategy generator and movers
+// row indicator in sync. Uses % change as primary, then refines with intraday position
+// and volatility for an explicit "volatile/neutral" distinction.
+function classifyBias(quote, vol) {
+  const changePct = quote.dp || 0;
+  const range = (quote.h || 0) - (quote.l || 0);
+  const rangePct = quote.c > 0 ? (range / quote.c) * 100 : 0;
+  // Where in the day's range is the current price? 0 = at low, 1 = at high
+  const positionInRange = range > 0 ? (quote.c - quote.l) / range : 0.5;
+
+  const isVolatile = (vol && vol > 0.5) || rangePct > 4;
+
+  // Strong directional bias
+  if (changePct > 2) return { tag: 'bull', label: 'Bullish' };
+  if (changePct < -2) return { tag: 'bear', label: 'Bearish' };
+
+  // Mild move with confirming intraday position
+  if (changePct > 0.5 && positionInRange > 0.55) return { tag: 'bull', label: 'Bullish' };
+  if (changePct < -0.5 && positionInRange < 0.45) return { tag: 'bear', label: 'Bearish' };
+
+  // Choppy day with high volatility but no clear direction
+  if (isVolatile) return { tag: 'volatile', label: 'Volatile' };
+
+  return { tag: 'neutral', label: 'Neutral' };
+}
+
 function generateStrategies(quote, atr, vol) {
   const price = quote.c;
   const changePct = quote.dp || 0;
@@ -3086,6 +3411,7 @@ async function findOptionOfTheDay() {
     }
 
     renderOOTD(bestPick);
+    maybeNotifyOOTD(bestPick);
   } catch (e) {
     loading.innerHTML = `<span style="color:var(--bear)">✗ ${e.message}</span>`;
     if (e.message === 'BAD_KEY' || e.message === 'NO_KEY') {
@@ -3333,9 +3659,9 @@ function renderMovers(rows) {
       <div>Last</div>
       <div>Change</div>
       <div class="col-vol">Range</div>
-      <div class="col-mc">Magnitude</div>
-      <div>Target 1</div>
-      <div>Target 2</div>
+      <div class="col-bias">Bias</div>
+      <div class="col-t1">Target 1</div>
+      <div class="col-t2">Target 2</div>
       <div class="col-act">Trade</div>
     </div>
   `;
@@ -3357,6 +3683,9 @@ function renderMovers(rows) {
       delete r._prevPrice;
     }
 
+    // Compute bias on the fly if missing (for older rows that may not have it cached)
+    const bias = r.bias || classifyBias({ c: r.price, d: r.change, dp: r.changePct, h: r.high, l: r.low }, r.vol);
+
     return `
       <div class="mt-row ${flashClass}" data-symbol="${r.symbol}">
         <div class="mt-rank ${rankClass}">${String(i + 1).padStart(2, '0')}</div>
@@ -3365,16 +3694,23 @@ function renderMovers(rows) {
         <div class="mt-price">$${r.price.toFixed(2)}</div>
         <div class="mt-change ${dirClass}">${isUp ? '+' : ''}${r.changePct.toFixed(2)}%</div>
         <div class="mt-volume col-vol">${r.range.toFixed(2)}%</div>
-        <div class="mt-volume col-mc" style="color:${isUp ? 'var(--bull)' : 'var(--bear)'};letter-spacing:0">${magnitude}</div>
-        <div class="mt-target ${targetT1Class}">
+        <div class="col-bias"><span class="mt-bias ${bias.tag}">${bias.label}</span></div>
+        <div class="mt-target ${targetT1Class} col-t1">
           $${r.targets.t1.toFixed(2)}
           <span class="pct">${r.targets.t1Pct >= 0 ? '+' : ''}${r.targets.t1Pct.toFixed(2)}%</span>
         </div>
-        <div class="mt-target ${targetT2Class}">
+        <div class="mt-target ${targetT2Class} col-t2">
           $${r.targets.t2.toFixed(2)}
           <span class="pct">${r.targets.t2Pct >= 0 ? '+' : ''}${r.targets.t2Pct.toFixed(2)}%</span>
         </div>
         <div class="col-act"><button class="mt-action" data-symbol="${r.symbol}">Strats →</button></div>
+        <div class="mt-extras">
+          <span class="mt-bias ${bias.tag}">${bias.label}</span>
+          <span class="ex-label">T1</span>
+          <span class="ex-target ${targetT1Class}">$${r.targets.t1.toFixed(2)}<span class="pct">${r.targets.t1Pct >= 0 ? '+' : ''}${r.targets.t1Pct.toFixed(2)}%</span></span>
+          <span class="ex-label">T2</span>
+          <span class="ex-target ${targetT2Class}">$${r.targets.t2.toFixed(2)}<span class="pct">${r.targets.t2Pct >= 0 ? '+' : ''}${r.targets.t2Pct.toFixed(2)}%</span></span>
+        </div>
       </div>
     `;
   }).join('');
@@ -3574,6 +3910,7 @@ async function runScan() {
             }
           }
           const targets = computeTargets(q.c, atr, vol, q.dp || 0);
+          const bias = classifyBias(q, vol);
           return {
             symbol: sym,
             price: q.c,
@@ -3582,7 +3919,8 @@ async function runScan() {
             range: q.h && q.l ? ((q.h - q.l) / q.c) * 100 : 0,
             high: q.h, low: q.l,
             atr, vol,
-            targets
+            targets,
+            bias
           };
         } catch (err) {
           // Re-throw key/auth errors so the outer catch handles them properly
@@ -3609,6 +3947,9 @@ async function runScan() {
     let footer = `Updated ${new Date().toLocaleTimeString()} · ${results.length}/${symbols.length} symbols`;
     if (!candlesAvailable) footer += ' · using vol-fallback targets (candles are premium)';
     document.getElementById('movers-update').textContent = footer;
+
+    // Notify on top 3 movers (deduplicated by date+symbols+rounded-pct)
+    maybeNotifyMovers(results);
 
     // Start real-time price polling for the scanned universe
     startMoversPolling();
@@ -3887,6 +4228,7 @@ function startMoversPolling() {
             existing.high = q.h;
             existing.low = q.l;
             existing.targets = computeTargets(q.c, existing.atr, existing.vol, q.dp || 0);
+            existing.bias = classifyBias(q, existing.vol);
             existing._prevPrice = prevPrice;
             updated.push(sym);
           }
@@ -4062,6 +4404,7 @@ async function addOrFocusMoverSymbol(symbol) {
       return;
     }
     const targets = computeTargets(q.c, null, null, q.dp || 0);
+    const bias = classifyBias(q, null);
     const newRow = {
       symbol,
       price: q.c,
@@ -4071,6 +4414,7 @@ async function addOrFocusMoverSymbol(symbol) {
       high: q.h, low: q.l,
       atr: null, vol: null,
       targets,
+      bias,
       _adhoc: true,
     };
     state.moversData.unshift(newRow);
@@ -4783,6 +5127,278 @@ function registerServiceWorker() {
 }
 
 // ====================================================================
+// NOTIFICATIONS (OS-level + in-app toast)
+// ====================================================================
+const NOTIF_PREFS_KEY = 'voldesk.notifPrefs';
+const NOTIF_DEDUP_KEY = 'voldesk.notifDedup';
+
+const notifState = {
+  prefs: { ootd: false, movers: false },
+  dedup: {},   // { ootd: 'date|symbol', movers: 'date|sym1|sym2|sym3|rpct' }
+  // permission is read from Notification.permission at call time
+};
+
+function loadNotifPrefs() {
+  try {
+    const raw = localStorage.getItem(NOTIF_PREFS_KEY);
+    if (raw) notifState.prefs = { ...notifState.prefs, ...JSON.parse(raw) };
+    const dedupRaw = localStorage.getItem(NOTIF_DEDUP_KEY);
+    if (dedupRaw) notifState.dedup = JSON.parse(dedupRaw);
+    // Clear dedup keys that aren't from today — fresh notifications each day
+    const today = new Date().toISOString().split('T')[0];
+    for (const k of Object.keys(notifState.dedup)) {
+      const stored = notifState.dedup[k];
+      if (typeof stored === 'string' && !stored.startsWith(today)) {
+        delete notifState.dedup[k];
+      }
+    }
+    saveNotifPrefs();
+  } catch { /* ignore */ }
+}
+
+function saveNotifPrefs() {
+  try {
+    localStorage.setItem(NOTIF_PREFS_KEY, JSON.stringify(notifState.prefs));
+    localStorage.setItem(NOTIF_DEDUP_KEY, JSON.stringify(notifState.dedup));
+  } catch { /* ignore */ }
+}
+
+function notifPermission() {
+  return ('Notification' in window) ? Notification.permission : 'unsupported';
+}
+
+async function requestNotifPermission() {
+  if (!('Notification' in window)) return 'unsupported';
+  if (Notification.permission === 'granted') return 'granted';
+  if (Notification.permission === 'denied') return 'denied';
+  try {
+    const result = await Notification.requestPermission();
+    return result;
+  } catch {
+    return 'denied';
+  }
+}
+
+function updateNotifBtnUI() {
+  const btn = document.getElementById('notif-btn');
+  if (!btn) return;
+  const perm = notifPermission();
+  const anyOn = notifState.prefs.ootd || notifState.prefs.movers;
+
+  if (perm === 'unsupported') {
+    btn.classList.remove('on');
+    btn.classList.add('blocked');
+    btn.title = 'Notifications not supported in this browser';
+  } else if (perm === 'denied') {
+    btn.classList.remove('on');
+    btn.classList.add('blocked');
+    btn.title = 'Notifications blocked — change in browser settings';
+  } else if (anyOn) {
+    btn.classList.add('on');
+    btn.classList.remove('blocked');
+    btn.title = 'Alerts on — tap to manage';
+  } else {
+    btn.classList.remove('on', 'blocked');
+    btn.title = 'Alerts off — tap to enable';
+  }
+}
+
+function updateNotifToggleUI() {
+  const ootd = document.getElementById('notif-toggle-ootd');
+  const movers = document.getElementById('notif-toggle-movers');
+  if (ootd) ootd.classList.toggle('on', !!notifState.prefs.ootd);
+  if (movers) movers.classList.toggle('on', !!notifState.prefs.movers);
+
+  const status = document.getElementById('notif-modal-status');
+  if (status) {
+    const perm = notifPermission();
+    if (perm === 'unsupported') {
+      status.innerHTML = `<span style="color:var(--bear)">This browser doesn't support notifications.</span> You'll still see in-app toasts when something fires.`;
+    } else if (perm === 'denied') {
+      status.innerHTML = `<span style="color:var(--bear)">OS notifications are blocked.</span> To re-enable, change the permission in your browser settings. You'll still see in-app toasts.`;
+    } else if (perm === 'default') {
+      status.innerHTML = `Toggle an alert on and you'll be asked for permission to show OS pop-ups. In-app toasts always appear regardless.`;
+    } else {
+      status.innerHTML = `<span style="color:var(--bull)">OS notifications enabled.</span> Toggle individual alerts below.`;
+    }
+  }
+}
+
+// Central dispatcher — fires an OS notification (if permitted) AND an in-app toast.
+function fireNotification({ kind, title, body, dedupKey, onClick }) {
+  // Dedup
+  if (dedupKey) {
+    if (notifState.dedup[kind] === dedupKey) return false; // already fired
+    notifState.dedup[kind] = dedupKey;
+    saveNotifPrefs();
+  }
+
+  // OS notification (best effort — silently fails if permission missing)
+  if (notifPermission() === 'granted') {
+    try {
+      const n = new Notification(title, {
+        body,
+        icon: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='96' fill='%230a0a0a'/><rect x='196' y='80' width='32' height='80' fill='%2300d68f'/><rect x='284' y='80' width='32' height='80' fill='%23ff3b5c'/><text x='256' y='400' font-family='Georgia,serif' font-style='italic' font-weight='900' font-size='340' fill='%23d4ff3a' text-anchor='middle' letter-spacing='-12'>V</text></svg>",
+        badge: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='96' fill='%230a0a0a'/><text x='256' y='380' font-family='Georgia,serif' font-style='italic' font-weight='900' font-size='340' fill='%23d4ff3a' text-anchor='middle' letter-spacing='-12'>V</text></svg>",
+        tag: `voldesk-${kind}`,                              // overwrites previous of same kind
+        renotify: false,
+        silent: false,
+      });
+      if (onClick) {
+        n.onclick = () => {
+          window.focus();
+          try { n.close(); } catch {}
+          onClick();
+        };
+      }
+      // Auto-close after 8s (some browsers ignore this; harmless if they do)
+      setTimeout(() => { try { n.close(); } catch {} }, 8000);
+    } catch (e) {
+      // Some environments (notably iOS Safari outside a PWA) throw on construction
+    }
+  }
+
+  // In-app toast — always shows
+  showToast({ kind, title, body, onClick });
+  return true;
+}
+
+function showToast({ kind, title, body, onClick }) {
+  const stack = document.getElementById('toast-stack');
+  if (!stack) return;
+
+  const toast = document.createElement('div');
+  toast.className = `toast ${kind === 'movers' ? 'movers' : ''}`;
+
+  const tagLabel = kind === 'ootd' ? '★ Pick of the Day' : '⌖ Top Movers';
+  toast.innerHTML = `
+    <div class="toast-head">
+      <div>
+        <div class="toast-tag">${tagLabel}</div>
+        <div class="toast-title">${title}</div>
+      </div>
+      <button class="toast-close" aria-label="Dismiss">×</button>
+    </div>
+    <div class="toast-body">${body}</div>
+  `;
+
+  const dismiss = () => {
+    toast.classList.add('exiting');
+    setTimeout(() => toast.remove(), 220);
+  };
+
+  toast.querySelector('.toast-close').addEventListener('click', (e) => {
+    e.stopPropagation();
+    dismiss();
+  });
+
+  if (onClick) {
+    toast.addEventListener('click', () => {
+      onClick();
+      dismiss();
+    });
+  }
+
+  // Auto-dismiss after 10s
+  const autoDismiss = setTimeout(dismiss, 10000);
+  // Pause auto-dismiss on hover
+  toast.addEventListener('mouseenter', () => clearTimeout(autoDismiss));
+
+  stack.appendChild(toast);
+
+  // Cap stack at 3 visible
+  while (stack.children.length > 3) {
+    stack.children[0].remove();
+  }
+}
+
+// === Triggers ===
+
+function maybeNotifyOOTD(pick) {
+  if (!notifState.prefs.ootd) return;
+  if (!pick || !pick.symbol || !pick.strategy) return;
+
+  // Dedup: one notification per (date, symbol) pair — won't refire if same pick re-scans
+  const today = new Date().toISOString().split('T')[0];
+  const dedupKey = `${today}|${pick.symbol}|${pick.strategy.name}`;
+
+  const dirIcon = pick.strategy.bias === 'bullish' ? '↑'
+                : pick.strategy.bias === 'bearish' ? '↓'
+                : pick.strategy.bias === 'volatile' ? '↕'
+                : '→';
+  const title = `${dirIcon} ${pick.symbol} · ${pick.strategy.name}`;
+  const movePct = (pick.quote.dp || 0).toFixed(2);
+  const body = `Today's pick: ${pick.symbol} at $${pick.quote.c.toFixed(2)} (${movePct >= 0 ? '+' : ''}${movePct}%). ${pick.strategy.bias.charAt(0).toUpperCase() + pick.strategy.bias.slice(1)} setup — tap to view.`;
+
+  fireNotification({
+    kind: 'ootd',
+    title,
+    body,
+    dedupKey,
+    onClick: () => {
+      switchPage('strategies');
+      const ootdCard = document.getElementById('ootd-card');
+      if (ootdCard) ootdCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}
+
+function maybeNotifyMovers(rows) {
+  if (!notifState.prefs.movers) return;
+  if (!rows || rows.length === 0) return;
+
+  // Take top 3 by absolute % change (rows already sorted that way)
+  const top3 = rows.slice(0, 3);
+  if (top3.length === 0) return;
+
+  // Dedup: one notification per (date, top3 symbols, rounded total move)
+  const today = new Date().toISOString().split('T')[0];
+  const rpct = top3.map(r => Math.round(r.changePct)).join(',');
+  const symbols = top3.map(r => r.symbol).join(',');
+  const dedupKey = `${today}|${symbols}|${rpct}`;
+
+  const title = `⌖ Top Movers · ${top3.length} flagged`;
+  const bodyLines = top3.map((r, i) => {
+    const sign = r.changePct >= 0 ? '+' : '';
+    const arrow = r.changePct >= 0 ? '↑' : '↓';
+    return `${i + 1}. ${r.symbol} ${arrow} ${sign}${r.changePct.toFixed(2)}% @ $${r.price.toFixed(2)}`;
+  });
+  const body = bodyLines.join(' · ');
+
+  fireNotification({
+    kind: 'movers',
+    title,
+    body,
+    dedupKey,
+    onClick: () => {
+      switchPage('movers');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+}
+
+async function toggleNotifPref(key) {
+  // Need permission before turning ON
+  if (!notifState.prefs[key]) {
+    const perm = notifPermission();
+    if (perm === 'default') {
+      // Request permission — must happen in response to user action
+      const result = await requestNotifPermission();
+      if (result === 'denied') {
+        // User denied — still allow toggle (in-app toast will work)
+      }
+    }
+    // We allow toggling on even if denied — the in-app toast will work
+    notifState.prefs[key] = true;
+  } else {
+    notifState.prefs[key] = false;
+  }
+  saveNotifPrefs();
+  updateNotifBtnUI();
+  updateNotifToggleUI();
+}
+
+// ====================================================================
 // API KEY PERSISTENCE
 // ====================================================================
 const STORAGE_KEY = 'voldesk.finnhubApiKey';
@@ -4891,6 +5507,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // API key modal
   document.getElementById('api-btn').addEventListener('click', openModal);
+
+  // Notifications: open prefs modal
+  document.getElementById('notif-btn').addEventListener('click', () => {
+    updateNotifToggleUI();
+    document.getElementById('notif-modal-bg').classList.add('show');
+  });
+  document.getElementById('notif-modal-close').addEventListener('click', () => {
+    document.getElementById('notif-modal-bg').classList.remove('show');
+  });
+  document.getElementById('notif-modal-bg').addEventListener('click', (e) => {
+    if (e.target.id === 'notif-modal-bg') {
+      document.getElementById('notif-modal-bg').classList.remove('show');
+    }
+  });
+  document.querySelectorAll('.notif-toggle').forEach(t => {
+    t.addEventListener('click', async () => {
+      const key = t.dataset.key;
+      await toggleNotifPref(key);
+    });
+  });
   document.getElementById('modal-cancel').addEventListener('click', closeModal);
   document.getElementById('modal-bg').addEventListener('click', (e) => {
     if (e.target.id === 'modal-bg') closeModal();
@@ -5060,6 +5696,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial state — load any persisted API key from localStorage
   const storedKey = loadStoredApiKey();
+  // Load notification preferences and update bell UI
+  loadNotifPrefs();
+  updateNotifBtnUI();
   if (storedKey) {
     state.apiKey = storedKey;
     updateApiBtn();
