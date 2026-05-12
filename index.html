@@ -447,6 +447,426 @@
     flex-wrap: wrap;
   }
 
+  /* ============================================================ */
+  /* EARNINGS BANNER */
+  /* ============================================================ */
+  .earnings-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    border: 1px solid var(--line-bright);
+    border-left: 3px solid var(--warn);
+    background: rgba(255, 181, 71, 0.06);
+    font-size: 11px;
+  }
+  .earnings-banner.imminent {
+    border-left-color: var(--bear);
+    background: rgba(255, 59, 92, 0.08);
+  }
+  .earnings-banner.safe {
+    border-left-color: var(--bull);
+    background: rgba(0, 214, 143, 0.05);
+  }
+  .earnings-banner.unknown {
+    border-left-color: var(--ink-faint);
+    background: transparent;
+  }
+  .earnings-icon {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: var(--warn);
+    flex-shrink: 0;
+  }
+  .earnings-banner.imminent .earnings-icon { color: var(--bear); }
+  .earnings-banner.safe .earnings-icon { color: var(--bull); }
+  .earnings-banner.unknown .earnings-icon { color: var(--ink-faint); }
+  .earnings-text {
+    flex: 1;
+    color: var(--ink-dim);
+    line-height: 1.5;
+  }
+  .earnings-text strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .earnings-days {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--warn);
+  }
+  .earnings-banner.imminent .earnings-days { color: var(--bear); }
+  .earnings-banner.safe .earnings-days { color: var(--bull); }
+
+  /* ============================================================ */
+  /* PROBABILITY OF PROFIT + GREEKS PILLS */
+  /* ============================================================ */
+  .sc-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+  }
+  .metric-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 9px;
+    border: 1px solid var(--line-bright);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink-dim);
+    line-height: 1;
+  }
+  .metric-pill .num {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .metric-pill.pop.good { border-color: var(--bull); color: var(--bull); }
+  .metric-pill.pop.good .num { color: var(--bull); }
+  .metric-pill.pop.mid { border-color: var(--warn); color: var(--warn); }
+  .metric-pill.pop.mid .num { color: var(--warn); }
+  .metric-pill.pop.bad { border-color: var(--bear); color: var(--bear); }
+  .metric-pill.pop.bad .num { color: var(--bear); }
+  .metric-pill.theta .num { color: var(--bear); }
+  .metric-pill.theta.pos .num { color: var(--bull); }
+  .metric-pill.vega .num { color: var(--accent); }
+  .metric-pill.delta .num { color: var(--ink); }
+
+  /* ============================================================ */
+  /* P&L DIAGRAM */
+  /* ============================================================ */
+  .pnl-chart {
+    margin: 12px 0;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+  }
+  .pnl-chart-svg {
+    width: 100%;
+    height: 120px;
+    display: block;
+  }
+  .pnl-chart-legend {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .pnl-chart-legend .v {
+    color: var(--ink-dim);
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-left: 4px;
+  }
+
+  /* ============================================================ */
+  /* WATCHLIST PAGE */
+  /* ============================================================ */
+  .star-btn {
+    background: none;
+    border: 1px solid var(--line-bright);
+    color: var(--ink-faint);
+    padding: 6px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .star-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .star-btn.starred {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(212, 255, 58, 0.06);
+  }
+
+  .watchlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .watchlist-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line-bright);
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 12px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .watchlist-card:hover { border-color: var(--accent); }
+  .watchlist-card.bull { border-left-color: var(--bull); }
+  .watchlist-card.bear { border-left-color: var(--bear); }
+  .watchlist-card.neutral { border-left-color: var(--ink-faint); }
+  .watchlist-card.volatile { border-left-color: var(--accent); }
+  .watchlist-symbol {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+  .watchlist-bias {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 3px 7px;
+    border: 1px solid var(--line-bright);
+    line-height: 1;
+    white-space: nowrap;
+    align-self: center;
+  }
+  .watchlist-bias.bull { color: var(--bull); border-color: var(--bull); }
+  .watchlist-bias.bear { color: var(--bear); border-color: var(--bear); }
+  .watchlist-bias.neutral { color: var(--ink-dim); }
+  .watchlist-bias.volatile { color: var(--accent); border-color: var(--accent); }
+  .watchlist-bias.loading { color: var(--ink-faint); }
+  .watchlist-name {
+    grid-column: 1 / -1;
+    font-size: 10px;
+    color: var(--ink-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .watchlist-price-row {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 10px;
+    margin-top: 4px;
+    border-top: 1px dashed var(--line);
+  }
+  .watchlist-price {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .watchlist-change {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .watchlist-change.up { color: var(--bull); }
+  .watchlist-change.down { color: var(--bear); }
+  .watchlist-remove {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+  .watchlist-remove button {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-faint);
+    font-family: inherit;
+    font-size: 9px;
+    padding: 4px 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .watchlist-remove button:hover { color: var(--bear); border-color: var(--bear); }
+
+  /* ============================================================ */
+  /* JOURNAL PAGE */
+  /* ============================================================ */
+  .journal-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .journal-summary-cell {
+    background: var(--bg-card);
+    padding: 16px 18px;
+  }
+  .journal-summary-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .journal-summary-val {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+  .journal-summary-val.bull { color: var(--bull); }
+  .journal-summary-val.bear { color: var(--bear); }
+  .journal-summary-val.accent { color: var(--accent); }
+
+  .journal-form {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    padding: 18px;
+    margin-bottom: 24px;
+  }
+  .journal-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .journal-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .journal-form-field label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .journal-form-field input, .journal-form-field select, .journal-form-field textarea {
+    background: var(--bg);
+    border: 1px solid var(--line-bright);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 10px 12px;
+    min-height: 40px;
+  }
+  .journal-form-field input:focus, .journal-form-field select:focus, .journal-form-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .journal-form-field textarea { min-height: 60px; resize: vertical; font-family: inherit; }
+  .journal-form-field.full { grid-column: 1 / -1; }
+
+  .journal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .journal-entry {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line-bright);
+    padding: 14px 18px;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 8px 16px;
+    align-items: center;
+  }
+  .journal-entry.win { border-left-color: var(--bull); }
+  .journal-entry.loss { border-left-color: var(--bear); }
+  .journal-entry.open { border-left-color: var(--warn); }
+  .je-symbol {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .je-detail {
+    font-size: 11px;
+    color: var(--ink-dim);
+    line-height: 1.4;
+  }
+  .je-detail strong {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 12px;
+  }
+  .je-pnl {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 18px;
+    text-align: right;
+    letter-spacing: -0.01em;
+  }
+  .je-pnl.win { color: var(--bull); }
+  .je-pnl.loss { color: var(--bear); }
+  .je-pnl.open { color: var(--warn); }
+  .je-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .je-actions button {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-faint);
+    font-family: inherit;
+    font-size: 9px;
+    padding: 6px 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    min-height: 32px;
+  }
+  .je-actions button:hover { color: var(--ink); }
+  .je-actions button.danger:hover { color: var(--bear); border-color: var(--bear); }
+  .je-notes {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    color: var(--ink-faint);
+    line-height: 1.5;
+    font-style: italic;
+    padding-top: 8px;
+    margin-top: 4px;
+    border-top: 1px dashed var(--line);
+  }
+
+  /* ============================================================ */
+  /* MULTI-TIMEFRAME HISTORICAL CHART (extends realtime chart) */
+  /* ============================================================ */
+  .chart-tf-toggle {
+    display: flex;
+    border: 1px solid var(--line-bright);
+    flex-wrap: wrap;
+  }
+  .chart-tf-toggle button {
+    padding: 6px 11px;
+    background: transparent;
+    border: none;
+    color: var(--ink-dim);
+    font-family: inherit;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-right: 1px solid var(--line-bright);
+    min-height: 32px;
+  }
+  .chart-tf-toggle button:last-child { border-right: none; }
+  .chart-tf-toggle button.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  @media (max-width: 720px) {
+    .journal-entry { grid-template-columns: 1fr auto; }
+    .je-detail { grid-column: 1 / -1; order: 3; }
+    .journal-summary { grid-template-columns: 1fr 1fr; }
+    .watchlist-grid { grid-template-columns: 1fr; }
+  }
+
   /* IV banner on quote panel */
   .iv-context-row {
     grid-column: 1 / -1;
@@ -2554,6 +2974,8 @@
       <button class="nav-tab active" data-page="strategies"><span class="num">01</span>Strategies</button>
       <button class="nav-tab" data-page="outlook"><span class="num">02</span>Outlook</button>
       <button class="nav-tab" data-page="movers"><span class="num">03</span>Movers</button>
+      <button class="nav-tab" data-page="watchlist"><span class="num">04</span>Watchlist</button>
+      <button class="nav-tab" data-page="journal"><span class="num">05</span>Journal</button>
     </nav>
     <div class="header-right">
       <div class="clock disconnected" id="clock"><span class="live"></span><span id="clock-text">— · —</span></div>
@@ -2606,6 +3028,8 @@
 
       <div id="quote-container"></div>
 
+      <div id="earnings-container"></div>
+
       <div id="chart-container" style="display:none">
         <div class="chart-card">
           <div class="chart-head">
@@ -2614,6 +3038,13 @@
               <div class="chart-meta" id="chart-stats"></div>
             </div>
             <div class="chart-controls">
+              <div class="chart-tf-toggle" id="chart-tf-toggle">
+                <button data-tf="live" class="active">Live</button>
+                <button data-tf="1M">1M</button>
+                <button data-tf="3M">3M</button>
+                <button data-tf="6M">6M</button>
+                <button data-tf="1Y">1Y</button>
+              </div>
               <div class="chart-toggle" id="chart-mode-toggle">
                 <button class="active" data-mode="line">Line</button>
                 <button data-mode="candles">Candles</button>
@@ -2801,9 +3232,128 @@
 
     </section>
 
+    <!-- ====================== PAGE 4: WATCHLIST ====================== -->
+    <section class="page" id="page-watchlist">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Your <em>watchlist</em>.<br /><strong>Tracked live.</strong></h1>
+          <div class="page-subtitle">Starred tickers · Live quotes · Bias & alerts</div>
+        </div>
+        <div class="page-meta">
+          <span class="big" id="watchlist-count">0</span>
+          Watching <span class="live-pill paused" id="watchlist-live-pill">Idle</span>
+        </div>
+      </div>
+
+      <div class="alert-bar" id="watchlist-alert"></div>
+
+      <div class="controls" style="grid-template-columns: 1fr auto auto">
+        <div class="search-wrap">
+          <div class="ticker-input">
+            <input type="text" id="watchlist-search" placeholder="Search a ticker to add to your watchlist…" autocomplete="off" />
+          </div>
+          <div class="search-results" id="watchlist-search-results"></div>
+        </div>
+        <button class="btn-primary" id="watchlist-refresh-btn">⟳ Refresh</button>
+        <button class="api-btn" id="watchlist-clear-btn">Clear All</button>
+      </div>
+
+      <div id="watchlist-output">
+        <div class="empty-state">
+          <div class="empty-state-mark">★</div>
+          <div class="empty-state-text">Search for a ticker above to start your watchlist</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== PAGE 5: JOURNAL ====================== -->
+    <section class="page" id="page-journal">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Your <em>trades</em>.<br /><strong>Honestly tracked.</strong></h1>
+          <div class="page-subtitle">Log entries · See your hit rate · Learn from results</div>
+        </div>
+        <div class="page-meta">
+          <span class="big" id="journal-count">0</span>
+          Entries
+        </div>
+      </div>
+
+      <div id="journal-summary-container"></div>
+
+      <div class="journal-form" id="journal-form">
+        <div class="section-head" style="margin-bottom: 12px">
+          <span class="section-num">+</span>
+          <span class="section-title">Log a Trade</span>
+          <span class="section-line"></span>
+        </div>
+        <div class="journal-form-grid">
+          <div class="journal-form-field">
+            <label>Symbol</label>
+            <input type="text" id="je-symbol" placeholder="AAPL" maxlength="6" />
+          </div>
+          <div class="journal-form-field">
+            <label>Strategy</label>
+            <select id="je-strategy">
+              <option>Long Call</option>
+              <option>Long Put</option>
+              <option>Bull Call Spread</option>
+              <option>Bear Put Spread</option>
+              <option>Long Straddle</option>
+              <option>Long Strangle</option>
+              <option>Iron Condor</option>
+              <option>Cash-Secured Put</option>
+              <option>Covered Call</option>
+              <option>Stock (Long)</option>
+              <option>Stock (Short)</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="journal-form-field">
+            <label>Entry Date</label>
+            <input type="date" id="je-entry-date" />
+          </div>
+          <div class="journal-form-field">
+            <label>Entry Price ($)</label>
+            <input type="number" id="je-entry-price" step="0.01" placeholder="0.00" />
+          </div>
+          <div class="journal-form-field">
+            <label>Contracts/Shares</label>
+            <input type="number" id="je-qty" step="1" placeholder="1" min="1" />
+          </div>
+          <div class="journal-form-field">
+            <label>Exit Price ($) — leave blank if open</label>
+            <input type="number" id="je-exit-price" step="0.01" placeholder="0.00" />
+          </div>
+          <div class="journal-form-field full">
+            <label>Notes (thesis, what I was thinking, lessons)</label>
+            <textarea id="je-notes" rows="2" placeholder="Why did I take this trade? What was the setup?"></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn-secondary" id="je-clear-btn">Clear</button>
+          <button class="btn-primary" id="je-save-btn">Save Entry</button>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <span class="section-num">§</span>
+        <span class="section-title">Entries</span>
+        <span class="section-line"></span>
+        <span class="section-tag" id="journal-tag">All time</span>
+      </div>
+
+      <div id="journal-list">
+        <div class="empty-state">
+          <div class="empty-state-mark">∅</div>
+          <div class="empty-state-text">No journal entries yet. Log a trade above to begin.</div>
+        </div>
+      </div>
+    </section>
+
     <div class="disclosure">
       <strong>Disclosure &amp; Data Sources</strong>
-      Volatility Desk surfaces options strategies, price targets, market outlook, and technical signals generated from real-time market data via the Finnhub API, supplemented with 200-day historical data from Stooq (with public CORS-proxy fallback) for moving average, RSI, and IV Rank calculations. <strong>Implied Volatility (IV)</strong> shown on strategy cards is <em>estimated from realized volatility</em> — true broker-quoted IV per contract requires Finnhub's paid options tier or a different provider. IV Rank is the percentile of current 20-day realized vol relative to its 1-year range (or an intraday estimate when 1-year history isn't available). The <strong>Market Outlook</strong> tab uses the same bias classifier as the Movers tab — bullish/bearish/neutral derived from % change, intraday range position, and volatility. The <strong>Full Option Chain</strong> section requires Finnhub's paid tier — on free keys it returns 403 Forbidden. Options trading involves substantial risk of loss and is not suitable for every investor. Nothing on this page is investment advice. Verify all data with your broker before trading.
+      Volatility Desk surfaces options strategies, price targets, market outlook, and technical signals generated from real-time market data via the Finnhub API, supplemented with 200-day historical data from Stooq (with public CORS-proxy fallback) for moving average, RSI, IV Rank, and multi-timeframe chart calculations. <strong>Probability of Profit (POP)</strong>, <strong>Greeks</strong> (Delta/Theta/Vega), and the <strong>P&amp;L diagram</strong> on strategy cards are computed from Black-Scholes assumptions (zero rates and dividends) using estimated IV from realized volatility — not broker-quoted IV per contract. They are statistical heuristics, not predictions. <strong>Earnings dates</strong> come from Finnhub's free calendar endpoint and are used to flag IV-elevation windows. <strong>Implied Volatility (IV)</strong> shown is estimated from realized vol; true per-contract IV requires Finnhub's paid options tier or another provider. <strong>Full Option Chain</strong> requires Finnhub's paid tier. <strong>Watchlist</strong> and <strong>Journal</strong> entries are stored locally on this device only — they never leave your browser. The journal does not connect to your broker; it tracks what you manually log. Options trading involves substantial risk of loss and is not suitable for every investor. Nothing on this page is investment advice. Verify all data with your broker before trading.
     </div>
 
   </main>
@@ -2883,6 +3433,8 @@ const state = {
   chartTicks: [],         // [{t, p}, ...] — every poll appends one
   chartMode: 'line',      // 'line' or 'candles'
   chartCandleSec: 60,     // 1-min candles
+  chartTimeframe: 'live', // 'live' | '1M' | '3M' | '6M' | '1Y'
+  chartHistorical: [],    // [{t, p}, ...] when timeframe is historical
 };
 
 // Universes for screening
@@ -3033,6 +3585,14 @@ async function getCompanyNews(symbol, daysBack = 7) {
 
 async function getOptionChain(symbol) {
   return finnhubFetch(`/stock/option-chain?symbol=${encodeURIComponent(symbol)}`);
+}
+
+// Earnings calendar — looks up next earnings date for a symbol within the next 90 days
+async function getEarningsCalendar(symbol) {
+  const today = new Date();
+  const future = new Date(today.getTime() + 90 * 24 * 60 * 60 * 1000);
+  const fmt = (d) => d.toISOString().split('T')[0];
+  return finnhubFetch(`/calendar/earnings?from=${fmt(today)}&to=${fmt(future)}&symbol=${encodeURIComponent(symbol)}`);
 }
 
 // ====================================================================
@@ -3207,6 +3767,749 @@ function estimateIVRankFromRange(quote, vol) {
     status,
     estimated: true, // marks this as low-confidence
   };
+}
+
+// ====================================================================
+// WATCHLIST
+// ====================================================================
+const WATCHLIST_KEY = 'voldesk.watchlist';
+
+const watchlistState = {
+  symbols: [],            // list of ticker strings
+  data: {},               // { symbol: { quote, bias, name } }
+  pollTimer: null,
+  searchDebounce: null,
+  searchResults: [],
+  searchActiveIdx: -1,
+};
+
+function loadWatchlist() {
+  try {
+    const raw = localStorage.getItem(WATCHLIST_KEY);
+    if (raw) watchlistState.symbols = JSON.parse(raw);
+  } catch { watchlistState.symbols = []; }
+}
+
+function saveWatchlist() {
+  try {
+    localStorage.setItem(WATCHLIST_KEY, JSON.stringify(watchlistState.symbols));
+  } catch { /* ignore */ }
+}
+
+function isInWatchlist(symbol) {
+  return watchlistState.symbols.includes(symbol.toUpperCase());
+}
+
+function addToWatchlist(symbol) {
+  const sym = symbol.toUpperCase();
+  if (!sym || isInWatchlist(sym)) return false;
+  watchlistState.symbols.push(sym);
+  saveWatchlist();
+  return true;
+}
+
+function removeFromWatchlist(symbol) {
+  const sym = symbol.toUpperCase();
+  watchlistState.symbols = watchlistState.symbols.filter(s => s !== sym);
+  delete watchlistState.data[sym];
+  saveWatchlist();
+}
+
+async function refreshWatchlist() {
+  if (!state.apiKey) {
+    handleApiError(new Error('NO_KEY'), 'watchlist');
+    return;
+  }
+  if (watchlistState.symbols.length === 0) {
+    renderWatchlist();
+    return;
+  }
+  document.getElementById('watchlist-refresh-btn').disabled = true;
+  try {
+    const CHUNK = 10;
+    for (let i = 0; i < watchlistState.symbols.length; i += CHUNK) {
+      const chunk = watchlistState.symbols.slice(i, i + CHUNK);
+      const results = await Promise.all(chunk.map(async sym => {
+        try {
+          const q = await getQuote(sym);
+          if (!q || !q.c) return null;
+          return { sym, q };
+        } catch (err) {
+          if (err.message === 'BAD_KEY' || err.message === 'NO_KEY') throw err;
+          return null;
+        }
+      }));
+      results.filter(Boolean).forEach(({ sym, q }) => {
+        watchlistState.data[sym] = {
+          quote: q,
+          bias: classifyBias(q, null),
+          name: COMPANY_NAMES[sym] || sym,
+        };
+      });
+      if (i + CHUNK < watchlistState.symbols.length) await new Promise(r => setTimeout(r, 200));
+    }
+    renderWatchlist();
+    startWatchlistPolling();
+  } catch (e) {
+    handleApiError(e, 'watchlist');
+  } finally {
+    document.getElementById('watchlist-refresh-btn').disabled = false;
+  }
+}
+
+function renderWatchlist() {
+  const container = document.getElementById('watchlist-output');
+  const count = watchlistState.symbols.length;
+  document.getElementById('watchlist-count').textContent = count;
+
+  if (count === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-mark">★</div>
+        <div class="empty-state-text">Search for a ticker above to start your watchlist</div>
+      </div>`;
+    stopWatchlistPolling();
+    return;
+  }
+
+  const html = watchlistState.symbols.map(sym => {
+    const item = watchlistState.data[sym];
+    if (!item) {
+      return `
+        <div class="watchlist-card" data-symbol="${sym}">
+          <div class="watchlist-symbol">${sym}</div>
+          <div class="watchlist-bias loading">—</div>
+          <div class="watchlist-name">${COMPANY_NAMES[sym] || sym}</div>
+          <div class="watchlist-price-row">
+            <span class="watchlist-price" style="color:var(--ink-faint)">Loading…</span>
+            <span class="watchlist-change" style="color:var(--ink-faint)">—</span>
+          </div>
+          <div class="watchlist-remove"><button data-symbol="${sym}">Remove</button></div>
+        </div>`;
+    }
+    const q = item.quote;
+    const bias = item.bias;
+    const isUp = (q.dp || 0) >= 0;
+    return `
+      <div class="watchlist-card ${bias.tag}" data-symbol="${sym}">
+        <div class="watchlist-symbol">${sym}</div>
+        <div class="watchlist-bias ${bias.tag}">${bias.label}</div>
+        <div class="watchlist-name">${item.name}</div>
+        <div class="watchlist-price-row">
+          <span class="watchlist-price">$${q.c.toFixed(2)}</span>
+          <span class="watchlist-change ${isUp ? 'up' : 'down'}">${isUp ? '+' : ''}${(q.dp || 0).toFixed(2)}%</span>
+        </div>
+        <div class="watchlist-remove"><button data-symbol="${sym}">Remove</button></div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `<div class="watchlist-grid">${html}</div>`;
+
+  // Wire card clicks (jump to analysis) — but skip the Remove button area
+  container.querySelectorAll('.watchlist-card[data-symbol]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.watchlist-remove')) return;
+      const sym = card.dataset.symbol;
+      switchPage('strategies');
+      document.getElementById('ticker-input').value = sym;
+      runAnalysis(sym);
+    });
+  });
+  container.querySelectorAll('.watchlist-remove button').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      removeFromWatchlist(btn.dataset.symbol);
+      renderWatchlist();
+    });
+  });
+}
+
+function setWatchlistLivePill(active, label) {
+  const pill = document.getElementById('watchlist-live-pill');
+  if (!pill) return;
+  if (active) { pill.classList.remove('paused'); pill.textContent = label || 'Live'; }
+  else { pill.classList.add('paused'); pill.textContent = label || 'Paused'; }
+}
+
+function stopWatchlistPolling() {
+  if (watchlistState.pollTimer) {
+    clearInterval(watchlistState.pollTimer);
+    watchlistState.pollTimer = null;
+  }
+  setWatchlistLivePill(false, 'Paused');
+}
+
+function startWatchlistPolling() {
+  stopWatchlistPolling();
+  if (watchlistState.symbols.length === 0 || !state.apiKey) return;
+  setWatchlistLivePill(true, 'Live');
+
+  watchlistState.pollTimer = setInterval(async () => {
+    if (document.hidden) return;
+    try {
+      const symbols = watchlistState.symbols;
+      const CHUNK = 10;
+      for (let i = 0; i < symbols.length; i += CHUNK) {
+        const chunk = symbols.slice(i, i + CHUNK);
+        const results = await Promise.all(chunk.map(async sym => {
+          try {
+            const q = await getQuote(sym);
+            if (!q || !q.c) return null;
+            return { sym, q };
+          } catch { return null; }
+        }));
+        results.filter(Boolean).forEach(({ sym, q }) => {
+          watchlistState.data[sym] = {
+            quote: q,
+            bias: classifyBias(q, null),
+            name: COMPANY_NAMES[sym] || sym,
+          };
+        });
+        if (i + CHUNK < symbols.length) await new Promise(r => setTimeout(r, 200));
+      }
+      renderWatchlist();
+    } catch { /* silent */ }
+  }, 20000);
+}
+
+// ====================================================================
+// TRADE JOURNAL
+// ====================================================================
+const JOURNAL_KEY = 'voldesk.journal';
+
+const journalState = {
+  entries: [],   // { id, symbol, strategy, entryDate, entryPrice, qty, exitPrice, exitDate, notes }
+};
+
+function loadJournal() {
+  try {
+    const raw = localStorage.getItem(JOURNAL_KEY);
+    if (raw) journalState.entries = JSON.parse(raw);
+  } catch { journalState.entries = []; }
+}
+
+function saveJournal() {
+  try {
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(journalState.entries));
+  } catch { /* ignore */ }
+}
+
+// Compute P&L for a journal entry. For options assume per-contract pricing (×100 multiplier),
+// for stock plain shares.
+function computeJournalPnL(entry) {
+  if (entry.exitPrice == null || entry.exitPrice === '' || isNaN(parseFloat(entry.exitPrice))) {
+    return { pnl: null, status: 'open' };
+  }
+  const entryP = parseFloat(entry.entryPrice);
+  const exitP = parseFloat(entry.exitPrice);
+  const qty = parseFloat(entry.qty) || 1;
+  const isOption = !/^Stock/i.test(entry.strategy);
+  const isShort = /Sell|Short|Cash-Secured Put|Covered Call|Iron Condor|Bear/i.test(entry.strategy) && /Cash-Secured Put|Covered Call|Iron Condor/i.test(entry.strategy);
+  const multiplier = isOption ? 100 : 1;
+  // For credit strategies (CSP, IC, CC), entry price represents premium collected,
+  // exit price is what was paid back. We assume the user enters from their broker's perspective.
+  // Simple convention: pnl = (exit - entry) * qty * multiplier for debit trades
+  // For credit trades (negative entry interpretation), the user should enter the actual prices
+  // Keep this simple: just (exit - entry) × qty × multiplier and let user interpret
+  let pnl = (exitP - entryP) * qty * multiplier;
+  // For short stock, flip
+  if (entry.strategy === 'Stock (Short)') pnl = -pnl;
+  return { pnl, status: pnl >= 0 ? 'win' : 'loss' };
+}
+
+function renderJournalSummary() {
+  const container = document.getElementById('journal-summary-container');
+  const closed = journalState.entries.filter(e => e.exitPrice != null && e.exitPrice !== '');
+  const open = journalState.entries.filter(e => e.exitPrice == null || e.exitPrice === '');
+
+  let totalPnL = 0, wins = 0, losses = 0;
+  for (const e of closed) {
+    const { pnl } = computeJournalPnL(e);
+    if (pnl == null) continue;
+    totalPnL += pnl;
+    if (pnl >= 0) wins++; else losses++;
+  }
+  const total = wins + losses;
+  const winRate = total > 0 ? (wins / total) * 100 : 0;
+
+  container.innerHTML = `
+    <div class="journal-summary">
+      <div class="journal-summary-cell">
+        <div class="journal-summary-label">Total P&L</div>
+        <div class="journal-summary-val ${totalPnL >= 0 ? 'bull' : 'bear'}">${totalPnL >= 0 ? '+' : '-'}$${Math.abs(totalPnL).toFixed(0)}</div>
+      </div>
+      <div class="journal-summary-cell">
+        <div class="journal-summary-label">Win Rate</div>
+        <div class="journal-summary-val accent">${total > 0 ? winRate.toFixed(0) + '%' : '—'}</div>
+      </div>
+      <div class="journal-summary-cell">
+        <div class="journal-summary-label">Wins</div>
+        <div class="journal-summary-val bull">${wins}</div>
+      </div>
+      <div class="journal-summary-cell">
+        <div class="journal-summary-label">Losses</div>
+        <div class="journal-summary-val bear">${losses}</div>
+      </div>
+      <div class="journal-summary-cell">
+        <div class="journal-summary-label">Open</div>
+        <div class="journal-summary-val">${open.length}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderJournalList() {
+  const container = document.getElementById('journal-list');
+  document.getElementById('journal-count').textContent = journalState.entries.length;
+
+  if (journalState.entries.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-mark">∅</div>
+        <div class="empty-state-text">No journal entries yet. Log a trade above to begin.</div>
+      </div>`;
+    return;
+  }
+
+  // Sort by entry date descending (most recent first)
+  const sorted = [...journalState.entries].sort((a, b) => {
+    return new Date(b.entryDate || 0) - new Date(a.entryDate || 0);
+  });
+
+  const html = sorted.map(e => {
+    const { pnl, status } = computeJournalPnL(e);
+    const pnlStr = pnl == null ? 'OPEN' : `${pnl >= 0 ? '+' : '-'}$${Math.abs(pnl).toFixed(2)}`;
+    const detail = `<strong>${e.strategy}</strong> · ${e.qty}× @ $${parseFloat(e.entryPrice).toFixed(2)}${e.exitPrice ? ' → $' + parseFloat(e.exitPrice).toFixed(2) : ''} · <span style="opacity:0.7">${e.entryDate || '—'}</span>`;
+    return `
+      <div class="journal-entry ${status}" data-id="${e.id}">
+        <div class="je-symbol">${e.symbol}</div>
+        <div class="je-detail">${detail}</div>
+        <div class="je-pnl ${status}">${pnlStr}</div>
+        <div class="je-actions">
+          ${pnl == null ? `<button data-action="close" data-id="${e.id}">Close</button>` : ''}
+          <button class="danger" data-action="delete" data-id="${e.id}">Delete</button>
+        </div>
+        ${e.notes ? `<div class="je-notes">${e.notes}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `<div class="journal-list">${html}</div>`;
+
+  // Wire action buttons
+  container.querySelectorAll('button[data-action]').forEach(btn => {
+    btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const id = btn.dataset.id;
+      const action = btn.dataset.action;
+      const entry = journalState.entries.find(e => e.id === id);
+      if (!entry) return;
+      if (action === 'delete') {
+        if (confirm(`Delete journal entry for ${entry.symbol}?`)) {
+          journalState.entries = journalState.entries.filter(e => e.id !== id);
+          saveJournal();
+          renderJournalSummary();
+          renderJournalList();
+        }
+      } else if (action === 'close') {
+        const exit = prompt(`Closing price for ${entry.symbol} (${entry.strategy}):`);
+        if (exit != null && exit !== '' && !isNaN(parseFloat(exit))) {
+          entry.exitPrice = parseFloat(exit);
+          entry.exitDate = new Date().toISOString().split('T')[0];
+          saveJournal();
+          renderJournalSummary();
+          renderJournalList();
+        }
+      }
+    });
+  });
+}
+
+function saveJournalEntry() {
+  const symbol = document.getElementById('je-symbol').value.trim().toUpperCase();
+  const strategy = document.getElementById('je-strategy').value;
+  const entryDate = document.getElementById('je-entry-date').value;
+  const entryPrice = document.getElementById('je-entry-price').value;
+  const qty = document.getElementById('je-qty').value;
+  const exitPrice = document.getElementById('je-exit-price').value;
+  const notes = document.getElementById('je-notes').value.trim();
+
+  if (!symbol) { alert('Please enter a symbol'); return; }
+  if (!entryPrice || isNaN(parseFloat(entryPrice))) { alert('Please enter a valid entry price'); return; }
+  if (!qty || isNaN(parseFloat(qty)) || parseFloat(qty) <= 0) { alert('Please enter a valid quantity'); return; }
+
+  const entry = {
+    id: 'je-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+    symbol, strategy,
+    entryDate: entryDate || new Date().toISOString().split('T')[0],
+    entryPrice: parseFloat(entryPrice),
+    qty: parseFloat(qty),
+    exitPrice: exitPrice && !isNaN(parseFloat(exitPrice)) ? parseFloat(exitPrice) : null,
+    exitDate: null,
+    notes,
+  };
+  journalState.entries.push(entry);
+  saveJournal();
+  clearJournalForm();
+  renderJournalSummary();
+  renderJournalList();
+}
+
+function clearJournalForm() {
+  document.getElementById('je-symbol').value = '';
+  document.getElementById('je-entry-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('je-entry-price').value = '';
+  document.getElementById('je-qty').value = '1';
+  document.getElementById('je-exit-price').value = '';
+  document.getElementById('je-notes').value = '';
+}
+
+// ====================================================================
+// PROBABILITY MATH (used by POP + Greeks)
+// ====================================================================
+// Standard normal cumulative distribution function (Abramowitz-Stegun approximation)
+function normCDF(x) {
+  const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+  const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+  const sign = x < 0 ? -1 : 1;
+  x = Math.abs(x) / Math.sqrt(2);
+  const t = 1.0 / (1.0 + p * x);
+  const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+  return 0.5 * (1.0 + sign * y);
+}
+
+// Standard normal probability density function
+function normPDF(x) {
+  return Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI);
+}
+
+// Probability that the underlying will be above a target price at expiration,
+// assuming geometric Brownian motion with annualized vol sigma.
+// P(S_T > target) = N(d2) where d2 = (ln(S/K) + (-sigma^2/2)*T) / (sigma * sqrt(T))
+function probAbove(spot, target, sigma, daysToExp) {
+  if (sigma <= 0 || daysToExp <= 0 || spot <= 0 || target <= 0) return null;
+  const T = daysToExp / 365;
+  const d2 = (Math.log(spot / target) - 0.5 * sigma * sigma * T) / (sigma * Math.sqrt(T));
+  return normCDF(d2);
+}
+
+// Probability target is BELOW
+function probBelow(spot, target, sigma, daysToExp) {
+  const above = probAbove(spot, target, sigma, daysToExp);
+  return above == null ? null : 1 - above;
+}
+
+// Probability the underlying stays between low and high at expiration
+function probBetween(spot, low, high, sigma, daysToExp) {
+  const pHigh = probAbove(spot, high, sigma, daysToExp);
+  const pLow = probAbove(spot, low, sigma, daysToExp);
+  if (pHigh == null || pLow == null) return null;
+  return Math.max(0, Math.min(1, pLow - pHigh));
+}
+
+// ====================================================================
+// PROBABILITY OF PROFIT (POP) per strategy
+// ====================================================================
+// Computes POP given strategy archetype, spot, breakeven(s), IV, DTE.
+function computePOP(strategy, spot, sigma, daysToExp) {
+  if (!sigma || sigma <= 0 || !daysToExp || daysToExp <= 0) return null;
+
+  switch (strategy.name) {
+    case 'Long Call':
+      // Profits if S_T > strike + premium = single-point breakeven
+      if (typeof strategy.breakeven !== 'number') return null;
+      return probAbove(spot, strategy.breakeven, sigma, daysToExp);
+    case 'Long Put':
+      if (typeof strategy.breakeven !== 'number') return null;
+      return probBelow(spot, strategy.breakeven, sigma, daysToExp);
+    case 'Bull Call Spread':
+      if (typeof strategy.breakeven !== 'number') return null;
+      return probAbove(spot, strategy.breakeven, sigma, daysToExp);
+    case 'Bear Put Spread':
+      if (typeof strategy.breakeven !== 'number') return null;
+      return probBelow(spot, strategy.breakeven, sigma, daysToExp);
+    case 'Long Straddle':
+    case 'Long Strangle': {
+      // Two breakevens (string formatted "$X / $Y"). Profits OUTSIDE the range.
+      const m = String(strategy.breakeven || '').match(/\$([\d.]+)\s*\/\s*\$([\d.]+)/);
+      if (!m) return null;
+      const lo = parseFloat(m[1]), hi = parseFloat(m[2]);
+      const below = probBelow(spot, lo, sigma, daysToExp);
+      const above = probAbove(spot, hi, sigma, daysToExp);
+      if (below == null || above == null) return null;
+      return below + above;
+    }
+    case 'Iron Condor': {
+      // Two breakevens. Profits INSIDE the range.
+      const m = String(strategy.breakeven || '').match(/\$([\d.]+)\s*\/\s*\$([\d.]+)/);
+      if (!m) return null;
+      const lo = parseFloat(m[1]), hi = parseFloat(m[2]);
+      return probBetween(spot, lo, hi, sigma, daysToExp);
+    }
+    case 'Cash-Secured Put':
+      // Profits if S_T stays above breakeven (strike - premium)
+      if (typeof strategy.breakeven !== 'number') return null;
+      return probAbove(spot, strategy.breakeven, sigma, daysToExp);
+    default:
+      return null;
+  }
+}
+
+// Classify POP for color coding
+function classifyPOP(pop) {
+  if (pop == null) return null;
+  const pct = pop * 100;
+  if (pct >= 65) return { pct, class: 'good' };
+  if (pct >= 45) return { pct, class: 'mid' };
+  return { pct, class: 'bad' };
+}
+
+// ====================================================================
+// SIMPLIFIED GREEKS (delta, theta, vega) for strategy legs
+// Uses Black-Scholes derivatives. Assumes zero rates and zero dividends.
+// ====================================================================
+// Returns { delta, theta, vega } per leg position.
+// d1, d2 use ln(S/K) since we assume r=0, q=0.
+function bsGreeks(isCall, S, K, sigma, daysToExp) {
+  if (S <= 0 || K <= 0 || sigma <= 0 || daysToExp <= 0) return null;
+  const T = daysToExp / 365;
+  const sqrtT = Math.sqrt(T);
+  const d1 = (Math.log(S / K) + 0.5 * sigma * sigma * T) / (sigma * sqrtT);
+  const d2 = d1 - sigma * sqrtT;
+  const delta = isCall ? normCDF(d1) : normCDF(d1) - 1;
+  const theta_year = -(S * normPDF(d1) * sigma) / (2 * sqrtT);  // per year
+  const theta = theta_year / 365; // per day
+  const vega_unit = S * normPDF(d1) * sqrtT;  // per 1.00 change in sigma
+  const vega = vega_unit / 100; // per 1% change in sigma
+  return { delta, theta, vega };
+}
+
+// Aggregate Greeks across strategy legs.
+// Each leg has action (BUY/SELL) and strike. Type (call/put) is inferred from desc.
+function aggregateStrategyGreeks(strategy, spot, sigma, daysToExp) {
+  if (!strategy.legs || sigma == null || sigma <= 0 || daysToExp == null || daysToExp <= 0) return null;
+  let totalDelta = 0, totalTheta = 0, totalVega = 0;
+  let valid = 0;
+  for (const leg of strategy.legs) {
+    const isCall = /call/i.test(leg.desc || '');
+    const isPut = /put/i.test(leg.desc || '');
+    if (!isCall && !isPut) continue;
+    const strikeMatch = String(leg.strike || '').match(/\$?([\d.]+)/);
+    if (!strikeMatch) continue;
+    const K = parseFloat(strikeMatch[1]);
+    if (!K || isNaN(K)) continue;
+    const g = bsGreeks(isCall, spot, K, sigma, daysToExp);
+    if (!g) continue;
+    const sign = leg.action === 'BUY' ? 1 : -1;
+    // Multiply by 100 because options control 100 shares per contract
+    totalDelta += sign * g.delta * 100;
+    totalTheta += sign * g.theta * 100;
+    totalVega += sign * g.vega * 100;
+    valid++;
+  }
+  if (valid === 0) return null;
+  return { delta: totalDelta, theta: totalTheta, vega: totalVega };
+}
+
+// ====================================================================
+// P&L DIAGRAM
+// Computes payoff at expiration for a strategy across a price range.
+// ====================================================================
+function computePayoffPoints(strategy, spot) {
+  // Build a price range ±25% around spot
+  const lo = spot * 0.75;
+  const hi = spot * 1.25;
+  const steps = 80;
+  const points = [];
+
+  // Initial debit/credit. debit > 0 means we paid, debit < 0 means we received credit.
+  const debit = typeof strategy.debit === 'number' ? strategy.debit : 0;
+
+  for (let i = 0; i <= steps; i++) {
+    const S = lo + ((hi - lo) * i) / steps;
+    let payoff = 0;
+    for (const leg of strategy.legs) {
+      const isCall = /call/i.test(leg.desc || '');
+      const isPut = /put/i.test(leg.desc || '');
+      const strikeMatch = String(leg.strike || '').match(/\$?([\d.]+)/);
+      if (!strikeMatch) continue;
+      const K = parseFloat(strikeMatch[1]);
+      if (!K || isNaN(K)) continue;
+      let intrinsic = 0;
+      if (isCall) intrinsic = Math.max(0, S - K);
+      else if (isPut) intrinsic = Math.max(0, K - S);
+      const sign = leg.action === 'BUY' ? 1 : -1;
+      payoff += sign * intrinsic;
+    }
+    // Subtract initial cost (or add credit)
+    const totalPnL = payoff - debit;
+    points.push({ S, pnl: totalPnL });
+  }
+  return points;
+}
+
+function renderPnLDiagram(strategy, spot) {
+  const points = computePayoffPoints(strategy, spot);
+  if (!points || points.length === 0) return '';
+
+  const W = 400, H = 100;
+  const padL = 40, padR = 12, padT = 8, padB = 18;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+
+  const pnls = points.map(p => p.pnl);
+  const minPnL = Math.min(...pnls);
+  const maxPnL = Math.max(...pnls);
+  const range = maxPnL - minPnL || 1;
+  // Pad the range a bit so the zero line shows
+  const pad = range * 0.1;
+  const yMin = minPnL - pad;
+  const yMax = maxPnL + pad;
+  const yRange = yMax - yMin;
+
+  const xMin = points[0].S, xMax = points[points.length - 1].S;
+  const xRange = xMax - xMin;
+  const xFor = (s) => padL + ((s - xMin) / xRange) * innerW;
+  const yFor = (p) => padT + (1 - (p - yMin) / yRange) * innerH;
+
+  // Build path with separate fill regions for profit and loss zones
+  let pathStr = '';
+  points.forEach((p, i) => {
+    pathStr += `${i === 0 ? 'M' : 'L'} ${xFor(p.S).toFixed(1)} ${yFor(p.pnl).toFixed(1)} `;
+  });
+
+  // Profit area (above zero)
+  const zeroY = yFor(0);
+  let profitArea = '';
+  let lossArea = '';
+  // Build a piecewise area: fills below the line down to zero (loss) and above zero up to the line (profit)
+  // Simpler approach: render two separate clipped areas
+  const profitPath = points.map((p, i) => {
+    const x = xFor(p.S);
+    const y = Math.min(yFor(p.pnl), zeroY);
+    return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+  }).join(' ') + ` L ${xFor(xMax)} ${zeroY} L ${xFor(xMin)} ${zeroY} Z`;
+  const lossPath = points.map((p, i) => {
+    const x = xFor(p.S);
+    const y = Math.max(yFor(p.pnl), zeroY);
+    return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+  }).join(' ') + ` L ${xFor(xMax)} ${zeroY} L ${xFor(xMin)} ${zeroY} Z`;
+
+  // Spot marker
+  const spotX = xFor(spot);
+
+  // Y-axis label values
+  const yMaxLabel = maxPnL >= 0 ? `+$${maxPnL.toFixed(0)}` : `-$${Math.abs(maxPnL).toFixed(0)}`;
+  const yMinLabel = minPnL >= 0 ? `+$${minPnL.toFixed(0)}` : `-$${Math.abs(minPnL).toFixed(0)}`;
+
+  return `
+    <div class="pnl-chart">
+      <svg class="pnl-chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+        <!-- Profit zone fill (green tint) -->
+        <path d="${profitPath}" fill="rgba(0,214,143,0.15)" stroke="none" />
+        <!-- Loss zone fill (red tint) -->
+        <path d="${lossPath}" fill="rgba(255,59,92,0.12)" stroke="none" />
+        <!-- Zero line -->
+        <line x1="${padL}" y1="${zeroY}" x2="${W - padR}" y2="${zeroY}" stroke="#555049" stroke-width="1" stroke-dasharray="3 3" />
+        <!-- Payoff line -->
+        <path d="${pathStr}" fill="none" stroke="#d4ff3a" stroke-width="1.5" stroke-linejoin="round" />
+        <!-- Spot marker -->
+        <line x1="${spotX}" y1="${padT}" x2="${spotX}" y2="${H - padB}" stroke="#8a857a" stroke-width="1" stroke-dasharray="2 4" />
+        <text x="${spotX}" y="${padT + 8}" fill="#8a857a" font-size="8" font-family="JetBrains Mono" text-anchor="middle">$${spot.toFixed(0)}</text>
+        <!-- Y labels -->
+        <text x="${padL - 4}" y="${padT + 6}" text-anchor="end" fill="#555049" font-size="8" font-family="JetBrains Mono">${yMaxLabel}</text>
+        <text x="${padL - 4}" y="${H - padB + 2}" text-anchor="end" fill="#555049" font-size="8" font-family="JetBrains Mono">${yMinLabel}</text>
+        <text x="${padL - 4}" y="${zeroY + 3}" text-anchor="end" fill="#8a857a" font-size="8" font-family="JetBrains Mono">$0</text>
+        <!-- X labels -->
+        <text x="${padL}" y="${H - 4}" fill="#555049" font-size="8" font-family="JetBrains Mono">$${xMin.toFixed(0)}</text>
+        <text x="${W - padR}" y="${H - 4}" text-anchor="end" fill="#555049" font-size="8" font-family="JetBrains Mono">$${xMax.toFixed(0)}</text>
+      </svg>
+      <div class="pnl-chart-legend">
+        <span>Profit/loss at expiry</span>
+        <span>Underlying price →</span>
+      </div>
+    </div>
+  `;
+}
+
+// ====================================================================
+// EARNINGS CONTEXT
+// ====================================================================
+async function loadEarningsContext(symbol) {
+  const container = document.getElementById('earnings-container');
+  if (!container) return null;
+  container.innerHTML = '';
+  try {
+    const data = await getEarningsCalendar(symbol);
+    if (!data || !data.earningsCalendar || data.earningsCalendar.length === 0) {
+      // No upcoming earnings in next 90 days
+      renderEarningsBanner('safe', null, symbol);
+      return null;
+    }
+    // Take the soonest upcoming
+    const list = data.earningsCalendar.sort((a, b) => new Date(a.date) - new Date(b.date));
+    const next = list[0];
+    const earningsDate = new Date(next.date + 'T16:00:00');  // typical post-market
+    const now = new Date();
+    const days = Math.ceil((earningsDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    if (days < 0) {
+      renderEarningsBanner('safe', null, symbol);
+      return null;
+    }
+    let kind;
+    if (days <= 7) kind = 'imminent';
+    else if (days <= 14) kind = 'warning';
+    else kind = 'safe';
+    const info = { date: next.date, days, hour: next.hour, epsEst: next.epsEstimate, revEst: next.revenueEstimate };
+    renderEarningsBanner(kind, info, symbol);
+    return info;
+  } catch (e) {
+    // Silent fail — earnings is best-effort
+    renderEarningsBanner('unknown', null, symbol);
+    return null;
+  }
+}
+
+function renderEarningsBanner(kind, info, symbol) {
+  const container = document.getElementById('earnings-container');
+  if (!container) return;
+  if (kind === 'safe' && !info) {
+    // No earnings in 90 days — show a low-key safe banner
+    container.innerHTML = `
+      <div class="earnings-banner safe">
+        <span class="earnings-icon">✓</span>
+        <div class="earnings-text"><strong>${symbol}</strong> has no scheduled earnings in the next 90 days — IV is not earnings-distorted.</div>
+      </div>
+    `;
+    return;
+  }
+  if (kind === 'unknown') {
+    container.innerHTML = '';
+    return;
+  }
+  if (!info) return;
+
+  const hourLabel = info.hour === 'bmo' ? 'before market open' : info.hour === 'amc' ? 'after market close' : '';
+  const dateObj = new Date(info.date + 'T00:00:00');
+  const dateStr = dateObj.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+
+  let message;
+  if (kind === 'imminent') {
+    message = `<strong>${symbol}</strong> reports earnings <strong>${dateStr}</strong>${hourLabel ? ' ' + hourLabel : ''}. <strong style="color:var(--bear)">IV will be elevated</strong> until release. Long premium plays are expensive; expect a vol crush post-event.`;
+  } else if (kind === 'warning') {
+    message = `<strong>${symbol}</strong> reports earnings <strong>${dateStr}</strong>${hourLabel ? ' ' + hourLabel : ''}. IV may rise into the report. Consider expiration timing carefully.`;
+  } else {
+    message = `<strong>${symbol}</strong> reports earnings <strong>${dateStr}</strong>${hourLabel ? ' ' + hourLabel : ''}. Outside the high-IV window — but worth knowing.`;
+  }
+
+  container.innerHTML = `
+    <div class="earnings-banner ${kind}">
+      <span class="earnings-icon">📅</span>
+      <span class="earnings-days">${info.days}d</span>
+      <div class="earnings-text">${message}</div>
+    </div>
+  `;
 }
 
 // ====================================================================
@@ -3698,13 +5001,44 @@ function updateQuoteInPlace(quote, prevPrice) {
   }
 }
 
-function renderStrategies(strats) {
+function renderStrategies(strats, context = {}) {
+  // context: { spot, sigma } — used for POP, Greeks, and P&L. Optional.
+  const { spot, sigma } = context;
+
   const html = strats.map(s => {
     const debitStr = s.debit < 0
       ? `<span class="bull">+$${Math.abs(s.debit).toFixed(2)}</span> credit`
       : `$${s.debit.toFixed(2)} debit`;
     const gainStr = typeof s.maxGain === 'number' ? `$${s.maxGain.toFixed(2)}` : s.maxGain;
     const beStr = typeof s.breakeven === 'number' ? `$${s.breakeven.toFixed(2)}` : s.breakeven;
+
+    // Compute POP and Greeks if we have spot + sigma + DTE
+    let popInfo = null, greeks = null, pnlSvg = '';
+    if (spot && sigma && s.targetDTE) {
+      const pop = computePOP(s, spot, sigma, s.targetDTE);
+      popInfo = classifyPOP(pop);
+      greeks = aggregateStrategyGreeks(s, spot, sigma, s.targetDTE);
+      pnlSvg = renderPnLDiagram(s, spot);
+    }
+
+    // Metrics row HTML
+    let metricsHtml = '';
+    if (popInfo || greeks) {
+      const parts = [];
+      if (popInfo) {
+        parts.push(`<span class="metric-pill pop ${popInfo.class}" title="Probability the trade is profitable at expiration based on estimated IV"><span class="num">${popInfo.pct.toFixed(0)}%</span> POP</span>`);
+      }
+      if (greeks) {
+        const dSign = greeks.delta >= 0 ? '+' : '';
+        parts.push(`<span class="metric-pill delta" title="Net delta — directional exposure (per share, ×100 contracts)"><span class="num">${dSign}${greeks.delta.toFixed(0)}</span> Δ</span>`);
+        const thetaClass = greeks.theta >= 0 ? 'pos' : '';
+        const tSign = greeks.theta >= 0 ? '+' : '';
+        parts.push(`<span class="metric-pill theta ${thetaClass}" title="Theta — daily P&L from time decay (positive = you collect, negative = you pay)"><span class="num">${tSign}$${greeks.theta.toFixed(2)}</span> Θ/day</span>`);
+        const vSign = greeks.vega >= 0 ? '+' : '';
+        parts.push(`<span class="metric-pill vega" title="Vega — P&L per 1% change in IV (positive = you benefit from rising IV)"><span class="num">${vSign}$${greeks.vega.toFixed(2)}</span> ν/IV%</span>`);
+      }
+      metricsHtml = `<div class="sc-metrics">${parts.join('')}</div>`;
+    }
 
     return `
       <div class="strategy-card" data-bias="${s.bias}">
@@ -3728,6 +5062,8 @@ function renderStrategies(strats) {
             <span class="sc-exp-dte ${s.expiration.tag.toLowerCase()}">${s.expiration.dte}D · ${s.expiration.tag}</span>
           </div>
         ` : ''}
+        ${metricsHtml}
+        ${pnlSvg}
         <div class="sc-stats">
           <div class="sc-stat">
             <div class="sc-stat-label">Cost</div>
@@ -4267,10 +5603,22 @@ async function runAnalysis(symbol) {
 
     renderQuote(symbol, quote, profile);
     const strats = generateStrategies(quote, atr, vol);
-    renderStrategies(strats);
+    // Pass spot + estimated sigma for POP, Greeks, and P&L diagrams.
+    // Use realized vol if we have it; otherwise estimate from intraday range.
+    let sigma = vol;
+    if (!sigma) {
+      const rangePct = quote.h && quote.l && quote.c ? (quote.h - quote.l) / quote.c : 0.02;
+      sigma = Math.max(0.15, rangePct * Math.sqrt(252));
+    }
+    renderStrategies(strats, { spot: quote.c, sigma });
 
     // Initialize chart with the current price as the first tick
     state.chartTicks = [{ t: Date.now() / 1000, p: quote.c }];
+    state.chartTimeframe = 'live';
+    state.chartHistorical = [];
+    document.querySelectorAll('#chart-tf-toggle button').forEach(b => {
+      b.classList.toggle('active', b.dataset.tf === 'live');
+    });
     showChart(symbol);
     renderChart();
 
@@ -4283,10 +5631,11 @@ async function runAnalysis(symbol) {
     // Start real-time polling for this symbol
     startRealtimePolling();
 
-    // Load news, tech analysis, and option chain in parallel (don't block strategy display)
+    // Load news, tech analysis, option chain, and earnings in parallel (don't block strategy display)
     loadNews(symbol);
     runTechAnalysis(symbol, quote);
     loadOptionChain(symbol, quote.c);
+    loadEarningsContext(symbol);
   } catch (e) {
     handleApiError(e, 'strategies');
     document.getElementById('strategy-output').innerHTML = `
@@ -4435,19 +5784,26 @@ function aggregateCandles(ticks, intervalSec) {
 function renderChart() {
   const wrap = document.getElementById('chart-container');
   const svg = document.getElementById('price-chart');
-  if (!state.chartTicks.length) {
-    svg.innerHTML = `<foreignObject x="0" y="0" width="800" height="280"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-empty">Waiting for first tick…</div></foreignObject>`;
+
+  // Pick data source based on timeframe
+  const isHistorical = state.chartTimeframe !== 'live';
+  const ticks = isHistorical ? state.chartHistorical : state.chartTicks;
+
+  if (!ticks || ticks.length === 0) {
+    const msg = isHistorical
+      ? `<span class="loading"></span>&nbsp;&nbsp;Loading ${state.chartTimeframe} history…`
+      : 'Waiting for first tick…';
+    svg.innerHTML = `<foreignObject x="0" y="0" width="800" height="280"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-empty">${msg}</div></foreignObject>`;
     return;
   }
 
-  const ticks = state.chartTicks;
   const W = 800, H = 280;
   const padL = 50, padR = 12, padT = 14, padB = 22;
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
-  // Y-axis range: include all ticks AND prev close
-  const prevClose = state.currentQuote ? state.currentQuote.pc : null;
+  // Y-axis range: include all ticks AND prev close (only for live)
+  const prevClose = !isHistorical && state.currentQuote ? state.currentQuote.pc : null;
   const prices = ticks.map(t => t.p);
   let minP = Math.min(...prices);
   let maxP = Math.max(...prices);
@@ -4460,9 +5816,11 @@ function renderChart() {
   minP -= pad; maxP += pad;
   const range = maxP - minP || 1;
 
-  // X-axis: time-based, from first tick to now
+  // X-axis: time-based, from first tick to now (or last historical tick)
   const tMin = ticks[0].t;
-  const tMax = Math.max(ticks[ticks.length - 1].t, Date.now() / 1000);
+  const tMax = isHistorical
+    ? ticks[ticks.length - 1].t
+    : Math.max(ticks[ticks.length - 1].t, Date.now() / 1000);
   const tRange = (tMax - tMin) || 1;
 
   const xFor = (t) => padL + ((t - tMin) / tRange) * innerW;
@@ -4528,13 +5886,17 @@ function renderChart() {
     svgInner += `<circle cx="${lx}" cy="${ly}" r="6" fill="${stroke}" opacity="0.3"><animate attributeName="r" from="6" to="14" dur="1.5s" repeatCount="indefinite" /><animate attributeName="opacity" from="0.5" to="0" dur="1.5s" repeatCount="indefinite" /></circle>`;
   }
 
-  // Time axis (just first and last labels)
-  const fmtTime = (sec) => {
+  // Time/date axis labels
+  const fmtAxis = (sec) => {
     const d = new Date(sec * 1000);
+    if (isHistorical) {
+      const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${m[d.getMonth()]} ${d.getDate()}`;
+    }
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
-  svgInner += `<text x="${padL}" y="${H - 6}" fill="#555049" font-size="9" font-family="JetBrains Mono" letter-spacing="1">${fmtTime(tMin)}</text>`;
-  svgInner += `<text x="${W - padR}" y="${H - 6}" text-anchor="end" fill="#555049" font-size="9" font-family="JetBrains Mono" letter-spacing="1">${fmtTime(tMax)}</text>`;
+  svgInner += `<text x="${padL}" y="${H - 6}" fill="#555049" font-size="9" font-family="JetBrains Mono" letter-spacing="1">${fmtAxis(tMin)}</text>`;
+  svgInner += `<text x="${W - padR}" y="${H - 6}" text-anchor="end" fill="#555049" font-size="9" font-family="JetBrains Mono" letter-spacing="1">${fmtAxis(tMax)}</text>`;
 
   svg.innerHTML = svgInner;
 
@@ -4543,16 +5905,50 @@ function renderChart() {
   const first = ticks[0];
   const sessionChange = last.p - first.p;
   const sessionChangePct = (sessionChange / first.p) * 100;
+  const periodLabel = isHistorical ? state.chartTimeframe : 'Session';
   document.getElementById('chart-stats').innerHTML = `
-    Session <span class="v" style="color:${sessionChange >= 0 ? 'var(--bull)' : 'var(--bear)'}">${sessionChange >= 0 ? '+' : ''}${sessionChange.toFixed(2)} (${sessionChange >= 0 ? '+' : ''}${sessionChangePct.toFixed(2)}%)</span>
+    ${periodLabel} <span class="v" style="color:${sessionChange >= 0 ? 'var(--bull)' : 'var(--bear)'}">${sessionChange >= 0 ? '+' : ''}${sessionChange.toFixed(2)} (${sessionChange >= 0 ? '+' : ''}${sessionChangePct.toFixed(2)}%)</span>
   `;
-  document.getElementById('chart-points-info').textContent = `${ticks.length} ticks · ${state.chartMode === 'candles' ? aggregateCandles(ticks, state.chartCandleSec).length + ' candles' : 'live'}`;
-  document.getElementById('legend-candle').style.display = state.chartMode === 'candles' ? 'flex' : 'none';
+  document.getElementById('chart-points-info').textContent = isHistorical
+    ? `${ticks.length} daily closes`
+    : `${ticks.length} ticks · ${state.chartMode === 'candles' ? aggregateCandles(ticks, state.chartCandleSec).length + ' candles' : 'live'}`;
+  document.getElementById('legend-candle').style.display = state.chartMode === 'candles' && !isHistorical ? 'flex' : 'none';
 }
 
 function showChart(symbol) {
   document.getElementById('chart-container').style.display = 'block';
   document.getElementById('chart-title').textContent = `${symbol} · Real-Time Price Action`;
+}
+
+// Load historical closes for a given timeframe and feed into chart.
+// Timeframes: 1M (~22 trading days), 3M (~65), 6M (~125), 1Y (~252)
+async function loadChartTimeframe(symbol, tf) {
+  const tfDays = { '1M': 30, '3M': 95, '6M': 185, '1Y': 365 }[tf] || 30;
+  state.chartHistorical = []; // clear so the chart shows loading
+  renderChart();
+
+  const closes = await getStooqHistory(symbol, tfDays);
+  if (!closes || closes.length === 0) {
+    state.chartHistorical = [];
+    renderChart();
+    return false;
+  }
+
+  // Stooq returns chronological closes; pair with synthetic dates (one per trading day backward)
+  // Use day-step approximation: most recent close = today, working backward by 1 calendar day.
+  // For chart purposes this is precise enough — we don't try to skip weekends/holidays.
+  const now = Date.now() / 1000;
+  const dayStep = 24 * 60 * 60;
+  // Use 1.45 day step on average to roughly account for weekends in calendar-day spacing
+  const stepPerClose = 1.45 * dayStep;
+  const N = closes.length;
+  const ticks = closes.map((p, i) => ({
+    t: now - (N - 1 - i) * stepPerClose,
+    p,
+  }));
+  state.chartHistorical = ticks;
+  renderChart();
+  return true;
 }
 
 function hideChart() {
@@ -6467,8 +7863,113 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Chart timeframe toggle (Live / 1M / 3M / 6M / 1Y)
+  document.querySelectorAll('#chart-tf-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#chart-tf-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tf = btn.dataset.tf;
+      state.chartTimeframe = tf;
+      if (tf === 'live') {
+        // Use live ticks
+        renderChart();
+      } else if (state.currentSymbol) {
+        // Hide the candle/line toggle visual cue when in historical mode (candle mode doesn't apply)
+        loadChartTimeframe(state.currentSymbol, tf);
+      } else {
+        renderChart();
+      }
+    });
+  });
+
   // Option chain calls/puts toggle
   wireChainControls();
+
+  // ============== WATCHLIST WIRING ==============
+  const watchlistInput = document.getElementById('watchlist-search');
+  watchlistInput.addEventListener('input', (e) => {
+    const q = e.target.value.trim();
+    clearTimeout(watchlistState.searchDebounce);
+    if (q.length === 0) {
+      document.getElementById('watchlist-search-results').classList.remove('show');
+      return;
+    }
+    watchlistState.searchDebounce = setTimeout(async () => {
+      if (!state.apiKey) return;
+      const el = document.getElementById('watchlist-search-results');
+      el.innerHTML = '<div class="sr-loading"><span class="loading"></span> Searching…</div>';
+      el.classList.add('show');
+      try {
+        const data = await searchSymbols(q);
+        let results = (data.result || []).filter(r => r.symbol && !r.symbol.includes('.') && r.type !== 'OEF').slice(0, 12);
+        if (results.length === 0) results = (data.result || []).slice(0, 12);
+        watchlistState.searchResults = results;
+        if (results.length === 0) {
+          el.innerHTML = `<div class="sr-empty">No matches for "${q}"</div>`;
+          return;
+        }
+        el.innerHTML = results.map((r, i) => `
+          <div class="sr-item" data-idx="${i}">
+            <div class="sr-symbol">${r.symbol}</div>
+            <div class="sr-name">${r.description || ''}</div>
+            <div class="sr-type">${(r.type || 'stock').replace(/Common Stock/i, 'Stock')}</div>
+          </div>
+        `).join('');
+        el.querySelectorAll('.sr-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const r = watchlistState.searchResults[parseInt(item.dataset.idx)];
+            if (!r) return;
+            const sym = (r.displaySymbol || r.symbol).toUpperCase();
+            if (addToWatchlist(sym)) {
+              watchlistInput.value = '';
+              el.classList.remove('show');
+              refreshWatchlist();
+            }
+          });
+        });
+      } catch (err) {
+        el.innerHTML = `<div class="sr-empty">Search error</div>`;
+      }
+    }, 220);
+  });
+  watchlistInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.value.trim()) {
+      const sym = e.target.value.trim().toUpperCase();
+      if (addToWatchlist(sym)) {
+        e.target.value = '';
+        document.getElementById('watchlist-search-results').classList.remove('show');
+        refreshWatchlist();
+      }
+    } else if (e.key === 'Escape') {
+      document.getElementById('watchlist-search-results').classList.remove('show');
+    }
+  });
+
+  document.getElementById('watchlist-refresh-btn').addEventListener('click', refreshWatchlist);
+  document.getElementById('watchlist-clear-btn').addEventListener('click', () => {
+    if (watchlistState.symbols.length === 0) return;
+    if (confirm(`Remove all ${watchlistState.symbols.length} symbols from your watchlist?`)) {
+      watchlistState.symbols = [];
+      watchlistState.data = {};
+      saveWatchlist();
+      stopWatchlistPolling();
+      renderWatchlist();
+    }
+  });
+
+  // ============== JOURNAL WIRING ==============
+  document.getElementById('je-save-btn').addEventListener('click', saveJournalEntry);
+  document.getElementById('je-clear-btn').addEventListener('click', clearJournalForm);
+  // Default entry date to today
+  document.getElementById('je-entry-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('je-qty').value = '1';
+
+  // Load persisted watchlist and journal
+  loadWatchlist();
+  loadJournal();
+  renderWatchlist();
+  renderJournalSummary();
+  renderJournalList();
 
   // Chart hover tooltip — use pointer events so we can filter out touch
   // (we don't want touch on the chart to fire the tooltip OR block scroll).
