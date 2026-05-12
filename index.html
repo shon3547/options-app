@@ -238,6 +238,246 @@
   .api-btn:hover { border-color: var(--accent); color: var(--accent); }
   .api-btn.connected { border-color: var(--bull); color: var(--bull); }
 
+  /* MARKET OUTLOOK */
+  .outlook-summary {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .outlook-summary-cell {
+    background: var(--bg-card);
+    padding: 20px 24px;
+  }
+  .outlook-summary-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .outlook-summary-headline {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 30px;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .outlook-summary-headline em {
+    font-style: italic;
+  }
+  .outlook-summary-headline.bull em { color: var(--bull); }
+  .outlook-summary-headline.bear em { color: var(--bear); }
+  .outlook-summary-headline.neutral em { color: var(--accent); }
+  .outlook-summary-stat {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 36px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .outlook-summary-stat.bull { color: var(--bull); }
+  .outlook-summary-stat.bear { color: var(--bear); }
+  .outlook-summary-stat.neutral { color: var(--ink-dim); }
+  .outlook-summary-stat-sub {
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .outlook-section {
+    margin-bottom: 28px;
+  }
+  .outlook-section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .outlook-section-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-style: italic;
+    color: var(--accent);
+    font-size: 18px;
+  }
+  .outlook-section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+  }
+  .outlook-section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .outlook-section-tag {
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .outlook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+  }
+
+  .outlook-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line-bright);
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 12px;
+    align-items: baseline;
+    transition: border-color 0.15s;
+    cursor: pointer;
+  }
+  .outlook-card:hover { border-color: var(--line-bright); }
+  .outlook-card.bull { border-left-color: var(--bull); }
+  .outlook-card.bear { border-left-color: var(--bear); }
+  .outlook-card.neutral { border-left-color: var(--ink-faint); }
+  .outlook-card.volatile { border-left-color: var(--accent); }
+
+  .outlook-card-symbol {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .outlook-card-bias {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 2px 6px;
+    border: 1px solid var(--line-bright);
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .outlook-card-bias.bull { color: var(--bull); border-color: var(--bull); background: rgba(0,214,143,0.08); }
+  .outlook-card-bias.bear { color: var(--bear); border-color: var(--bear); background: rgba(255,59,92,0.08); }
+  .outlook-card-bias.neutral { color: var(--ink-dim); }
+  .outlook-card-bias.volatile { color: var(--accent); border-color: var(--accent); }
+  .outlook-card-bias.loading { color: var(--ink-faint); }
+
+  .outlook-card-name {
+    font-size: 10px;
+    color: var(--ink-dim);
+    grid-column: 1 / -1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 4px;
+  }
+  .outlook-card-price-row {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--line);
+  }
+  .outlook-card-price {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+  }
+  .outlook-card-change {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .outlook-card-change.up { color: var(--bull); }
+  .outlook-card-change.down { color: var(--bear); }
+
+  /* IV RANK PILL */
+  .iv-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border: 1px solid var(--line-bright);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .iv-pill.high {
+    color: var(--bear);
+    border-color: var(--bear);
+    background: rgba(255, 59, 92, 0.06);
+  }
+  .iv-pill.medium {
+    color: var(--warn);
+    border-color: var(--warn);
+    background: rgba(255, 181, 71, 0.06);
+  }
+  .iv-pill.low {
+    color: var(--bull);
+    border-color: var(--bull);
+    background: rgba(0, 214, 143, 0.06);
+  }
+  .iv-pill .rank {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: -0.01em;
+  }
+
+  .sc-bias-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* IV banner on quote panel */
+  .iv-context-row {
+    grid-column: 1 / -1;
+    background: var(--bg-card);
+    padding: 12px 22px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--ink-dim);
+  }
+  .iv-context-row .v { color: var(--ink); font-weight: 600; }
+  .iv-context-row strong { color: var(--ink-dim); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; font-size: 9px; }
+
+  @media (max-width: 900px) {
+    .outlook-summary { grid-template-columns: 1fr 1fr; }
+    .outlook-summary-cell { padding: 16px 18px; }
+    .outlook-summary-headline { font-size: 22px; }
+    .outlook-summary-stat { font-size: 28px; }
+  }
+  @media (max-width: 720px) {
+    .outlook-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .outlook-card { padding: 12px; }
+    .outlook-card-symbol { font-size: 16px; }
+    .outlook-card-name { font-size: 9px; }
+    .outlook-card-price { font-size: 14px; }
+  }
+
   /* NOTIFICATION BELL */
   .notif-btn {
     padding: 7px 10px;
@@ -2312,7 +2552,8 @@
     </div>
     <nav class="nav-tabs">
       <button class="nav-tab active" data-page="strategies"><span class="num">01</span>Strategies</button>
-      <button class="nav-tab" data-page="movers"><span class="num">02</span>Movers</button>
+      <button class="nav-tab" data-page="outlook"><span class="num">02</span>Outlook</button>
+      <button class="nav-tab" data-page="movers"><span class="num">03</span>Movers</button>
     </nav>
     <div class="header-right">
       <div class="clock disconnected" id="clock"><span class="live"></span><span id="clock-text">— · —</span></div>
@@ -2475,7 +2716,39 @@
       </div>
     </section>
 
-    <!-- ====================== PAGE 2: MOVERS ====================== -->
+    <!-- ====================== PAGE 2: MARKET OUTLOOK ====================== -->
+    <section class="page" id="page-outlook">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">The <em>market's mood</em><br /><strong>at a glance.</strong></h1>
+          <div class="page-subtitle">Indices · Sectors · Volatility · Fixed Income · Commodities</div>
+        </div>
+        <div class="page-meta">
+          <span class="big" id="outlook-tracked">—</span>
+          Indices Tracked <span class="live-pill paused" id="outlook-live-pill">Idle</span>
+        </div>
+      </div>
+
+      <div class="alert-bar" id="outlook-alert"></div>
+
+      <div class="controls" style="grid-template-columns: 1fr auto">
+        <div style="font-size:11px;color:var(--ink-dim);align-self:center;letter-spacing:0.05em">
+          Live scan of broad indices, sector ETFs, volatility, fixed income, and commodities.
+        </div>
+        <button class="btn-primary" id="outlook-scan-btn">⟳ Refresh Outlook</button>
+      </div>
+
+      <div id="outlook-summary-container"></div>
+
+      <div id="outlook-content">
+        <div class="empty-state">
+          <div class="empty-state-mark">⌖</div>
+          <div class="empty-state-text">Hit "Refresh Outlook" to scan the market</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== PAGE 3: MOVERS ====================== -->
     <section class="page" id="page-movers">
       <div class="page-head">
         <div>
@@ -2530,7 +2803,7 @@
 
     <div class="disclosure">
       <strong>Disclosure &amp; Data Sources</strong>
-      Volatility Desk surfaces options strategies, price targets, and technical signals generated from real-time market data via the Finnhub API, supplemented with 200-day historical data from Stooq (with public CORS-proxy fallback) for moving average and RSI calculations. The <strong>Full Option Chain</strong> section requires Finnhub's paid tier — on free keys it returns 403 Forbidden and shows a notice. Strategy cards above the chain use real-time quotes plus calculated strikes; their premium estimates use realized volatility as an IV proxy. The Entry Signal combines RSI-14, distance from the 200-day MA, intraday range position, and short-term momentum into a composite score — it is a statistical heuristic, not a prediction. Options trading involves substantial risk of loss and is not suitable for every investor. Nothing on this page is investment advice. Verify all data with your broker before trading.
+      Volatility Desk surfaces options strategies, price targets, market outlook, and technical signals generated from real-time market data via the Finnhub API, supplemented with 200-day historical data from Stooq (with public CORS-proxy fallback) for moving average, RSI, and IV Rank calculations. <strong>Implied Volatility (IV)</strong> shown on strategy cards is <em>estimated from realized volatility</em> — true broker-quoted IV per contract requires Finnhub's paid options tier or a different provider. IV Rank is the percentile of current 20-day realized vol relative to its 1-year range (or an intraday estimate when 1-year history isn't available). The <strong>Market Outlook</strong> tab uses the same bias classifier as the Movers tab — bullish/bearish/neutral derived from % change, intraday range position, and volatility. The <strong>Full Option Chain</strong> section requires Finnhub's paid tier — on free keys it returns 403 Forbidden. Options trading involves substantial risk of loss and is not suitable for every investor. Nothing on this page is investment advice. Verify all data with your broker before trading.
     </div>
 
   </main>
@@ -2619,6 +2892,66 @@ const UNIVERSES = {
   etfs:    ['SPY','QQQ','IWM','DIA','VTI','VOO','XLK','XLF','XLE','XLV','XLY','XLI','XLP','SMH','ARKK','TLT','GLD','USO','UVXY','VXX'],
   ai:      ['NVDA','AMD','AVGO','TSM','MU','MRVL','SMCI','ARM','PLTR','AI','SOUN','BBAI','MSFT','GOOGL','META','META','ASML','LRCX','AMAT','KLAC'],
   meme:    ['GME','AMC','BB','BBBY','SOFI','RIVN','LCID','MARA','RIOT','COIN','HOOD','DKNG','PLTR','SNAP','PYPL','ROKU','FUBO','TLRY','SNDL','NIO']
+};
+
+// Market Outlook universe — organized by category for display
+const OUTLOOK_SECTIONS = [
+  {
+    key: 'broad',
+    title: 'Broad Market',
+    symbols: ['SPY','QQQ','DIA','IWM','VTI'],
+  },
+  {
+    key: 'sectors',
+    title: 'Sector ETFs',
+    symbols: ['XLK','XLF','XLV','XLY','XLP','XLE','XLI','XLB','XLU','XLRE','XLC'],
+  },
+  {
+    key: 'volatility',
+    title: 'Volatility',
+    symbols: ['UVXY','VXX'],
+  },
+  {
+    key: 'fixed_income',
+    title: 'Fixed Income',
+    symbols: ['TLT','IEF','SHY','HYG','LQD'],
+  },
+  {
+    key: 'commodities',
+    title: 'Commodities & Currencies',
+    symbols: ['GLD','SLV','USO','UNG','UUP'],
+  },
+];
+
+const OUTLOOK_NAMES = {
+  SPY: 'S&P 500',
+  QQQ: 'Nasdaq 100',
+  DIA: 'Dow Jones 30',
+  IWM: 'Russell 2000',
+  VTI: 'Total US Market',
+  XLK: 'Technology',
+  XLF: 'Financials',
+  XLV: 'Healthcare',
+  XLY: 'Consumer Discretionary',
+  XLP: 'Consumer Staples',
+  XLE: 'Energy',
+  XLI: 'Industrials',
+  XLB: 'Materials',
+  XLU: 'Utilities',
+  XLRE: 'Real Estate',
+  XLC: 'Communication Svcs',
+  UVXY: 'VIX Short-Term Futures',
+  VXX: 'iPath VIX Futures',
+  TLT: '20+ Yr Treasury',
+  IEF: '7-10 Yr Treasury',
+  SHY: '1-3 Yr Treasury',
+  HYG: 'High Yield Corp',
+  LQD: 'Investment Grade Corp',
+  GLD: 'Gold',
+  SLV: 'Silver',
+  USO: 'Crude Oil',
+  UNG: 'Natural Gas',
+  UUP: 'US Dollar Index',
 };
 
 const COMPANY_NAMES = {
@@ -2792,6 +3125,88 @@ function intradayRSIProxy(quote) {
   // Blend with day-change to get a momentum-aware proxy.
   const changeBias = Math.max(-20, Math.min(20, (quote.dp || 0) * 2));
   return Math.max(0, Math.min(100, positionPct * 0.7 + 50 + changeBias * 0.3));
+}
+
+// ===== IMPLIED VOLATILITY (ESTIMATED via realized vol) =====
+// Computes a rolling annualized realized vol from closes.
+function rollingRealizedVol(closes, period = 20) {
+  if (!closes || closes.length < period + 1) return null;
+  const recent = closes.slice(-period - 1);
+  const rets = [];
+  for (let i = 1; i < recent.length; i++) {
+    rets.push(Math.log(recent[i] / recent[i - 1]));
+  }
+  const mean = rets.reduce((a, b) => a + b, 0) / rets.length;
+  const variance = rets.reduce((s, r) => s + (r - mean) ** 2, 0) / (rets.length - 1);
+  return Math.sqrt(variance) * Math.sqrt(252);
+}
+
+// Compute IV Rank: where current vol sits relative to its 1-year range.
+// Returns { rank, currentIV, minIV, maxIV, status } or null if insufficient data.
+//   IV Rank = (current - min) / (max - min) * 100
+//   < 33  → LOW (good for buying premium)
+//   33-67 → MEDIUM
+//   > 67  → HIGH (good for selling premium)
+function computeIVRank(closes) {
+  if (!closes || closes.length < 252) return null;
+
+  // Current realized vol (most recent 20 days)
+  const currentVol = rollingRealizedVol(closes, 20);
+  if (!currentVol) return null;
+
+  // Generate a series of rolling 20-day vols for the past 252 trading days
+  const vols = [];
+  for (let endIdx = 20; endIdx < closes.length; endIdx++) {
+    const window = closes.slice(endIdx - 20, endIdx + 1);
+    const v = rollingRealizedVol(window, 20);
+    if (v != null) vols.push(v);
+  }
+  if (vols.length < 50) return null;
+
+  const minIV = Math.min(...vols);
+  const maxIV = Math.max(...vols);
+  if (maxIV === minIV) return null;
+
+  const rank = ((currentVol - minIV) / (maxIV - minIV)) * 100;
+  let status;
+  if (rank < 33) status = 'low';
+  else if (rank > 67) status = 'high';
+  else status = 'medium';
+
+  return {
+    rank: Math.max(0, Math.min(100, rank)),
+    currentIV: currentVol,
+    minIV,
+    maxIV,
+    status,
+  };
+}
+
+// Fallback: estimate IV Rank from the day's intraday range alone
+// (when we can't get 1y history). This is much rougher.
+function estimateIVRankFromRange(quote, vol) {
+  // We have NO history baseline, so just use absolute rangePct vs typical heuristics
+  const range = (quote.h || 0) - (quote.l || 0);
+  const rangePct = quote.c > 0 ? (range / quote.c) * 100 : 0;
+  const dailyVolFromRealized = vol ? vol / Math.sqrt(252) * 100 : null;
+
+  // Big intraday move suggests elevated IV
+  // Typical large-cap daily range: 1-2%. Above 3% = elevated. Above 5% = high.
+  let estimatedRank, status;
+  if (rangePct < 1.5) { estimatedRank = 20; status = 'low'; }
+  else if (rangePct < 2.5) { estimatedRank = 35; status = 'medium'; }
+  else if (rangePct < 4) { estimatedRank = 55; status = 'medium'; }
+  else if (rangePct < 6) { estimatedRank = 75; status = 'high'; }
+  else { estimatedRank = 90; status = 'high'; }
+
+  return {
+    rank: estimatedRank,
+    currentIV: dailyVolFromRealized != null ? vol : null,
+    minIV: null,
+    maxIV: null,
+    status,
+    estimated: true, // marks this as low-confidence
+  };
 }
 
 // ====================================================================
@@ -3422,12 +3837,13 @@ async function findOptionOfTheDay() {
 
 // Populates the OOTD signals row after async tech-data load
 function populateOOTDSignals(techData) {
-  const { ma200info, rsiInfo, entry } = techData;
+  const { ma200info, rsiInfo, entry, ivRank } = techData;
 
   const entryEl = document.getElementById('ootd-sig-entry');
   const priceEl = document.getElementById('ootd-sig-price');
   const maEl = document.getElementById('ootd-sig-ma');
   const rsiEl = document.getElementById('ootd-sig-rsi');
+  const ivEl = document.getElementById('ootd-sig-iv');
   if (!entryEl) return; // OOTD card may not be rendered anymore
 
   if (entry) {
@@ -3459,6 +3875,21 @@ function populateOOTDSignals(techData) {
     rsiEl.style.color = 'var(--ink-faint)';
     rsiEl.style.fontSize = '11px';
     rsiEl.textContent = '—';
+  }
+
+  if (ivEl) {
+    if (ivRank) {
+      const labelText = ivRank.status === 'high' ? 'HIGH' : ivRank.status === 'medium' ? 'MED' : 'LOW';
+      ivEl.className = `sig-val ${ivRank.status === 'high' ? 'bear' : ivRank.status === 'medium' ? 'warn' : 'bull'}`;
+      ivEl.style.color = '';
+      ivEl.style.fontSize = '';
+      ivEl.textContent = `${labelText} · ${Math.round(ivRank.rank)}${ivRank.estimated ? ' (est.)' : ''}`;
+    } else {
+      ivEl.className = 'sig-val';
+      ivEl.style.color = 'var(--ink-faint)';
+      ivEl.style.fontSize = '11px';
+      ivEl.textContent = '—';
+    }
   }
 }
 
@@ -3589,6 +4020,10 @@ async function renderOOTD(pick) {
           <div class="sig-label">RSI · Status</div>
           <div class="sig-val" id="ootd-sig-rsi" style="color:var(--ink-faint);font-size:11px">Loading…</div>
         </div>
+        <div class="sig">
+          <div class="sig-label">IV Rank</div>
+          <div class="sig-val" id="ootd-sig-iv" style="color:var(--ink-faint);font-size:11px">Loading…</div>
+        </div>
       </div>
     </div>
   `;
@@ -3600,24 +4035,32 @@ async function renderOOTD(pick) {
     // Async fetch — show loading then update when done
     (async () => {
       try {
-        const closes = await getStooqHistory(pick.symbol, 220);
-        let ma200info = null, rsiInfo = null;
+        const closes = await getStooqHistory(pick.symbol, 270);
+        let ma200info = null, rsiInfo = null, ivRank = null;
         if (closes && closes.length >= 200) {
           ma200info = classifyMA(q.c, computeMA(closes, 200));
           rsiInfo = classifyRSI(computeRSI(closes, 14));
         } else if (closes && closes.length >= 50) {
           rsiInfo = classifyRSI(computeRSI(closes, 14));
         }
+        if (closes && closes.length >= 252) {
+          ivRank = computeIVRank(closes);
+        }
+        if (!ivRank) {
+          const rv = closes && closes.length >= 20 ? rollingRealizedVol(closes, 20) : null;
+          ivRank = estimateIVRankFromRange(q, rv);
+        }
         if (!rsiInfo) rsiInfo = classifyRSI(intradayRSIProxy(q));
         const newEntry = computeEntrySignal(q, ma200info, rsiInfo);
-        const techData = { ma200info, rsiInfo, entry: newEntry };
+        const techData = { ma200info, rsiInfo, entry: newEntry, ivRank };
         techCache.set(pick.symbol, techData);
         populateOOTDSignals(techData);
       } catch (e) {
         // On total failure, still show entry signal based on intraday-only data
         const rsiInfo = classifyRSI(intradayRSIProxy(q));
         const entry = computeEntrySignal(q, null, rsiInfo);
-        populateOOTDSignals({ ma200info: null, rsiInfo, entry });
+        const ivRank = estimateIVRankFromRange(q, null);
+        populateOOTDSignals({ ma200info: null, rsiInfo, entry, ivRank });
       }
     })();
   }
@@ -4195,6 +4638,280 @@ function stopMoversPolling() {
   setMoversLivePill(false, 'Paused');
 }
 
+// ====================================================================
+// MARKET OUTLOOK
+// ====================================================================
+const outlookState = {
+  data: {},        // { symbol: { quote, bias, ...} }
+  lastScanAt: null,
+  pollTimer: null,
+};
+
+async function runOutlookScan() {
+  if (!state.apiKey) {
+    handleApiError(new Error('NO_KEY'), 'outlook');
+    return;
+  }
+
+  hideAlert('outlook');
+  stopOutlookPolling();
+
+  const allSymbols = OUTLOOK_SECTIONS.flatMap(s => s.symbols);
+
+  document.getElementById('outlook-content').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-state-mark"><span class="loading"></span></div>
+      <div class="empty-state-text">Fetching ${allSymbols.length} symbols…</div>
+    </div>`;
+  document.getElementById('outlook-scan-btn').disabled = true;
+
+  try {
+    const results = {};
+    const CHUNK = 10;
+    let progress = 0;
+    for (let i = 0; i < allSymbols.length; i += CHUNK) {
+      const chunk = allSymbols.slice(i, i + CHUNK);
+      const chunkResults = await Promise.all(chunk.map(async sym => {
+        try {
+          const q = await getQuote(sym);
+          if (!q || !q.c) return null;
+          const bias = classifyBias(q, null);
+          return { symbol: sym, quote: q, bias };
+        } catch (err) {
+          if (err.message === 'BAD_KEY' || err.message === 'NO_KEY') throw err;
+          return null;
+        }
+      }));
+      chunkResults.filter(Boolean).forEach(r => { results[r.symbol] = r; });
+      progress += chunk.length;
+      if (i + CHUNK < allSymbols.length) await new Promise(r => setTimeout(r, 200));
+    }
+
+    if (Object.keys(results).length === 0) {
+      throw new Error('No data returned. Check API key.');
+    }
+
+    outlookState.data = results;
+    outlookState.lastScanAt = new Date();
+
+    renderOutlookSummary();
+    renderOutlookSections();
+    document.getElementById('outlook-tracked').textContent = Object.keys(results).length;
+    startOutlookPolling();
+  } catch (e) {
+    handleApiError(e, 'outlook');
+    document.getElementById('outlook-content').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-mark">!</div>
+        <div class="empty-state-text">${e.message}</div>
+      </div>`;
+  } finally {
+    document.getElementById('outlook-scan-btn').disabled = false;
+  }
+}
+
+function renderOutlookSummary() {
+  const container = document.getElementById('outlook-summary-container');
+  const data = outlookState.data;
+  const broadSyms = OUTLOOK_SECTIONS.find(s => s.key === 'broad').symbols;
+  const sectorSyms = OUTLOOK_SECTIONS.find(s => s.key === 'sectors').symbols;
+
+  // Tally bias counts on broad market only (most representative of overall mood)
+  let bull = 0, bear = 0, neutral = 0;
+  for (const sym of broadSyms) {
+    if (!data[sym]) continue;
+    if (data[sym].bias.tag === 'bull') bull++;
+    else if (data[sym].bias.tag === 'bear') bear++;
+    else neutral++;
+  }
+  // Sector bias counts
+  let sectorBull = 0, sectorBear = 0, sectorNeutral = 0;
+  for (const sym of sectorSyms) {
+    if (!data[sym]) continue;
+    if (data[sym].bias.tag === 'bull') sectorBull++;
+    else if (data[sym].bias.tag === 'bear') sectorBear++;
+    else sectorNeutral++;
+  }
+  // Headline message
+  let headline, headlineClass;
+  if (bull > bear && bull >= 3) {
+    headline = `Risk <em>on</em>. Broad market leans bullish.`;
+    headlineClass = 'bull';
+  } else if (bear > bull && bear >= 3) {
+    headline = `Risk <em>off</em>. Broad market leans bearish.`;
+    headlineClass = 'bear';
+  } else if (Math.abs(bull - bear) <= 1) {
+    headline = `Markets are <em>mixed</em>. Wait for confirmation.`;
+    headlineClass = 'neutral';
+  } else {
+    headline = `Markets are <em>cautious</em>. Watch sector rotation.`;
+    headlineClass = 'neutral';
+  }
+
+  // VIX status: if UVXY or VXX is up >2%, fear is elevated
+  const uvxy = data['UVXY'];
+  let volContext = '';
+  if (uvxy && uvxy.quote.dp != null) {
+    const vp = uvxy.quote.dp;
+    if (vp > 5) volContext = `<span style="color:var(--bear)">VIX proxy +${vp.toFixed(1)}% · fear elevated</span>`;
+    else if (vp < -5) volContext = `<span style="color:var(--bull)">VIX proxy ${vp.toFixed(1)}% · fear easing</span>`;
+    else volContext = `VIX proxy ${vp >= 0 ? '+' : ''}${vp.toFixed(1)}%`;
+  }
+
+  const lastScan = outlookState.lastScanAt ? outlookState.lastScanAt.toLocaleTimeString() : '—';
+
+  container.innerHTML = `
+    <div class="outlook-summary">
+      <div class="outlook-summary-cell">
+        <div class="outlook-summary-label">Market Mood</div>
+        <div class="outlook-summary-headline ${headlineClass}">${headline}</div>
+        <div style="margin-top:10px;font-size:11px;color:var(--ink-dim)">${volContext} · Updated ${lastScan}</div>
+      </div>
+      <div class="outlook-summary-cell">
+        <div class="outlook-summary-label">Broad Bullish</div>
+        <div class="outlook-summary-stat bull">${bull}<span style="font-size:18px;color:var(--ink-faint)">/${broadSyms.length}</span></div>
+        <div class="outlook-summary-stat-sub">Indices rising</div>
+      </div>
+      <div class="outlook-summary-cell">
+        <div class="outlook-summary-label">Broad Bearish</div>
+        <div class="outlook-summary-stat bear">${bear}<span style="font-size:18px;color:var(--ink-faint)">/${broadSyms.length}</span></div>
+        <div class="outlook-summary-stat-sub">Indices falling</div>
+      </div>
+      <div class="outlook-summary-cell">
+        <div class="outlook-summary-label">Sectors</div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <span class="outlook-summary-stat bull" style="font-size:24px">${sectorBull}</span>
+          <span style="color:var(--ink-faint);font-size:14px">·</span>
+          <span class="outlook-summary-stat bear" style="font-size:24px">${sectorBear}</span>
+          <span style="color:var(--ink-faint);font-size:14px">·</span>
+          <span class="outlook-summary-stat neutral" style="font-size:24px">${sectorNeutral}</span>
+        </div>
+        <div class="outlook-summary-stat-sub">Bull · Bear · Neutral</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderOutlookSections() {
+  const container = document.getElementById('outlook-content');
+  const data = outlookState.data;
+
+  const html = OUTLOOK_SECTIONS.map(section => {
+    const cards = section.symbols.map(sym => {
+      const item = data[sym];
+      if (!item) {
+        return `
+          <div class="outlook-card" data-symbol="${sym}">
+            <div class="outlook-card-symbol">${sym}</div>
+            <div class="outlook-card-bias loading">—</div>
+            <div class="outlook-card-name">${OUTLOOK_NAMES[sym] || sym}</div>
+            <div class="outlook-card-price-row">
+              <span class="outlook-card-price" style="color:var(--ink-faint)">N/A</span>
+              <span class="outlook-card-change" style="color:var(--ink-faint)">—</span>
+            </div>
+          </div>`;
+      }
+      const q = item.quote;
+      const bias = item.bias;
+      const isUp = (q.dp || 0) >= 0;
+      return `
+        <div class="outlook-card ${bias.tag}" data-symbol="${sym}">
+          <div class="outlook-card-symbol">${sym}</div>
+          <div class="outlook-card-bias ${bias.tag}">${bias.label}</div>
+          <div class="outlook-card-name">${OUTLOOK_NAMES[sym] || sym}</div>
+          <div class="outlook-card-price-row">
+            <span class="outlook-card-price">$${q.c.toFixed(2)}</span>
+            <span class="outlook-card-change ${isUp ? 'up' : 'down'}">${isUp ? '+' : ''}${(q.dp || 0).toFixed(2)}%</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="outlook-section">
+        <div class="outlook-section-head">
+          <span class="outlook-section-num">§</span>
+          <span class="outlook-section-title">${section.title}</span>
+          <span class="outlook-section-line"></span>
+          <span class="outlook-section-tag">${section.symbols.length} tracked</span>
+        </div>
+        <div class="outlook-grid">${cards}</div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = html;
+
+  // Wire up clicks — jump to strategies for that symbol
+  container.querySelectorAll('.outlook-card[data-symbol]').forEach(card => {
+    card.addEventListener('click', () => {
+      const sym = card.dataset.symbol;
+      if (!data[sym]) return;
+      switchPage('strategies');
+      document.getElementById('ticker-input').value = sym;
+      runAnalysis(sym);
+    });
+  });
+}
+
+function setOutlookLivePill(active, label) {
+  const pill = document.getElementById('outlook-live-pill');
+  if (!pill) return;
+  if (active) {
+    pill.classList.remove('paused');
+    pill.textContent = label || 'Live';
+  } else {
+    pill.classList.add('paused');
+    pill.textContent = label || 'Paused';
+  }
+}
+
+function stopOutlookPolling() {
+  if (outlookState.pollTimer) {
+    clearInterval(outlookState.pollTimer);
+    outlookState.pollTimer = null;
+  }
+  setOutlookLivePill(false, 'Paused');
+}
+
+function startOutlookPolling() {
+  stopOutlookPolling();
+  if (Object.keys(outlookState.data).length === 0 || !state.apiKey) return;
+  setOutlookLivePill(true, 'Live');
+
+  // Poll every 30s — outlook is slower-moving than movers
+  outlookState.pollTimer = setInterval(async () => {
+    if (document.hidden) return;
+    const symbols = Object.keys(outlookState.data);
+    const CHUNK = 10;
+    try {
+      for (let i = 0; i < symbols.length; i += CHUNK) {
+        const chunk = symbols.slice(i, i + CHUNK);
+        const results = await Promise.all(chunk.map(async sym => {
+          try {
+            const q = await getQuote(sym);
+            if (!q || !q.c) return null;
+            return { sym, q };
+          } catch { return null; }
+        }));
+        results.filter(Boolean).forEach(({ sym, q }) => {
+          if (outlookState.data[sym]) {
+            outlookState.data[sym].quote = q;
+            outlookState.data[sym].bias = classifyBias(q, null);
+          }
+        });
+        if (i + CHUNK < symbols.length) await new Promise(r => setTimeout(r, 200));
+      }
+      outlookState.lastScanAt = new Date();
+      renderOutlookSummary();
+      renderOutlookSections();
+    } catch (err) {
+      // silent retry on next interval
+    }
+  }, 30000);
+}
+
+
 function startMoversPolling() {
   stopMoversPolling();
   if (!state.moversData.length || !state.apiKey) return;
@@ -4254,9 +4971,11 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     if (state.pollTimer) setLivePill(false, 'Tab Idle');
     if (state.moversPollTimer) setMoversLivePill(false, 'Tab Idle');
+    if (outlookState.pollTimer) setOutlookLivePill(false, 'Tab Idle');
   } else {
     if (state.pollTimer) setLivePill(true, 'Live');
     if (state.moversPollTimer) setMoversLivePill(true, 'Live');
+    if (outlookState.pollTimer) setOutlookLivePill(true, 'Live');
   }
 });
 
@@ -4966,13 +5685,14 @@ async function runTechAnalysis(symbol, quote) {
   // Fetch historical closes from Stooq (best effort — may take several seconds through CORS proxies)
   let closes = null;
   try {
-    closes = await getStooqHistory(symbol, 220);
+    closes = await getStooqHistory(symbol, 270);
   } catch (e) {
     closes = null;
   }
 
   let ma200info = null;
   let rsiInfo = null;
+  let ivRank = null;
   let dataSource = 'none';
 
   if (closes && closes.length >= 200) {
@@ -4988,6 +5708,16 @@ async function runTechAnalysis(symbol, quote) {
     dataSource = 'partial';
   }
 
+  // IV Rank: prefer 252-day rank if we have it, else estimate from intraday range
+  if (closes && closes.length >= 252) {
+    ivRank = computeIVRank(closes);
+  }
+  if (!ivRank) {
+    // Estimate from intraday range
+    const realizedVol = closes && closes.length >= 20 ? rollingRealizedVol(closes, 20) : null;
+    ivRank = estimateIVRankFromRange(quote, realizedVol);
+  }
+
   // Always have an RSI value — fall back to intraday proxy if no history available
   if (!rsiInfo) {
     const proxyRSI = intradayRSIProxy(quote);
@@ -5001,10 +5731,87 @@ async function runTechAnalysis(symbol, quote) {
 
   renderTechDashboard(symbol, quote, ma200info, rsiInfo, entry, dataSource);
 
-  // Cache for OOTD consumption
-  techCache.set(symbol, { ma200info, rsiInfo, entry });
+  // Update strategy cards with the IV Rank (renderStrategies was called earlier without IV)
+  updateStrategiesWithIVRank(ivRank);
+  // Show IV context row on the quote panel
+  renderIVContextRow(ivRank, quote);
 
-  return { ma200info, rsiInfo, entry };
+  // Cache for OOTD consumption
+  techCache.set(symbol, { ma200info, rsiInfo, entry, ivRank });
+
+  return { ma200info, rsiInfo, entry, ivRank };
+}
+
+// Updates the IV Rank pill on every visible strategy card after tech data loads.
+function updateStrategiesWithIVRank(ivRank) {
+  if (!ivRank) return;
+  const cards = document.querySelectorAll('.strategy-card');
+  cards.forEach(card => {
+    const existing = card.querySelector('.iv-pill');
+    if (existing) existing.remove();
+    const biasEl = card.querySelector('.sc-bias');
+    if (!biasEl) return;
+    // Wrap bias + iv pill in a row if needed
+    let row = biasEl.closest('.sc-bias-row');
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'sc-bias-row';
+      biasEl.parentNode.insertBefore(row, biasEl);
+      row.appendChild(biasEl);
+    }
+    const pill = document.createElement('span');
+    pill.className = `iv-pill ${ivRank.status}`;
+    const labelText = ivRank.estimated ? 'IV est.' : 'IV';
+    pill.innerHTML = `${labelText} <span class="rank">${Math.round(ivRank.rank)}</span>`;
+    pill.title = ivRank.estimated
+      ? 'IV estimated from intraday range — full 1-year history unavailable'
+      : `IV Rank: current realized vol is at the ${Math.round(ivRank.rank)}th percentile of its 1-year range`;
+    row.appendChild(pill);
+  });
+}
+
+function renderIVContextRow(ivRank, quote) {
+  // Append an IV context row at the bottom of the quote-panel
+  const panel = document.querySelector('.quote-panel');
+  if (!panel) return;
+  let row = document.getElementById('iv-context-row');
+  if (row) row.remove();
+  if (!ivRank) return;
+
+  row = document.createElement('div');
+  row.className = 'iv-context-row';
+  row.id = 'iv-context-row';
+
+  const statusLabel = ivRank.status === 'high' ? 'HIGH' : ivRank.status === 'medium' ? 'MEDIUM' : 'LOW';
+  const statusColor = ivRank.status === 'high' ? 'var(--bear)' : ivRank.status === 'medium' ? 'var(--warn)' : 'var(--bull)';
+
+  let strategyHint;
+  if (ivRank.status === 'high') {
+    strategyHint = 'Premium is expensive — favor <span class="v" style="color:var(--bull)">selling</span> options (Iron Condor, Cash-Secured Put, Credit Spreads)';
+  } else if (ivRank.status === 'low') {
+    strategyHint = 'Premium is cheap — favor <span class="v" style="color:var(--bull)">buying</span> options (Long Call, Long Put, Straddle)';
+  } else {
+    strategyHint = 'IV is in the middle of its range — directional debit spreads are reasonable';
+  }
+
+  const ivPctStr = ivRank.currentIV != null ? `${(ivRank.currentIV * 100).toFixed(1)}%` : '—';
+  const rangeStr = ivRank.minIV != null && ivRank.maxIV != null
+    ? `${(ivRank.minIV * 100).toFixed(1)}% – ${(ivRank.maxIV * 100).toFixed(1)}%`
+    : 'intraday est.';
+
+  row.innerHTML = `
+    <div>
+      <strong>Implied Volatility</strong>
+      <span class="iv-pill ${ivRank.status}" style="margin-left:8px">${ivRank.estimated ? 'IV est.' : 'IV'} <span class="rank">${Math.round(ivRank.rank)}</span></span>
+      <span style="color:var(--ink-faint);margin:0 8px">·</span>
+      <span class="v">${ivPctStr}</span> realized vol
+      <span style="color:var(--ink-faint);margin:0 8px">·</span>
+      <span style="font-size:10px;color:var(--ink-faint);letter-spacing:0.15em;text-transform:uppercase">1y range:</span>
+      <span class="v" style="font-size:11px">${rangeStr}</span>
+    </div>
+    <div style="font-size:11px">${strategyHint}</div>
+  `;
+  panel.appendChild(row);
 }
 
 // ====================================================================
@@ -5636,6 +6443,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Movers page
   document.getElementById('scan-btn').addEventListener('click', runScan);
+  document.getElementById('outlook-scan-btn').addEventListener('click', runOutlookScan);
   document.querySelectorAll('.pill[data-filter]').forEach(p => {
     p.addEventListener('click', () => {
       document.querySelectorAll('.pill[data-filter]').forEach(x => x.classList.remove('active'));
