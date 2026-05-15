@@ -564,6 +564,236 @@
   .metric-pill.delta .num { color: var(--ink); }
 
   /* ============================================================ */
+  /* DELTA CALLOUT — prominent display on strategy cards */
+  /* ============================================================ */
+  .delta-callout {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    margin: 10px 0;
+    background: linear-gradient(90deg, rgba(212, 255, 58, 0.06) 0%, transparent 100%);
+    border: 1px solid var(--line-bright);
+    border-left: 3px solid var(--accent);
+  }
+  .delta-callout.bull { border-left-color: var(--bull); background: linear-gradient(90deg, rgba(0, 214, 143, 0.07) 0%, transparent 100%); }
+  .delta-callout.bear { border-left-color: var(--bear); background: linear-gradient(90deg, rgba(255, 59, 92, 0.07) 0%, transparent 100%); }
+  .delta-callout.neutral { border-left-color: var(--ink-faint); background: transparent; }
+
+  .delta-callout-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .delta-callout-label .lab {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .delta-callout-label .Δ {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .delta-callout-value {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .delta-callout-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .delta-callout.bull .delta-callout-num { color: var(--bull); }
+  .delta-callout.bear .delta-callout-num { color: var(--bear); }
+  .delta-callout.neutral .delta-callout-num { color: var(--ink); }
+  .delta-callout-context {
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* Visual delta bar — shows direction & magnitude */
+  .delta-bar {
+    position: relative;
+    width: 140px;
+    height: 6px;
+    background: var(--bg);
+    border: 1px solid var(--line-bright);
+    overflow: visible;
+  }
+  .delta-bar-zero {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: 50%;
+    width: 1px;
+    background: var(--ink-faint);
+  }
+  .delta-bar-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+  .delta-bar-fill.bull { background: var(--bull); left: 50%; }
+  .delta-bar-fill.bear { background: var(--bear); right: 50%; }
+  .delta-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8px;
+    color: var(--ink-faint);
+    letter-spacing: 0.15em;
+    margin-top: 4px;
+    width: 140px;
+  }
+
+  /* Per-leg Delta — small inline badge on each leg */
+  .leg-delta {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-left: auto;
+    padding-left: 8px;
+    border-left: 1px dashed var(--line-bright);
+  }
+  .leg-delta.bull-itm { color: var(--bull); }
+  .leg-delta.bear-itm { color: var(--bear); }
+  .leg-delta.atm { color: var(--accent); }
+  .leg-delta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  /* Updated leg row to accommodate per-leg delta */
+  .leg {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  @media (max-width: 720px) {
+    .delta-callout {
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+    .delta-bar, .delta-bar-labels { display: none; }
+    .leg-delta { font-size: 10px; }
+  }
+
+  /* ============================================================ */
+  /* CHAIN DELTA VISUALIZATION */
+  /* ============================================================ */
+  .chain-delta-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .chain-delta-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    min-width: 42px;
+    text-align: right;
+  }
+  .chain-delta-num.deep-itm { color: var(--bull); }
+  .chain-delta-num.itm { color: #7fd9a8; }
+  .chain-delta-num.atm { color: var(--accent); font-weight: 800; }
+  .chain-delta-num.otm { color: var(--ink-dim); }
+  .chain-delta-num.deep-otm { color: var(--ink-faint); }
+  .chain-delta-num.put-itm { color: var(--bear); }
+  .chain-delta-num.put-mid { color: #f08fa1; }
+  .chain-delta-mini-bar {
+    width: 40px;
+    height: 4px;
+    background: var(--bg);
+    border: 1px solid var(--line-bright);
+    position: relative;
+    overflow: visible;
+  }
+  .chain-delta-mini-bar .mid {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    left: 50%;
+    width: 1px;
+    background: var(--ink-faint);
+  }
+  .chain-delta-mini-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+  .chain-delta-mini-fill.pos {
+    background: var(--bull);
+    left: 50%;
+  }
+  .chain-delta-mini-fill.neg {
+    background: var(--bear);
+    right: 50%;
+  }
+
+  /* Highlight the entire row when delta is near ATM (most actionable strike) */
+  .chain-table tr.delta-atm {
+    background: rgba(212, 255, 58, 0.04);
+  }
+
+  /* Delta primer / legend — explainer on the chain card */
+  .delta-primer {
+    padding: 10px 16px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    font-size: 10px;
+    color: var(--ink-dim);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+  }
+  .delta-primer strong {
+    color: var(--ink-dim);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 9px;
+  }
+  .delta-primer .legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+  }
+  .delta-primer .legend .swatch {
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--line-bright);
+  }
+  .delta-primer .legend .swatch.deep-itm { background: var(--bull); }
+  .delta-primer .legend .swatch.atm { background: var(--accent); }
+  .delta-primer .legend .swatch.otm { background: var(--ink-faint); }
+
+  /* ============================================================ */
   /* P&L DIAGRAM */
   /* ============================================================ */
   .pnl-chart {
@@ -2372,6 +2602,13 @@
     .chain-table-wrap { max-height: 420px; }
     /* Hide less critical columns on mobile to reduce horizontal scroll */
     .chain-table .col-iv, .chain-table .col-oi { display: none; }
+    /* Delta primer becomes a vertical stack on mobile */
+    .delta-primer { flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px 14px; }
+    .delta-primer strong { font-size: 8px; }
+    .delta-primer .legend { font-size: 9px; }
+    /* Hide the mini bar on mobile — number alone is enough */
+    .chain-delta-mini-bar { display: none; }
+    .chain-delta-num { min-width: 38px; font-size: 12px; }
   }
 
   /* NEWS SECTION */
@@ -4369,29 +4606,98 @@ function bsGreeks(isCall, S, K, sigma, daysToExp) {
 
 // Aggregate Greeks across strategy legs.
 // Each leg has action (BUY/SELL) and strike. Type (call/put) is inferred from desc.
+// Returns net Greeks (×100 multiplier) AND per-leg signed deltas (0-1 scale).
 function aggregateStrategyGreeks(strategy, spot, sigma, daysToExp) {
   if (!strategy.legs || sigma == null || sigma <= 0 || daysToExp == null || daysToExp <= 0) return null;
   let totalDelta = 0, totalTheta = 0, totalVega = 0;
   let valid = 0;
+  const legDeltas = []; // parallel to strategy.legs
+
   for (const leg of strategy.legs) {
     const isCall = /call/i.test(leg.desc || '');
     const isPut = /put/i.test(leg.desc || '');
-    if (!isCall && !isPut) continue;
+    if (!isCall && !isPut) {
+      legDeltas.push(null);
+      continue;
+    }
     const strikeMatch = String(leg.strike || '').match(/\$?([\d.]+)/);
-    if (!strikeMatch) continue;
+    if (!strikeMatch) {
+      legDeltas.push(null);
+      continue;
+    }
     const K = parseFloat(strikeMatch[1]);
-    if (!K || isNaN(K)) continue;
+    if (!K || isNaN(K)) {
+      legDeltas.push(null);
+      continue;
+    }
     const g = bsGreeks(isCall, spot, K, sigma, daysToExp);
-    if (!g) continue;
+    if (!g) {
+      legDeltas.push(null);
+      continue;
+    }
     const sign = leg.action === 'BUY' ? 1 : -1;
+    const signedLegDelta = sign * g.delta; // -1 to +1 range
+    legDeltas.push({ delta: g.delta, signedDelta: signedLegDelta, isCall });
     // Multiply by 100 because options control 100 shares per contract
-    totalDelta += sign * g.delta * 100;
+    totalDelta += signedLegDelta * 100;
     totalTheta += sign * g.theta * 100;
     totalVega += sign * g.vega * 100;
     valid++;
   }
   if (valid === 0) return null;
-  return { delta: totalDelta, theta: totalTheta, vega: totalVega };
+  return { delta: totalDelta, theta: totalTheta, vega: totalVega, legDeltas };
+}
+
+// Classify per-strike delta to give traders quick context about moneyness.
+// For CALLS: positive delta. ITM as |delta| approaches 1, ATM ~0.5, OTM ~0
+// For PUTS: negative delta (in the same -1..0 range when long).
+// This function takes the raw absolute delta (0..1) and the option type and returns a label.
+function classifyDelta(rawDelta, isCall) {
+  if (rawDelta == null) return null;
+  const abs = Math.abs(rawDelta);
+  let zone;
+  if (abs >= 0.80) zone = 'deep-itm';
+  else if (abs >= 0.60) zone = 'itm';
+  else if (abs >= 0.40) zone = 'atm';
+  else if (abs >= 0.20) zone = 'otm';
+  else zone = 'deep-otm';
+
+  let label;
+  if (zone === 'deep-itm') label = 'Deep ITM';
+  else if (zone === 'itm') label = 'ITM';
+  else if (zone === 'atm') label = 'ATM';
+  else if (zone === 'otm') label = 'OTM';
+  else label = 'Far OTM';
+
+  return { zone, label, abs };
+}
+
+// Natural-language description of a strategy's net delta.
+// Used in the prominent Delta callout on strategy cards.
+function describeNetDelta(netDelta) {
+  // netDelta is the ×100 aggregate value (e.g. +52 means roughly equivalent to long 52 shares)
+  const abs = Math.abs(netDelta);
+  if (abs < 5) return { direction: 'neutral', label: 'Direction-neutral', detail: 'Profit doesn\'t depend on which way the stock moves' };
+  if (abs < 25) return {
+    direction: netDelta > 0 ? 'bull' : 'bear',
+    label: netDelta > 0 ? 'Mildly bullish' : 'Mildly bearish',
+    detail: `Like being ${netDelta > 0 ? 'long' : 'short'} ~${Math.round(abs)} shares per contract`
+  };
+  if (abs < 60) return {
+    direction: netDelta > 0 ? 'bull' : 'bear',
+    label: netDelta > 0 ? 'Moderately bullish' : 'Moderately bearish',
+    detail: `Like being ${netDelta > 0 ? 'long' : 'short'} ~${Math.round(abs)} shares per contract`
+  };
+  if (abs < 90) return {
+    direction: netDelta > 0 ? 'bull' : 'bear',
+    label: netDelta > 0 ? 'Strongly bullish' : 'Strongly bearish',
+    detail: `Like being ${netDelta > 0 ? 'long' : 'short'} ~${Math.round(abs)} shares per contract`
+  };
+  return {
+    direction: netDelta > 0 ? 'bull' : 'bear',
+    label: netDelta > 0 ? 'Near-stock bullish' : 'Near-stock bearish',
+    detail: `Behaves almost exactly like ${Math.round(abs)} shares of stock`
+  };
 }
 
 // ====================================================================
@@ -5103,7 +5409,41 @@ function renderStrategies(strats, context = {}) {
       pnlSvg = renderPnLDiagram(s, spot);
     }
 
-    // Metrics row HTML
+    // === DELTA CALLOUT (prominent block) ===
+    let deltaCalloutHtml = '';
+    if (greeks) {
+      const desc = describeNetDelta(greeks.delta);
+      const dSign = greeks.delta >= 0 ? '+' : '';
+      // Bar fill: scale by magnitude (cap at 100 for full bar)
+      const barMag = Math.min(Math.abs(greeks.delta), 100);
+      const barWidthPct = (barMag / 100) * 50; // each side is 50% of bar
+      const fillSide = greeks.delta >= 0 ? 'bull' : 'bear';
+      deltaCalloutHtml = `
+        <div class="delta-callout ${desc.direction}">
+          <div class="delta-callout-label">
+            <span class="lab">Net Delta</span>
+            <span class="Δ">Δ</span>
+          </div>
+          <div>
+            <div style="font-size:12px;color:var(--ink);font-weight:600;letter-spacing:0.02em;margin-bottom:3px">${desc.label}</div>
+            <div class="delta-callout-context">${desc.detail}</div>
+            <div class="delta-bar" style="margin-top:8px">
+              <div class="delta-bar-zero"></div>
+              <div class="delta-bar-fill ${fillSide}" style="width:${barWidthPct}%"></div>
+            </div>
+            <div class="delta-bar-labels">
+              <span>−100</span><span>0</span><span>+100</span>
+            </div>
+          </div>
+          <div class="delta-callout-value">
+            <span class="delta-callout-num">${dSign}${greeks.delta.toFixed(0)}</span>
+            <span style="font-size:9px;letter-spacing:0.2em;color:var(--ink-faint);text-transform:uppercase">per contract</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // === Compact theta/vega/POP row (delta moved to callout above) ===
     let metricsHtml = '';
     if (popInfo || greeks) {
       const parts = [];
@@ -5111,8 +5451,6 @@ function renderStrategies(strats, context = {}) {
         parts.push(`<span class="metric-pill pop ${popInfo.class}" title="Probability the trade is profitable at expiration based on estimated IV"><span class="num">${popInfo.pct.toFixed(0)}%</span> POP</span>`);
       }
       if (greeks) {
-        const dSign = greeks.delta >= 0 ? '+' : '';
-        parts.push(`<span class="metric-pill delta" title="Net delta — directional exposure (per share, ×100 contracts)"><span class="num">${dSign}${greeks.delta.toFixed(0)}</span> Δ</span>`);
         const thetaClass = greeks.theta >= 0 ? 'pos' : '';
         const tSign = greeks.theta >= 0 ? '+' : '';
         parts.push(`<span class="metric-pill theta ${thetaClass}" title="Theta — daily P&L from time decay (positive = you collect, negative = you pay)"><span class="num">${tSign}$${greeks.theta.toFixed(2)}</span> Θ/day</span>`);
@@ -5122,6 +5460,40 @@ function renderStrategies(strats, context = {}) {
       metricsHtml = `<div class="sc-metrics">${parts.join('')}</div>`;
     }
 
+    // === Per-leg Delta — render inside each leg row ===
+    const legsHtml = s.legs.map((l, idx) => {
+      let legDeltaHtml = '';
+      if (greeks && greeks.legDeltas && greeks.legDeltas[idx]) {
+        const ld = greeks.legDeltas[idx];
+        const cls = classifyDelta(ld.delta, ld.isCall);
+        // For long calls and short puts: delta is positive. Color by zone.
+        // For long puts and short calls: delta is effectively negative directionally.
+        // Display: show the leg's "raw" delta (with sign matching position direction)
+        const signedDisplay = ld.signedDelta;
+        const dSign = signedDisplay >= 0 ? '+' : '';
+        // Zone-based color: ATM is most actionable, deep-ITM/OTM less so
+        let zoneClass = '';
+        if (cls.zone === 'atm') zoneClass = 'atm';
+        else if (cls.zone === 'deep-itm' || cls.zone === 'itm') {
+          zoneClass = signedDisplay >= 0 ? 'bull-itm' : 'bear-itm';
+        }
+        legDeltaHtml = `
+          <span class="leg-delta ${zoneClass}">
+            <span title="Per-leg delta — sensitivity to a $1 move in underlying">${dSign}${signedDisplay.toFixed(2)}</span>
+            <span class="leg-delta-label">${cls.label}</span>
+          </span>
+        `;
+      }
+      return `
+        <div class="leg">
+          <span class="leg-action ${l.action.toLowerCase()}">${l.action}</span>
+          <span class="leg-desc">${l.desc}</span>
+          <span class="leg-strike">${l.strike}</span>
+          ${legDeltaHtml}
+        </div>
+      `;
+    }).join('');
+
     return `
       <div class="strategy-card" data-bias="${s.bias}">
         <div class="sc-head">
@@ -5129,13 +5501,7 @@ function renderStrategies(strats, context = {}) {
           <div class="sc-bias ${s.bias}">${s.bias}</div>
         </div>
         <div class="sc-legs">
-          ${s.legs.map(l => `
-            <div class="leg">
-              <span class="leg-action ${l.action.toLowerCase()}">${l.action}</span>
-              <span class="leg-desc">${l.desc}</span>
-              <span class="leg-strike">${l.strike}</span>
-            </div>
-          `).join('')}
+          ${legsHtml}
         </div>
         ${s.expiration ? `
           <div class="sc-exp">
@@ -5144,6 +5510,7 @@ function renderStrategies(strats, context = {}) {
             <span class="sc-exp-dte ${s.expiration.tag.toLowerCase()}">${s.expiration.dte}D · ${s.expiration.tag}</span>
           </div>
         ` : ''}
+        ${deltaCalloutHtml}
         ${metricsHtml}
         ${pnlSvg}
         <div class="sc-stats">
@@ -7084,8 +7451,45 @@ function renderChainTable() {
     const bid = c.bid != null ? c.bid : null;
     const ask = c.ask != null ? c.ask : null;
 
-    const deltaDisplay = delta != null ? delta.toFixed(3) : '—';
-    const deltaClass = delta != null && Math.abs(delta) >= 0.4 ? 'high' : '';
+    // Enhanced delta display — classify by moneyness and add mini bar
+    let deltaCellHtml;
+    let deltaRowClass = '';
+    if (delta != null) {
+      const isCall = chainState.type === 'calls';
+      const cls = classifyDelta(delta, isCall);
+      // For PUTS, delta is negative; for color we still want ITM puts in red (bearish)
+      let zoneClass;
+      if (isCall) {
+        zoneClass = cls.zone; // deep-itm, itm, atm, otm, deep-otm
+      } else {
+        // Puts: deep-itm puts are very bearish (large negative delta)
+        if (cls.zone === 'deep-itm') zoneClass = 'put-itm';
+        else if (cls.zone === 'itm') zoneClass = 'put-mid';
+        else if (cls.zone === 'atm') zoneClass = 'atm';
+        else zoneClass = 'otm';
+      }
+      // Mark row class for ATM highlighting (just delta-near-0.5 strikes)
+      if (cls.zone === 'atm') deltaRowClass = 'delta-atm';
+
+      // Mini bar: absolute delta from 0 to 1 mapped to half-bar width
+      const barPct = Math.min(Math.abs(delta), 1) * 50; // 50% of full bar for one side
+      const fillSide = delta >= 0 ? 'pos' : 'neg';
+
+      deltaCellHtml = `
+        <td>
+          <div class="chain-delta-cell">
+            <span class="chain-delta-num ${zoneClass}" title="${cls.label} (|Δ| = ${cls.abs.toFixed(2)})">${delta.toFixed(3)}</span>
+            <span class="chain-delta-mini-bar">
+              <span class="mid"></span>
+              <span class="chain-delta-mini-fill ${fillSide}" style="width:${barPct}%"></span>
+            </span>
+          </div>
+        </td>
+      `;
+    } else {
+      deltaCellHtml = '<td>—</td>';
+    }
+
     const ivDisplay = iv != null ? `${(iv * 100).toFixed(1)}%` : '—';
     const bidAskDisplay = (bid != null && ask != null)
       ? `${bid.toFixed(2)} / ${ask.toFixed(2)}`
@@ -7094,12 +7498,13 @@ function renderChainTable() {
     let classes = [];
     if (isATM) classes.push('atm');
     if (isUnusual) classes.push('unusual');
+    if (deltaRowClass) classes.push(deltaRowClass);
 
     return `
       <tr class="${classes.join(' ')}">
         <td class="chain-strike ${isITM ? 'chain-itm' : 'chain-otm'}">$${strike.toFixed(2)}${isATM ? ' ◀' : ''}</td>
         <td class="chain-bidask">${bidAskDisplay}</td>
-        <td class="chain-delta ${deltaClass}">${deltaDisplay}</td>
+        ${deltaCellHtml}
         <td class="chain-iv col-iv">${ivDisplay}</td>
         <td class="chain-volume ${isUnusual ? 'hot' : ''}">${vol.toLocaleString()}</td>
         <td class="chain-iv col-oi">${oi.toLocaleString()}</td>
@@ -7109,12 +7514,18 @@ function renderChainTable() {
   }).join('');
 
   wrap.innerHTML = `
+    <div class="delta-primer">
+      <strong>Delta Guide</strong>
+      <span class="legend"><span class="swatch deep-itm"></span> |Δ| 0.80+ Deep ITM (acts like stock)</span>
+      <span class="legend"><span class="swatch atm"></span> |Δ| 0.40-0.60 ATM (highest gamma · directional)</span>
+      <span class="legend"><span class="swatch otm"></span> |Δ| under 0.20 Far OTM (lottery ticket)</span>
+    </div>
     <table class="chain-table">
       <thead>
         <tr>
           <th>Strike</th>
           <th>Bid / Ask</th>
-          <th>Delta</th>
+          <th style="text-align:center">Delta (Δ)</th>
           <th class="col-iv">IV</th>
           <th>Volume</th>
           <th class="col-oi">Open Int</th>
