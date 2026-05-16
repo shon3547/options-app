@@ -1680,7 +1680,7 @@
   .chart-svg-wrap {
     position: relative;
     width: 100%;
-    height: 280px;
+    height: 360px;
     overflow: hidden;
     /* Allow vertical pan to pass through even though we have hover handlers.
        Without this, Android Chrome can hold the touch waiting to see if
@@ -1692,6 +1692,34 @@
     height: 100%;
     display: block;
     touch-action: pan-y;
+    cursor: crosshair;
+  }
+  .chart-overlay-controls {
+    display: flex;
+    gap: 6px;
+    padding: 8px 0;
+    border-top: 1px solid var(--line);
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .overlay-btn {
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--line-bright);
+    color: var(--ink-faint);
+    font-family: inherit;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    min-height: 28px;
+    transition: all 0.15s;
+  }
+  .overlay-btn:hover { color: var(--ink); border-color: var(--ink-dim); }
+  .overlay-btn.active {
+    background: var(--bg-elev);
+    color: var(--accent);
+    border-color: var(--accent);
   }
   .chart-legend {
     display: flex;
@@ -1702,38 +1730,60 @@
     font-size: 10px;
     color: var(--ink-dim);
     letter-spacing: 0.1em;
+    flex-wrap: wrap;
   }
   .chart-legend .item { display: flex; align-items: center; gap: 6px; }
   .chart-legend .swatch { width: 14px; height: 2px; }
   .chart-legend .swatch.line { background: var(--accent); }
   .chart-legend .swatch.prev { background: var(--ink-faint); border-top: 1px dashed var(--ink-faint); height: 0; border-width: 1px 0 0 0; border-style: dashed; }
   .chart-legend .swatch.candle { background: var(--bull); width: 8px; height: 12px; }
-  .chart-tooltip {
+  /* Floating crosshair tooltip — TradingView-style OHLC + Volume display */
+  .chart-crosshair-tooltip {
     position: absolute;
+    top: 8px;
+    left: 8px;
     background: var(--bg-elev);
     border: 1px solid var(--line-bright);
     padding: 8px 12px;
-    font-size: 11px;
+    font-size: 10px;
     pointer-events: none;
     z-index: 10;
-    transform: translate(-50%, -100%);
-    margin-top: -8px;
-    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
     display: none;
+    backdrop-filter: blur(4px);
+    background: rgba(20, 20, 20, 0.92);
   }
-  .chart-tooltip.show { display: block; }
-  .chart-tooltip .t-time {
-    font-size: 9px;
+  .chart-crosshair-tooltip.show { display: block; }
+  .chart-crosshair-tooltip .ct-date {
     color: var(--ink-faint);
+    font-size: 9px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
   }
-  .chart-tooltip .t-price {
+  .chart-crosshair-tooltip .ct-row {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+  }
+  .chart-crosshair-tooltip .ct-row .lab {
+    color: var(--ink-faint);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-width: 22px;
+  }
+  .chart-crosshair-tooltip .ct-row .v {
+    color: var(--ink);
+    font-weight: 600;
     font-family: 'Fraunces', serif;
-    font-weight: 700;
-    font-size: 14px;
+    font-size: 12px;
   }
+  .chart-crosshair-tooltip .ct-row .v.up { color: var(--bull); }
+  .chart-crosshair-tooltip .ct-row .v.down { color: var(--bear); }
   .chart-empty {
     display: flex;
     align-items: center;
@@ -3243,7 +3293,8 @@
     .filter-pills { flex-wrap: wrap; }
     .pill { flex: 1; padding: 11px 8px; min-height: 40px; min-width: 70px; }
 
-    .chart-svg-wrap { height: 220px; }
+    .chart-svg-wrap { height: 300px; }
+    .overlay-btn { font-size: 8px; padding: 4px 6px; }
     .chart-card { padding: 14px; }
 
     .modal { padding: 22px; margin: 12px; }
@@ -3359,6 +3410,7 @@
             <div class="chart-controls">
               <div class="chart-tf-toggle" id="chart-tf-toggle">
                 <button data-tf="live" class="active">Live</button>
+                <button data-tf="5D">5D</button>
                 <button data-tf="1M">1M</button>
                 <button data-tf="3M">3M</button>
                 <button data-tf="6M">6M</button>
@@ -3370,17 +3422,21 @@
               </div>
             </div>
           </div>
-          <div class="chart-svg-wrap">
-            <svg id="price-chart" viewBox="0 0 800 280" preserveAspectRatio="none"></svg>
-            <div class="chart-tooltip" id="chart-tooltip">
-              <div class="t-time"></div>
-              <div class="t-price"></div>
-            </div>
+          <div class="chart-overlay-controls">
+            <button class="overlay-btn" data-overlay="ma50">+ MA 50</button>
+            <button class="overlay-btn" data-overlay="ma200">+ MA 200</button>
+            <button class="overlay-btn active" data-overlay="volume">+ Volume</button>
+          </div>
+          <div class="chart-svg-wrap" id="chart-svg-wrap">
+            <svg id="price-chart" viewBox="0 0 800 360" preserveAspectRatio="none"></svg>
+            <div class="chart-crosshair-tooltip" id="chart-crosshair-tooltip"></div>
           </div>
           <div class="chart-legend">
-            <div class="item"><span class="swatch line"></span> Live Price</div>
+            <div class="item"><span class="swatch line"></span> Price</div>
             <div class="item"><span class="swatch prev" style="border-top:1px dashed var(--ink-faint); width:14px"></span> Prev Close</div>
-            <div class="item" id="legend-candle" style="display:none"><span class="swatch candle"></span> 1-min Candles</div>
+            <div class="item" id="legend-ma50" style="display:none"><span class="swatch" style="background:#5b9bd5"></span> MA 50</div>
+            <div class="item" id="legend-ma200" style="display:none"><span class="swatch" style="background:#e8a040"></span> MA 200</div>
+            <div class="item" id="legend-candle" style="display:none"><span class="swatch candle"></span> Candles</div>
             <div class="item" style="margin-left:auto" id="chart-points-info"></div>
           </div>
         </div>
@@ -3749,11 +3805,15 @@ const state = {
   // Movers polling
   moversPollTimer: null,
   // Chart
-  chartTicks: [],         // [{t, p}, ...] — every poll appends one
+  chartTicks: [],         // [{t, p}, ...] — every poll appends one (live mode)
   chartMode: 'line',      // 'line' or 'candles'
-  chartCandleSec: 60,     // 1-min candles
-  chartTimeframe: 'live', // 'live' | '1M' | '3M' | '6M' | '1Y'
-  chartHistorical: [],    // [{t, p}, ...] when timeframe is historical
+  chartCandleSec: 60,     // 1-min candles in live mode
+  chartTimeframe: 'live', // 'live' | '5D' | '1M' | '3M' | '6M' | '1Y'
+  chartBars: [],          // [{t, o, h, l, c, v, dateStr}, ...] when timeframe is historical
+  chartShowMA50: false,
+  chartShowMA200: false,
+  chartShowVolume: true,
+  chartCrosshair: null,   // { x, y, bar } when hovering
 };
 
 // Universes for screening
@@ -3920,6 +3980,15 @@ async function getEarningsCalendar(symbol) {
 // We try-fetch and gracefully degrade if it fails.
 // ====================================================================
 async function getStooqHistory(symbol, days = 220) {
+  // Backward-compat wrapper that returns just close prices.
+  const bars = await getStooqHistoryFull(symbol, days);
+  if (!bars) return null;
+  return bars.map(b => b.c);
+}
+
+// Returns array of OHLCV bars: [{ t: unix_seconds, dateStr: 'YYYY-MM-DD', o, h, l, c, v }, ...]
+// Chronological order (oldest first). Each entry corresponds to a real trading date from Stooq.
+async function getStooqHistoryFull(symbol, days = 220) {
   // Stooq uses .us suffix for US tickers
   const today = new Date();
   const start = new Date(today.getTime() - days * 1.6 * 24 * 60 * 60 * 1000);
@@ -3933,7 +4002,6 @@ async function getStooqHistory(symbol, days = 220) {
   const baseUrl = `https://stooq.com/q/d/l/?s=${encodeURIComponent(tickerForStooq)}.us&d1=${fmt(start)}&d2=${fmt(today)}&i=d`;
 
   // Try direct first, then fall back through public CORS proxies.
-  // These proxies are public/free and may have occasional downtime — we cycle through.
   const attempts = [
     baseUrl,
     `https://corsproxy.io/?${encodeURIComponent(baseUrl)}`,
@@ -3949,26 +4017,43 @@ async function getStooqHistory(symbol, days = 220) {
       if (text.toLowerCase().includes('no data') || text.toLowerCase().includes('<!doctype html')) continue;
 
       const lines = text.trim().split('\n');
-      if (lines.length < 50) continue;
+      if (lines.length < 30) continue;
       // First line should be the CSV header — verify by checking it starts with "Date"
       if (!lines[0].toLowerCase().startsWith('date')) continue;
 
-      const closes = [];
+      const bars = [];
       for (let i = 1; i < lines.length; i++) {
         const parts = lines[i].split(',');
-        if (parts.length >= 5) {
-          const close = parseFloat(parts[4]);
-          if (!isNaN(close) && close > 0) closes.push(close);
-        }
+        if (parts.length < 5) continue;
+        const dateStr = parts[0]; // YYYY-MM-DD
+        const o = parseFloat(parts[1]);
+        const h = parseFloat(parts[2]);
+        const l = parseFloat(parts[3]);
+        const c = parseFloat(parts[4]);
+        const v = parts.length >= 6 ? parseFloat(parts[5]) : 0;
+        if (isNaN(c) || c <= 0) continue;
+        // Build timestamp from the date string (16:00 ET as session close — using UTC noon as a stable proxy)
+        const [yy, mm, dd] = dateStr.split('-').map(Number);
+        if (!yy || !mm || !dd) continue;
+        const t = Date.UTC(yy, mm - 1, dd, 16, 0, 0) / 1000; // 16:00 UTC ~= market afternoon
+        bars.push({
+          t,
+          dateStr,
+          o: isNaN(o) ? c : o,
+          h: isNaN(h) ? c : h,
+          l: isNaN(l) ? c : l,
+          c,
+          v: isNaN(v) ? 0 : v,
+        });
       }
-      if (closes.length < 50) continue;
-      return closes; // chronological order, oldest first
+      if (bars.length < 30) continue;
+      // Chronological order is what Stooq already returns (oldest first)
+      return bars;
     } catch (e) {
-      // Network/CORS failure — try next attempt
       continue;
     }
   }
-  return null; // all attempts failed
+  return null;
 }
 
 // Compute simple moving average from a series of closes (oldest first)
@@ -6064,9 +6149,13 @@ async function runAnalysis(symbol) {
     // Initialize chart with the current price as the first tick
     state.chartTicks = [{ t: Date.now() / 1000, p: quote.c }];
     state.chartTimeframe = 'live';
-    state.chartHistorical = [];
+    state.chartBars = [];
+    state.chartMode = 'line';
     document.querySelectorAll('#chart-tf-toggle button').forEach(b => {
       b.classList.toggle('active', b.dataset.tf === 'live');
+    });
+    document.querySelectorAll('#chart-mode-toggle button').forEach(b => {
+      b.classList.toggle('active', b.dataset.mode === 'line');
     });
     showChart(symbol);
     renderChart();
@@ -6230,172 +6319,446 @@ function aggregateCandles(ticks, intervalSec) {
   return Array.from(buckets.values()).sort((a, b) => a.t - b.t);
 }
 
+// ============================================================
+// CHART (TradingView-style)
+// Layout: price pane on top (75% height), optional volume pane below (25%).
+// Features: candles or line, volume bars colored by direction, MA overlays,
+//           crosshair with OHLC tooltip, right-side Y axis with grid lines,
+//           multi-label X axis with proper trading-day spacing.
+// ============================================================
 function renderChart() {
-  const wrap = document.getElementById('chart-container');
   const svg = document.getElementById('price-chart');
 
-  // Pick data source based on timeframe
   const isHistorical = state.chartTimeframe !== 'live';
-  const ticks = isHistorical ? state.chartHistorical : state.chartTicks;
 
-  if (!ticks || ticks.length === 0) {
+  // Pick data source. Live uses {t,p} ticks; historical uses {t,o,h,l,c,v} bars.
+  const dataset = isHistorical ? state.chartBars : state.chartTicks;
+  if (!dataset || dataset.length === 0) {
     const msg = isHistorical
       ? `<span class="loading"></span>&nbsp;&nbsp;Loading ${state.chartTimeframe} history…`
       : 'Waiting for first tick…';
-    svg.innerHTML = `<foreignObject x="0" y="0" width="800" height="280"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-empty">${msg}</div></foreignObject>`;
+    svg.innerHTML = `<foreignObject x="0" y="0" width="800" height="360"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-empty">${msg}</div></foreignObject>`;
+    document.getElementById('chart-crosshair-tooltip').classList.remove('show');
     return;
   }
 
-  const W = 800, H = 280;
-  const padL = 50, padR = 12, padT = 14, padB = 22;
+  // Canvas dimensions
+  const W = 800, H = 360;
+  const padT = 14, padB = 24, padL = 8, padR = 56;
+  const showVolume = state.chartShowVolume && isHistorical;
+  const priceH = showVolume ? 220 : 300;
+  const volumeH = showVolume ? 70 : 0;
+  const priceTop = padT;
+  const priceBot = priceTop + priceH;
+  const volumeTop = priceBot + (showVolume ? 14 : 0);
+  const volumeBot = volumeTop + volumeH;
   const innerW = W - padL - padR;
-  const innerH = H - padT - padB;
 
-  // Y-axis range: include all ticks AND prev close (only for live)
-  const prevClose = !isHistorical && state.currentQuote ? state.currentQuote.pc : null;
-  const prices = ticks.map(t => t.p);
-  let minP = Math.min(...prices);
-  let maxP = Math.max(...prices);
-  if (prevClose != null) {
-    minP = Math.min(minP, prevClose);
-    maxP = Math.max(maxP, prevClose);
+  // X-axis: positional (index-based) for historical to avoid weekend gaps,
+  // time-based for live. TradingView itself uses positional spacing for daily.
+  const N = dataset.length;
+  let xFor;
+  if (isHistorical) {
+    // Use index-based positioning so days are evenly spaced (no weekend gaps)
+    xFor = (idx) => padL + (idx / Math.max(N - 1, 1)) * innerW;
+  } else {
+    const tMin = dataset[0].t;
+    const tMax = Math.max(dataset[N - 1].t, Date.now() / 1000);
+    const tRange = (tMax - tMin) || 1;
+    xFor = (idx) => {
+      const t = dataset[idx].t;
+      return padL + ((t - tMin) / tRange) * innerW;
+    };
   }
-  // Pad the range a bit
-  const pad = (maxP - minP) * 0.1 || maxP * 0.005 || 0.5;
+
+  // Y-axis range for price pane
+  let minP, maxP;
+  if (isHistorical) {
+    const lows = dataset.map(b => b.l);
+    const highs = dataset.map(b => b.h);
+    minP = Math.min(...lows);
+    maxP = Math.max(...highs);
+  } else {
+    const prices = dataset.map(t => t.p);
+    minP = Math.min(...prices);
+    maxP = Math.max(...prices);
+    const prevClose = state.currentQuote ? state.currentQuote.pc : null;
+    if (prevClose != null) {
+      minP = Math.min(minP, prevClose);
+      maxP = Math.max(maxP, prevClose);
+    }
+  }
+  const pad = (maxP - minP) * 0.08 || maxP * 0.005 || 0.5;
   minP -= pad; maxP += pad;
-  const range = maxP - minP || 1;
+  const priceRange = maxP - minP || 1;
+  const yFor = (p) => priceTop + (1 - (p - minP) / priceRange) * priceH;
 
-  // X-axis: time-based, from first tick to now (or last historical tick)
-  const tMin = ticks[0].t;
-  const tMax = isHistorical
-    ? ticks[ticks.length - 1].t
-    : Math.max(ticks[ticks.length - 1].t, Date.now() / 1000);
-  const tRange = (tMax - tMin) || 1;
+  // Volume range
+  let maxV = 0;
+  if (showVolume) {
+    for (const b of dataset) if (b.v > maxV) maxV = b.v;
+  }
+  const yForVolume = (v) => volumeBot - (v / Math.max(maxV, 1)) * volumeH;
 
-  const xFor = (t) => padL + ((t - tMin) / tRange) * innerW;
-  const yFor = (p) => padT + (1 - (p - minP) / range) * innerH;
+  const prevClose = !isHistorical && state.currentQuote ? state.currentQuote.pc : null;
 
   let svgInner = '';
 
-  // Grid lines (5 horizontal)
-  for (let i = 0; i <= 4; i++) {
-    const y = padT + (i / 4) * innerH;
-    const p = maxP - (i / 4) * range;
-    svgInner += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#1f1f1f" stroke-width="1" />`;
-    svgInner += `<text x="${padL - 6}" y="${y + 3}" text-anchor="end" fill="#555049" font-size="10" font-family="JetBrains Mono">$${p.toFixed(2)}</text>`;
+  // ===== Grid =====
+  // Horizontal grid lines on price pane
+  const gridLines = 5;
+  for (let i = 0; i <= gridLines; i++) {
+    const y = priceTop + (i / gridLines) * priceH;
+    const p = maxP - (i / gridLines) * priceRange;
+    svgInner += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" stroke="#1f1f1f" stroke-width="0.5" stroke-dasharray="2 4" />`;
+    // Right-side Y-axis labels
+    svgInner += `<text x="${W - padR + 4}" y="${(y + 3).toFixed(1)}" fill="#8a857a" font-size="9.5" font-family="JetBrains Mono">${p.toFixed(2)}</text>`;
+  }
+  // Volume pane border
+  if (showVolume) {
+    svgInner += `<line x1="${padL}" y1="${volumeTop}" x2="${W - padR}" y2="${volumeTop}" stroke="#1f1f1f" stroke-width="1" />`;
+    // Volume label
+    svgInner += `<text x="${W - padR + 4}" y="${(volumeTop + 8).toFixed(1)}" fill="#555049" font-size="8" font-family="JetBrains Mono" letter-spacing="1">VOL</text>`;
+    // Max volume label
+    if (maxV > 0) {
+      const formatVol = (v) => v >= 1e9 ? (v / 1e9).toFixed(1) + 'B' : v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(0) + 'K' : String(v);
+      svgInner += `<text x="${W - padR + 4}" y="${(volumeTop + 18).toFixed(1)}" fill="#8a857a" font-size="9" font-family="JetBrains Mono">${formatVol(maxV)}</text>`;
+    }
   }
 
-  // Prev close line
-  if (prevClose != null) {
+  // ===== Prev close line (live mode only) =====
+  if (prevClose != null && !isHistorical) {
     const y = yFor(prevClose);
-    svgInner += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#555049" stroke-width="1" stroke-dasharray="4 4" />`;
-    svgInner += `<text x="${W - padR - 4}" y="${y - 4}" text-anchor="end" fill="#8a857a" font-size="9" font-family="JetBrains Mono" letter-spacing="1">PREV $${prevClose.toFixed(2)}</text>`;
+    svgInner += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" stroke="#555049" stroke-width="1" stroke-dasharray="4 4" />`;
+    svgInner += `<text x="${W - padR - 4}" y="${(y - 4).toFixed(1)}" text-anchor="end" fill="#8a857a" font-size="9" font-family="JetBrains Mono" letter-spacing="1">PREV ${prevClose.toFixed(2)}</text>`;
   }
 
-  if (state.chartMode === 'candles') {
-    const candles = aggregateCandles(ticks, state.chartCandleSec);
-    const candleW = Math.max(2, Math.min(14, innerW / Math.max(candles.length, 1) * 0.7));
+  // ===== Volume bars (historical) =====
+  if (showVolume) {
+    const barW = Math.max(1, (innerW / N) * 0.7);
+    dataset.forEach((b, i) => {
+      if (!b.v || b.v <= 0) return;
+      const x = xFor(i);
+      const y = yForVolume(b.v);
+      const h = volumeBot - y;
+      const isUp = b.c >= b.o;
+      const color = isUp ? '#00d68f' : '#ff3b5c';
+      svgInner += `<rect x="${(x - barW / 2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" fill="${color}" opacity="0.5" />`;
+    });
+  }
 
+  // ===== Price: candles or line =====
+  const useCandles = (isHistorical && state.chartMode === 'candles') ||
+                     (!isHistorical && state.chartMode === 'candles');
+
+  if (isHistorical && state.chartMode === 'candles') {
+    // OHLC candles — proper TradingView style
+    const candleW = Math.max(1.5, Math.min(14, (innerW / N) * 0.7));
+    dataset.forEach((b, i) => {
+      const x = xFor(i);
+      const yO = yFor(b.o), yC = yFor(b.c), yH = yFor(b.h), yL = yFor(b.l);
+      const isUp = b.c >= b.o;
+      const color = isUp ? '#00d68f' : '#ff3b5c';
+      // Wick
+      svgInner += `<line x1="${x.toFixed(1)}" y1="${yH.toFixed(1)}" x2="${x.toFixed(1)}" y2="${yL.toFixed(1)}" stroke="${color}" stroke-width="1" />`;
+      // Body
+      const bodyY = Math.min(yO, yC);
+      const bodyH = Math.max(1, Math.abs(yC - yO));
+      svgInner += `<rect x="${(x - candleW / 2).toFixed(1)}" y="${bodyY.toFixed(1)}" width="${candleW.toFixed(1)}" height="${bodyH.toFixed(1)}" fill="${isUp ? color : color}" stroke="${color}" stroke-width="0.5" />`;
+    });
+  } else if (!isHistorical && state.chartMode === 'candles') {
+    // Live candles aggregated from ticks (existing behavior)
+    const candles = aggregateCandles(dataset, state.chartCandleSec);
+    const candleW = Math.max(2, Math.min(14, innerW / Math.max(candles.length, 1) * 0.7));
+    const tMin = dataset[0].t;
+    const tMax = Math.max(dataset[dataset.length - 1].t, Date.now() / 1000);
+    const tRange = (tMax - tMin) || 1;
     candles.forEach(c => {
-      const x = xFor(c.t);
+      const x = padL + ((c.t - tMin) / tRange) * innerW;
       const yO = yFor(c.o), yC = yFor(c.c), yH = yFor(c.h), yL = yFor(c.l);
       const isUp = c.c >= c.o;
       const color = isUp ? '#00d68f' : '#ff3b5c';
-      // Wick
-      svgInner += `<line x1="${x}" y1="${yH}" x2="${x}" y2="${yL}" stroke="${color}" stroke-width="1" />`;
-      // Body
+      svgInner += `<line x1="${x.toFixed(1)}" y1="${yH.toFixed(1)}" x2="${x.toFixed(1)}" y2="${yL.toFixed(1)}" stroke="${color}" stroke-width="1" />`;
       const bodyY = Math.min(yO, yC);
       const bodyH = Math.max(2, Math.abs(yC - yO));
-      svgInner += `<rect x="${x - candleW/2}" y="${bodyY}" width="${candleW}" height="${bodyH}" fill="${color}" stroke="${color}" />`;
+      svgInner += `<rect x="${(x - candleW / 2).toFixed(1)}" y="${bodyY.toFixed(1)}" width="${candleW.toFixed(1)}" height="${bodyH.toFixed(1)}" fill="${color}" stroke="${color}" />`;
     });
   } else {
-    // Line chart with area gradient
-    const isUp = ticks[ticks.length - 1].p >= (prevClose != null ? prevClose : ticks[0].p);
+    // Line/area chart
+    const last = isHistorical ? dataset[N - 1].c : dataset[N - 1].p;
+    const first = isHistorical ? dataset[0].c : dataset[0].p;
+    const isUp = last >= (prevClose != null ? prevClose : first);
     const stroke = isUp ? '#00d68f' : '#ff3b5c';
     const fillId = isUp ? 'gradUp' : 'gradDown';
-    const fillStart = isUp ? '#00d68f' : '#ff3b5c';
-
     svgInner += `<defs>
       <linearGradient id="${fillId}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${fillStart}" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="${fillStart}" stop-opacity="0"/>
+        <stop offset="0%" stop-color="${stroke}" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="${stroke}" stop-opacity="0"/>
       </linearGradient>
     </defs>`;
 
-    const linePath = ticks.map((t, i) => `${i === 0 ? 'M' : 'L'} ${xFor(t.t).toFixed(2)} ${yFor(t.p).toFixed(2)}`).join(' ');
-    const areaPath = linePath + ` L ${xFor(ticks[ticks.length - 1].t).toFixed(2)} ${padT + innerH} L ${xFor(ticks[0].t).toFixed(2)} ${padT + innerH} Z`;
-
+    let linePath = '';
+    dataset.forEach((d, i) => {
+      const x = xFor(i);
+      const price = isHistorical ? d.c : d.p;
+      const y = yFor(price);
+      linePath += `${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)} `;
+    });
+    // Area path closes down to bottom of price pane
+    const lastX = xFor(N - 1);
+    const firstX = xFor(0);
+    const areaPath = linePath + ` L ${lastX.toFixed(2)} ${priceBot} L ${firstX.toFixed(2)} ${priceBot} Z`;
     svgInner += `<path d="${areaPath}" fill="url(#${fillId})" />`;
     svgInner += `<path d="${linePath}" fill="none" stroke="${stroke}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" />`;
 
-    // Last point marker
-    const lt = ticks[ticks.length - 1];
-    const lx = xFor(lt.t), ly = yFor(lt.p);
-    svgInner += `<circle cx="${lx}" cy="${ly}" r="3" fill="${stroke}" />`;
-    svgInner += `<circle cx="${lx}" cy="${ly}" r="6" fill="${stroke}" opacity="0.3"><animate attributeName="r" from="6" to="14" dur="1.5s" repeatCount="indefinite" /><animate attributeName="opacity" from="0.5" to="0" dur="1.5s" repeatCount="indefinite" /></circle>`;
+    // Live: last-point marker with pulsing halo
+    if (!isHistorical) {
+      const lx = xFor(N - 1);
+      const ly = yFor(last);
+      svgInner += `<circle cx="${lx.toFixed(2)}" cy="${ly.toFixed(2)}" r="3" fill="${stroke}" />`;
+      svgInner += `<circle cx="${lx.toFixed(2)}" cy="${ly.toFixed(2)}" r="6" fill="${stroke}" opacity="0.3"><animate attributeName="r" from="6" to="14" dur="1.5s" repeatCount="indefinite" /><animate attributeName="opacity" from="0.5" to="0" dur="1.5s" repeatCount="indefinite" /></circle>`;
+    }
   }
 
-  // Time/date axis labels
-  const fmtAxis = (sec) => {
-    const d = new Date(sec * 1000);
+  // ===== Moving Average overlays (historical only) =====
+  if (isHistorical) {
+    const closes = dataset.map(b => b.c);
+    if (state.chartShowMA50 && closes.length >= 50) {
+      const ma50Path = buildMAPath(closes, 50, xFor, yFor);
+      svgInner += `<path d="${ma50Path}" fill="none" stroke="#5b9bd5" stroke-width="1.4" stroke-linejoin="round" />`;
+    }
+    if (state.chartShowMA200 && closes.length >= 200) {
+      const ma200Path = buildMAPath(closes, 200, xFor, yFor);
+      svgInner += `<path d="${ma200Path}" fill="none" stroke="#e8a040" stroke-width="1.4" stroke-linejoin="round" />`;
+    }
+  }
+
+  // ===== Last price tag on right edge =====
+  const lastVal = isHistorical ? dataset[N - 1].c : dataset[N - 1].p;
+  const lastY = yFor(lastVal);
+  const lastChange = isHistorical
+    ? lastVal - dataset[0].c
+    : (prevClose != null ? lastVal - prevClose : 0);
+  const lastColor = lastChange >= 0 ? '#00d68f' : '#ff3b5c';
+  svgInner += `<rect x="${W - padR}" y="${(lastY - 9).toFixed(1)}" width="${padR - 2}" height="18" fill="${lastColor}" />`;
+  svgInner += `<text x="${(W - padR / 2 - 1).toFixed(1)}" y="${(lastY + 3.5).toFixed(1)}" fill="#0a0a0a" font-size="10.5" font-family="JetBrains Mono" font-weight="700" text-anchor="middle">${lastVal.toFixed(2)}</text>`;
+
+  // ===== X-axis date/time labels =====
+  // 4-6 evenly distributed labels along the x-axis
+  const fmtAxisLabel = (idx) => {
+    const item = dataset[idx];
+    if (!item) return '';
     if (isHistorical) {
+      const d = new Date(item.t * 1000);
       const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      // For 1Y, prefer month-year; for shorter, month-day
+      if (state.chartTimeframe === '1Y' || state.chartTimeframe === '6M') {
+        return `${m[d.getMonth()]} ${String(d.getFullYear()).slice(2)}`;
+      }
       return `${m[d.getMonth()]} ${d.getDate()}`;
     }
+    const d = new Date(item.t * 1000);
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
-  svgInner += `<text x="${padL}" y="${H - 6}" fill="#555049" font-size="9" font-family="JetBrains Mono" letter-spacing="1">${fmtAxis(tMin)}</text>`;
-  svgInner += `<text x="${W - padR}" y="${H - 6}" text-anchor="end" fill="#555049" font-size="9" font-family="JetBrains Mono" letter-spacing="1">${fmtAxis(tMax)}</text>`;
+  const labelCount = Math.min(6, Math.max(3, Math.floor(innerW / 100)));
+  for (let i = 0; i < labelCount; i++) {
+    const idx = Math.round((i / (labelCount - 1)) * (N - 1));
+    const x = xFor(idx);
+    const label = fmtAxisLabel(idx);
+    const anchor = i === 0 ? 'start' : (i === labelCount - 1 ? 'end' : 'middle');
+    svgInner += `<text x="${x.toFixed(1)}" y="${H - 8}" fill="#8a857a" font-size="9" font-family="JetBrains Mono" letter-spacing="1" text-anchor="${anchor}">${label}</text>`;
+  }
 
   svg.innerHTML = svgInner;
 
-  // Update info
-  const last = ticks[ticks.length - 1];
-  const first = ticks[0];
-  const sessionChange = last.p - first.p;
-  const sessionChangePct = (sessionChange / first.p) * 100;
+  // ===== Header stats =====
+  const headerLast = isHistorical ? dataset[N - 1].c : dataset[N - 1].p;
+  const headerFirst = isHistorical ? dataset[0].c : dataset[0].p;
+  const headerChange = headerLast - headerFirst;
+  const headerChangePct = (headerChange / headerFirst) * 100;
   const periodLabel = isHistorical ? state.chartTimeframe : 'Session';
   document.getElementById('chart-stats').innerHTML = `
-    ${periodLabel} <span class="v" style="color:${sessionChange >= 0 ? 'var(--bull)' : 'var(--bear)'}">${sessionChange >= 0 ? '+' : ''}${sessionChange.toFixed(2)} (${sessionChange >= 0 ? '+' : ''}${sessionChangePct.toFixed(2)}%)</span>
+    ${periodLabel} <span class="v" style="color:${headerChange >= 0 ? 'var(--bull)' : 'var(--bear)'}">${headerChange >= 0 ? '+' : ''}${headerChange.toFixed(2)} (${headerChange >= 0 ? '+' : ''}${headerChangePct.toFixed(2)}%)</span>
   `;
   document.getElementById('chart-points-info').textContent = isHistorical
-    ? `${ticks.length} daily closes`
-    : `${ticks.length} ticks · ${state.chartMode === 'candles' ? aggregateCandles(ticks, state.chartCandleSec).length + ' candles' : 'live'}`;
-  document.getElementById('legend-candle').style.display = state.chartMode === 'candles' && !isHistorical ? 'flex' : 'none';
+    ? `${N} daily bars`
+    : `${N} ticks · ${state.chartMode === 'candles' ? aggregateCandles(dataset, state.chartCandleSec).length + ' candles' : 'live'}`;
+
+  // Legend toggle visibility
+  document.getElementById('legend-ma50').style.display = (isHistorical && state.chartShowMA50) ? 'flex' : 'none';
+  document.getElementById('legend-ma200').style.display = (isHistorical && state.chartShowMA200) ? 'flex' : 'none';
+  document.getElementById('legend-candle').style.display = state.chartMode === 'candles' ? 'flex' : 'none';
+}
+
+// Build an SVG path string for a moving average overlay.
+// closes is the full array of close prices; period is the MA window length.
+function buildMAPath(closes, period, xFor, yFor) {
+  let path = '';
+  let started = false;
+  for (let i = period - 1; i < closes.length; i++) {
+    let sum = 0;
+    for (let j = i - period + 1; j <= i; j++) sum += closes[j];
+    const ma = sum / period;
+    const x = xFor(i);
+    const y = yFor(ma);
+    path += `${started ? 'L' : 'M'} ${x.toFixed(2)} ${y.toFixed(2)} `;
+    started = true;
+  }
+  return path;
 }
 
 function showChart(symbol) {
   document.getElementById('chart-container').style.display = 'block';
-  document.getElementById('chart-title').textContent = `${symbol} · Real-Time Price Action`;
+  document.getElementById('chart-title').textContent = `${symbol} · Price Action`;
 }
 
-// Load historical closes for a given timeframe and feed into chart.
-// Timeframes: 1M (~22 trading days), 3M (~65), 6M (~125), 1Y (~252)
+// ============================================================
+// Chart crosshair — TradingView-style hover tooltip showing OHLC + Volume
+// ============================================================
+function wireChartCrosshair() {
+  const svg = document.getElementById('price-chart');
+  const wrap = document.getElementById('chart-svg-wrap');
+  const tooltip = document.getElementById('chart-crosshair-tooltip');
+  if (!svg || !wrap || !tooltip) return;
+
+  const formatVol = (v) => v >= 1e9 ? (v / 1e9).toFixed(2) + 'B' : v >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1) + 'K' : String(v);
+
+  function onMove(e) {
+    // Only on devices with hover. On touch we skip — touch should pass through to scroll.
+    if (e.pointerType === 'touch') return;
+
+    const rect = wrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    // Convert pixel x to SVG coord (since viewBox is 800 wide but rendered width might differ)
+    const W = 800, padL = 8, padR = 56;
+    const innerW = W - padL - padR;
+    const svgX = (x / rect.width) * W;
+    const relX = svgX - padL;
+    if (relX < 0 || relX > innerW) {
+      tooltip.classList.remove('show');
+      removeCrosshairLine();
+      return;
+    }
+
+    const isHistorical = state.chartTimeframe !== 'live';
+    const dataset = isHistorical ? state.chartBars : state.chartTicks;
+    if (!dataset || dataset.length === 0) {
+      tooltip.classList.remove('show');
+      removeCrosshairLine();
+      return;
+    }
+
+    const N = dataset.length;
+    let idx;
+    if (isHistorical) {
+      idx = Math.round((relX / innerW) * (N - 1));
+    } else {
+      // Time-based positioning
+      const tMin = dataset[0].t;
+      const tMax = Math.max(dataset[N - 1].t, Date.now() / 1000);
+      const tTarget = tMin + (relX / innerW) * (tMax - tMin);
+      let bestI = 0, bestD = Infinity;
+      for (let i = 0; i < N; i++) {
+        const d = Math.abs(dataset[i].t - tTarget);
+        if (d < bestD) { bestD = d; bestI = i; }
+      }
+      idx = bestI;
+    }
+    idx = Math.max(0, Math.min(N - 1, idx));
+    const item = dataset[idx];
+    if (!item) return;
+
+    // Draw the crosshair line at the bar's actual position
+    let xPx;
+    if (isHistorical) {
+      xPx = padL + (idx / Math.max(N - 1, 1)) * innerW;
+    } else {
+      const tMin = dataset[0].t;
+      const tMax = Math.max(dataset[N - 1].t, Date.now() / 1000);
+      xPx = padL + ((item.t - tMin) / (tMax - tMin || 1)) * innerW;
+    }
+    drawCrosshairLine(xPx);
+
+    // Build the tooltip content
+    let html;
+    if (isHistorical) {
+      const d = new Date(item.t * 1000);
+      const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const dateStr = `${m[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
+      const change = item.c - item.o;
+      const changeClass = change >= 0 ? 'up' : 'down';
+      html = `
+        <div class="ct-date">${dateStr}</div>
+        <div class="ct-row"><span class="lab">O</span><span class="v">${item.o.toFixed(2)}</span></div>
+        <div class="ct-row"><span class="lab">H</span><span class="v">${item.h.toFixed(2)}</span></div>
+        <div class="ct-row"><span class="lab">L</span><span class="v">${item.l.toFixed(2)}</span></div>
+        <div class="ct-row"><span class="lab">C</span><span class="v ${changeClass}">${item.c.toFixed(2)}</span></div>
+        ${item.v > 0 ? `<div class="ct-row" style="margin-top:4px;padding-top:4px;border-top:1px solid var(--line)"><span class="lab">VOL</span><span class="v" style="font-size:11px">${formatVol(item.v)}</span></div>` : ''}
+      `;
+    } else {
+      const d = new Date(item.t * 1000);
+      const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      html = `
+        <div class="ct-date">${timeStr}</div>
+        <div class="ct-row"><span class="lab">Price</span><span class="v">${item.p.toFixed(2)}</span></div>
+      `;
+    }
+    tooltip.innerHTML = html;
+    tooltip.classList.add('show');
+  }
+
+  function drawCrosshairLine(xPx) {
+    const existing = svg.querySelector('#crosshair-line');
+    if (existing) existing.remove();
+    const ns = 'http://www.w3.org/2000/svg';
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('id', 'crosshair-line');
+    line.setAttribute('x1', xPx);
+    line.setAttribute('x2', xPx);
+    line.setAttribute('y1', 0);
+    line.setAttribute('y2', 360);
+    line.setAttribute('stroke', '#8a857a');
+    line.setAttribute('stroke-width', '0.5');
+    line.setAttribute('stroke-dasharray', '3 3');
+    line.setAttribute('pointer-events', 'none');
+    svg.appendChild(line);
+  }
+
+  function removeCrosshairLine() {
+    const existing = svg.querySelector('#crosshair-line');
+    if (existing) existing.remove();
+  }
+
+  function onLeave() {
+    tooltip.classList.remove('show');
+    removeCrosshairLine();
+  }
+
+  svg.addEventListener('pointermove', onMove);
+  svg.addEventListener('pointerleave', onLeave);
+}
+
+// Load historical OHLCV bars for a given timeframe and feed into chart.
+// Timeframes: 5D (~7 calendar days for buffer), 1M (~22 trading days = ~30 cal), 3M (~95), 6M (~185), 1Y (~365)
 async function loadChartTimeframe(symbol, tf) {
-  const tfDays = { '1M': 30, '3M': 95, '6M': 185, '1Y': 365 }[tf] || 30;
-  state.chartHistorical = []; // clear so the chart shows loading
+  const tfDays = { '5D': 10, '1M': 30, '3M': 95, '6M': 185, '1Y': 365 }[tf] || 30;
+  state.chartBars = []; // clear so the chart shows loading
   renderChart();
 
-  const closes = await getStooqHistory(symbol, tfDays);
-  if (!closes || closes.length === 0) {
-    state.chartHistorical = [];
+  const bars = await getStooqHistoryFull(symbol, tfDays);
+  if (!bars || bars.length === 0) {
+    state.chartBars = [];
     renderChart();
     return false;
   }
 
-  // Stooq returns chronological closes; pair with synthetic dates (one per trading day backward)
-  // Use day-step approximation: most recent close = today, working backward by 1 calendar day.
-  // For chart purposes this is precise enough — we don't try to skip weekends/holidays.
-  const now = Date.now() / 1000;
-  const dayStep = 24 * 60 * 60;
-  // Use 1.45 day step on average to roughly account for weekends in calendar-day spacing
-  const stepPerClose = 1.45 * dayStep;
-  const N = closes.length;
-  const ticks = closes.map((p, i) => ({
-    t: now - (N - 1 - i) * stepPerClose,
-    p,
-  }));
-  state.chartHistorical = ticks;
+  // For shorter timeframes, slice to the appropriate number of trading days from the end
+  let sliced = bars;
+  const targetDays = { '5D': 5, '1M': 22, '3M': 66, '6M': 130, '1Y': 252 }[tf];
+  if (targetDays && bars.length > targetDays) {
+    sliced = bars.slice(-targetDays);
+  }
+  state.chartBars = sliced;
   renderChart();
   return true;
 }
@@ -8447,7 +8810,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateClock();
   setInterval(updateClock, 1000);
 
-  // Chart mode toggle
+  // Chart mode toggle (Line / Candles)
   document.querySelectorAll('#chart-mode-toggle button').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('#chart-mode-toggle button').forEach(b => b.classList.remove('active'));
@@ -8457,24 +8820,48 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Chart timeframe toggle (Live / 1M / 3M / 6M / 1Y)
+  // Chart timeframe toggle (Live / 5D / 1M / 3M / 6M / 1Y)
   document.querySelectorAll('#chart-tf-toggle button').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('#chart-tf-toggle button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const tf = btn.dataset.tf;
       state.chartTimeframe = tf;
+
+      // TradingView default: candles for daily/historical, line for live
       if (tf === 'live') {
-        // Use live ticks
+        state.chartMode = 'line';
+      } else {
+        state.chartMode = 'candles';
+      }
+      document.querySelectorAll('#chart-mode-toggle button').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === state.chartMode);
+      });
+
+      if (tf === 'live') {
         renderChart();
       } else if (state.currentSymbol) {
-        // Hide the candle/line toggle visual cue when in historical mode (candle mode doesn't apply)
         loadChartTimeframe(state.currentSymbol, tf);
       } else {
         renderChart();
       }
     });
   });
+
+  // Chart overlay buttons (MA50 / MA200 / Volume)
+  document.querySelectorAll('.overlay-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const overlay = btn.dataset.overlay;
+      btn.classList.toggle('active');
+      if (overlay === 'ma50') state.chartShowMA50 = btn.classList.contains('active');
+      else if (overlay === 'ma200') state.chartShowMA200 = btn.classList.contains('active');
+      else if (overlay === 'volume') state.chartShowVolume = btn.classList.contains('active');
+      renderChart();
+    });
+  });
+
+  // Chart crosshair: track mouse/touch and show OHLC tooltip
+  wireChartCrosshair();
 
   // Option chain calls/puts toggle
   wireChainControls();
